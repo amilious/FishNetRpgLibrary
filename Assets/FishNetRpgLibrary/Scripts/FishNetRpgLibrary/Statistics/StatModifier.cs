@@ -94,7 +94,14 @@ namespace FishNetRpgLibrary.Statistics {
         /// <param name="sourceId">The id of the source that you want to check for.</param>
         /// <returns>True if the modifier has the given source.</returns>
         public bool HasSource(int sourceId) => SourceId == sourceId;
-        
+
+        /// <summary>
+        /// This method is used to apply a modifier to the given value.
+        /// </summary>
+        /// <param name="valueToModify">The value that you want to modify.</param>
+        /// <returns>The modified value.</returns>
+        public int ApplyModifier(int valueToModify) => Operation.ApplyModifier(valueToModify, Amount);
+
         #endregion
 
     }
