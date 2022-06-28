@@ -7,15 +7,15 @@
   <br>
 </h1>
 
-<h4 align="center">FishNet RPG Library is built for <a href="http://unity.com" target="_blank">Unity</a> using <ahref="https://github.com/FirstGearGames/FishNet" target="_blank">FishNet</a>.</h4>
+<h4 align="center">FishNet RPG Library is built for <a href="http://unity.com" target="_blank">Unity</a> using <a href="https://github.com/FirstGearGames/FishNet" target="_blank">FishNet</a>.</h4>
 
 <p align="center" style="text-align: center">  
   <a href="https://discord.gg/m3BhGJ6BAf">
     <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=amilious&logo=discord">
   </a> 
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious/FishNetRpgLibrary/">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious/FishNetRpgLibrary/">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/amilious/FishNetRpgLibrary/">
+  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious/FishNetRpgLibrary">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious/FishNetRpgLibrary">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/amilious/FishNetRpgLibrary">
 </p>
 
 <p align="center" style="text-align: center">
