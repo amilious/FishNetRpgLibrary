@@ -47,4 +47,4 @@ This project contains a core RPG system that can be used to make a multiplayer r
 
 ## License
 
-MIT
+[MIT](https://github.com/amilious/FishNetRpgLibrary/blob/master/LICENSE)
