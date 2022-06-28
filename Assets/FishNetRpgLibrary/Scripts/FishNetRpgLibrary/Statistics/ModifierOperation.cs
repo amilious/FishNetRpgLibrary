@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace FishNetRpgLibrary.Statistics {
     
@@ -8,32 +7,33 @@ namespace FishNetRpgLibrary.Statistics {
     /// </summary>
     [Serializable]
     public enum ModifierOperation {
+        
+        /// <summary>
+        /// This value indicates that a value should be added to the base value before the multipliers.
+        /// </summary>
         Additive = 0,
-        Multiplicative = 1,
-        Override = 2
+        
+        /// <summary>
+        /// All modifiers of this type will have their values added together before multiplying the stats base
+        /// value after applying the additive modifiers.
+        /// </summary>
+        AdditiveMultiplier = 5,
+        
+        /// <summary>
+        /// Modifiers of this type will multiply the base value individually after applying the AdditiveMultiplier
+        /// modifiers and the additive multipliers. 
+        /// </summary>
+        StackableMultiplier = 10,
+        
+        /// <summary>
+        /// Modifiers of this type will be added to the base value after the multiplier modifiers have been applied.
+        /// </summary>
+        PostMultiplierAdditive = 15,
+        
+        /// <summary>
+        /// Modifiers of this type will override the base value.
+        /// </summary>
+        Override = 20
     }
     
-    /// <summary>
-    /// This class is used to extend the ModifierOperation enum.
-    /// </summary>
-    public static class ModifierOperationExtension{
-
-        /// <summary>
-        /// This method is used to apply a modifier to a value.
-        /// </summary>
-        /// <param name="operation">The operation that you want to execute.</param>
-        /// <param name="valueToModify">The value that you want to modify.</param>
-        /// <param name="amount">The operation amount.</param>
-        /// <returns>The modified value.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when a ModifierOperation is missing.</exception>
-        public static int ApplyModifier(this ModifierOperation operation, int valueToModify, float amount) {
-            return operation switch {
-                ModifierOperation.Additive => Mathf.RoundToInt(valueToModify+amount),
-                ModifierOperation.Multiplicative => Mathf.RoundToInt(valueToModify*amount),
-                ModifierOperation.Override => Mathf.RoundToInt(amount),
-                _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null)
-            };
-        }
-        
-    }
 }

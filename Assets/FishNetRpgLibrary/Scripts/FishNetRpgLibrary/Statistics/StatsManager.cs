@@ -8,6 +8,5 @@ namespace FishNetRpgLibrary.Statistics {
         
         
     }
-    
-    
+
 }
