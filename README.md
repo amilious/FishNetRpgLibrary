@@ -7,7 +7,7 @@
   <br>
 </h1>
 
-<h4 align="center">Amilious Procedural Terrain is built for <a href="http://unity.com" target="_blank">Unity</a>.</h4>
+<h4 align="center">FishNet RPG Library is built for <a href="http://unity.com" target="_blank">Unity</a> using <ahref="https://github.com/FirstGearGames/FishNet" target="_blank">FishNet</a>.</h4>
 
 <p align="center" style="text-align: center">  
   <a href="https://discord.gg/m3BhGJ6BAf">
