@@ -11,7 +11,10 @@
 
 <p align="center" style="text-align: center">  
   <a href="https://discord.gg/m3BhGJ6BAf">
-    <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=amilious&logo=discord">
+    <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=Amilious&logo=discord">
+  </a>
+  <a href="https://discord.gg/Ta9HgDh4Hj">
+    <img alt="Discord" src="https://img.shields.io/discord/424284635074134018?label=FishNet&logo=discord">
   </a> 
   <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious/FishNetRpgLibrary">
   <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious/FishNetRpgLibrary">
