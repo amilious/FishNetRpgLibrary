@@ -94,7 +94,7 @@ namespace FishNetRpgLibrary.Statistics {
         /// <param name="sourceId">The id of the source that you want to check for.</param>
         /// <returns>True if the modifier has the given source.</returns>
         public bool HasSource(int sourceId) => SourceId == sourceId;
-        
+
         #endregion
 
     }

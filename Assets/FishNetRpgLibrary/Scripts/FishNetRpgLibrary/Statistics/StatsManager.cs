@@ -1,8 +1,12 @@
+using FishNet.Object;
 using UnityEngine;
 
 namespace FishNetRpgLibrary.Statistics {
     
-    public class StatsManager : MonoBehaviour {
+    public class StatsManager : NetworkBehaviour {
+        
+        
         
     }
+
 }

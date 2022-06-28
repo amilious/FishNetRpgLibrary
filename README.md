@@ -3,19 +3,22 @@
   <br>
   <a href="https://www.amilious.com"><img src="https://github.com/amilious-ba/AmiliousProceduralTerrain/blob/master/Assets/Amilious/Core/Assets/Icons/logo.png" alt="Amilious" width="200"></a>
   <br>
-  Amilious Procedural Terrain
+  FishNet RPG Library
   <br>
 </h1>
 
-<h4 align="center">Amilious Procedural Terrain is built for <a href="http://unity.com" target="_blank">Unity</a>.</h4>
+<h4 align="center">FishNet RPG Library is built for <a href="http://unity.com" target="_blank">Unity</a> using <a href="https://github.com/FirstGearGames/FishNet" target="_blank">FishNet</a>.</h4>
 
 <p align="center" style="text-align: center">  
   <a href="https://discord.gg/m3BhGJ6BAf">
-    <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=discord&logo=discord">
+    <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=Amilious&logo=discord">
   </a>
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious-ba/AmiliousProceduralTerrain">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious-ba/AmiliousProceduralTerrain">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/amilious-ba/AmiliousProceduralTerrain">
+  <a href="https://discord.gg/Ta9HgDh4Hj">
+    <img alt="Discord" src="https://img.shields.io/discord/424284635074134018?label=FishNet&logo=discord">
+  </a> 
+  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious/FishNetRpgLibrary">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious/FishNetRpgLibrary">
+  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/amilious/FishNetRpgLibrary">
 </p>
 
 <p align="center" style="text-align: center">
@@ -28,28 +31,20 @@
 
 ## Key Features
 
-* Heat and moisture based biomes - biomes are generated using a heat and moisture noise.
-* Biome based height maps - each biome can use a unique noise for precedural generation.
-* Biome Blending - biomes are blended together
-* Ocean/Land noise - you can use a unique noise algorithm for deciding what is land and what is an ocean.
+* Stat System
 
 ## How To Use
 
-This repository is a complete unity project.  In the future, I will release this as a free asset on the asset store.  This project is built using the odin inspector asset.  The asset should be added to the project in order for it to work properly.
+This repository contains an entire project that is being used to develop the library.  Once the library is stable the repository will only contain the library.  You must have FishNet installed in the unity project for it to work.
 
 ## What Is This For
 
-This project is being created for use in my game Eidreven.
+This project contains a core RPG system that can be used to make a multiplayer rpg using FishNet.
 
 ## Credits
 
-This project was build using several other projects for noise generation or as insperation:
-
-- [KdotJPG - Scattered Biome Blender](https://github.com/KdotJPG/Scattered-Biome-Blender)
-- [Auburn - Fast Noise Lite](https://github.com/Auburn/FastNoiseLite)
-- [SabLague - Procedural Landmass Generation](https://github.com/SebLague/Procedural-Landmass-Generation)
+- [FishNet](https://github.com/FirstGearGames/FishNet)
 
 ## License
 
-MIT <br />
-Odin (You must be using your own copy of odin.)
+MIT
