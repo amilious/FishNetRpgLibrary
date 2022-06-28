@@ -13,9 +13,9 @@
   <a href="https://discord.gg/m3BhGJ6BAf">
     <img alt="Discord" src="https://img.shields.io/discord/907228288735408158?label=discord&logo=discord">
   </a>
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/amilious-ba/AmiliousProceduralTerrain">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/amilious-ba/AmiliousProceduralTerrain">
-  <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/amilious-ba/AmiliousProceduralTerrain">
+  <img alt="GitHub contributors" src="https://github.com/amilious/FishNetRpgLibrary/tree/Statistics">
+  <img alt="GitHub last commit" src="https://github.com/amilious/FishNetRpgLibrary/tree/Statistics">
+  <img alt="GitHub commit activity" src="https://github.com/amilious/FishNetRpgLibrary/tree/Statistics">
 </p>
 
 <p align="center" style="text-align: center">
