@@ -3,14 +3,16 @@ using System.Linq;
 using UnityEngine;
 using FishNet.Serializing;
 using System.Collections.Generic;
-using FishNet.Object.Synchronizing;
 using Object = UnityEngine.Object;
+using FishNet.Object.Synchronizing;
 using FishNet.Object.Synchronizing.Internal;
 
 namespace FishNetRpgLibrary.Statistics {
     
+    //TODO: Implement IStatBaseValueProvider
+    
     /// <summary>
-    /// This class is used to represent a stat.
+    /// This class is used to represent a networked stat.
     /// </summary>
     public class Stat : SyncBase, ICustomSync {
 
@@ -51,8 +53,6 @@ namespace FishNetRpgLibrary.Statistics {
                 Dirty();
             }
         }
-
-        public void SetStatsManager(StatsManager manager) => Manager = manager; 
         
         /// <summary>
         /// This property contains the manager that this stat belongs to.
@@ -68,7 +68,7 @@ namespace FishNetRpgLibrary.Statistics {
         /// This property is used to get the stat's value.  This is the stat value after the modifiers are
         /// applied. This property can be used to set the value only when on the server.
         /// </summary>
-        public int Value {
+        public virtual int Value {
             get { return _value; }
             protected set {
                 if(!IsServer()) return;
@@ -110,7 +110,7 @@ namespace FishNetRpgLibrary.Statistics {
                 Dirty();
             }
         }
-
+        
         #endregion
         
         
@@ -177,7 +177,7 @@ namespace FishNetRpgLibrary.Statistics {
         
         #endregion
         
-
+        
         #region Sync Methods ///////////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
@@ -222,6 +222,17 @@ namespace FishNetRpgLibrary.Statistics {
         
         #endregion
 
+        
+        #region Other Public Methods ///////////////////////////////////////////////////////////////////////////////////
+                                     
+        /// <summary>
+        /// This method is used to set the stats manager.  This method should only be called on the server.
+        /// </summary>
+        /// <param name="manager"></param>
+        public void SetStatsManager(StatsManager manager) => Manager = manager; 
+        
+        #endregion
+        
         
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
 

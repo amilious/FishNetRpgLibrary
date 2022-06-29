@@ -55,11 +55,22 @@ namespace FishNetRpgLibrary.Statistics {
         /// </summary>
         private readonly Dictionary<string, Stat> _statDictionary = new Dictionary<string, Stat>();
 
+        /// <summary>
+        /// This list contains the modifiers that need to be removed after a duration.
+        /// </summary>
         private readonly List<StatModifierSource> _durationModifiers = new List<StatModifierSource>();
 
         #endregion
         
         public LivingEntity Entity { get; private set; }
+
+        public Stat this[string statName] {
+            get {
+                //make sure that the manager is initialized
+                Initialize();
+                return _statDictionary.TryGetValue(statName, out var stat) ? stat : null;
+            }
+        }
         
         [SyncObject, Stat("Defence")]
         private readonly Stat _defence = new Stat();
@@ -111,6 +122,7 @@ namespace FishNetRpgLibrary.Statistics {
 
         [Server]
         public bool ApplyModifier(Object source, IStatModifier modifier) {
+            //make sure that the manager is initialized
             Initialize();
             if(!_statDictionary.TryGetValue(modifier.StatName, out var stat)) {
                 Debug.LogWarningFormat(MISSING_STAT,GetType().Name,modifier.StatName);
@@ -150,9 +162,8 @@ namespace FishNetRpgLibrary.Statistics {
         }
 
         [Server]
-        public void WatchDuration(StatModifierSource source) {
-            _durationModifiers.Add(source);
-        }
+        public void WatchDuration(StatModifierSource source) => _durationModifiers.Add(source);
+
     }
 
 }
