@@ -59,6 +59,17 @@ namespace FishNetRpgLibrary.Statistics {
         #endregion
         
         
+        #region Constructors ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This constructor is used to create a new consumable stat.
+        /// </summary>
+        /// <param name="name">The name of the stat.</param>
+        public ConsumableStat(string name) : base(name) { }
+
+        #endregion
+        
+        
         #region Current Value Modifier Methods /////////////////////////////////////////////////////////////////////////
         
         /// <summary>

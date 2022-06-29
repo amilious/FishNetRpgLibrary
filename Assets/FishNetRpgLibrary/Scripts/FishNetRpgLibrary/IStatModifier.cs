@@ -1,7 +1,7 @@
 
-using UnityEngine;
+using FishNetRpgLibrary.Statistics;
 
-namespace FishNetRpgLibrary.Statistics {
+namespace FishNetRpgLibrary {
     
     public interface IStatModifier {
         

@@ -39,6 +39,11 @@ namespace FishNetRpgLibrary.Statistics {
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
+        /// This property contains the name of the stat.
+        /// </summary>
+        public string Name { get; private set; }
+        
+        /// <summary>
         /// This property is used to get the stat's current base value.  This is the stat value before the
         /// modifiers are applied. This property can be used to set the base value only when on the server.
         /// </summary>
@@ -110,6 +115,13 @@ namespace FishNetRpgLibrary.Statistics {
                 Dirty();
             }
         }
+        
+        #endregion
+        
+        
+        #region Constructors ///////////////////////////////////////////////////////////////////////////////////////////
+
+        public Stat(string name) => Name = name;
         
         #endregion
         

@@ -18,8 +18,8 @@ namespace FishNetRpgLibrary.Statistics {
         /// <summary>
         /// This dictionary contains the stat FieldInfo references
         /// </summary>
-        private static readonly Dictionary<Type, Dictionary<string, FieldInfo>> FieldCache =
-            new Dictionary<Type, Dictionary<string, FieldInfo>>();
+        private static readonly Dictionary<Type, List<FieldInfo>> FieldCache =
+            new Dictionary<Type, List<FieldInfo>>();
         
         #endregion
         
@@ -72,8 +72,8 @@ namespace FishNetRpgLibrary.Statistics {
             }
         }
         
-        [SyncObject, Stat("Defence")]
-        private readonly Stat _defence = new Stat();
+        [SyncObject]
+        private readonly Stat _defence = new Stat("Defence");
         
         private void Awake() {
             Entity = GetComponent<LivingEntity>();
@@ -87,25 +87,23 @@ namespace FishNetRpgLibrary.Statistics {
             //build the field cached for this class type if it does not exist
             if(!FieldCache.ContainsKey(type)) {
                 //create dictionary
-                var fieldDictionary = new Dictionary<string, FieldInfo>();
                 //get the stat types
                 var stats = GetType()
                     .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Where(f => f.FieldType.IsAssignableFrom(typeof(Stat)))
-                    .Where(f => f.IsDefined(typeof(StatAttribute), false));
-                foreach(var stat in stats) {
-                    var att = stat.GetCustomAttribute<StatAttribute>();
-                    if(_statDictionary.ContainsKey(att.Name)) {
-                        Debug.LogWarningFormat("The stat manager has multiple stats with the name {0}!", att.Name);
-                    }
-                    fieldDictionary[att.Name] = stat;
-                }
-                FieldCache[type] = fieldDictionary;
+                    .Where(f => f.FieldType.IsAssignableFrom(typeof(Stat)));
+                var fieldList = stats.ToList();
+                FieldCache[type] = fieldList;
             }
             //crate the stat dictionary for this class.
-            foreach(var keyValue in FieldCache[type]) {
-                _statDictionary[keyValue.Key] = (Stat)keyValue.Value.GetValue(this);
-                _statDictionary[keyValue.Key]?.SetStatsManager(this);
+            foreach(var statInfo in FieldCache[type]) {
+                var stat = (Stat)statInfo.GetValue(this);
+                if(stat==null) continue;
+                if(_statDictionary.ContainsKey(stat.Name)) {
+                    Debug.LogWarningFormat("The stat manager has multiple stats with the name {0}!", stat.Name);
+                    continue;
+                }
+                _statDictionary[stat.Name] = stat;
+                _statDictionary[stat.Name]?.SetStatsManager(this);
             }
         }
 

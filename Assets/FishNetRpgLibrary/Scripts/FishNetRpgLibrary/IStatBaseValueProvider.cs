@@ -1,4 +1,4 @@
-namespace FishNetRpgLibrary.Statistics {
+namespace FishNetRpgLibrary {
     
     /// <summary>
     /// This interface is used to get the base value based on the stats level.
