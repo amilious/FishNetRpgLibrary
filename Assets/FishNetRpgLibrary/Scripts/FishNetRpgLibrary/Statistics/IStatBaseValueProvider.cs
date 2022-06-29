@@ -18,6 +18,11 @@ namespace FishNetRpgLibrary.Statistics {
         /// </summary>
         public int Cap { get; }
 
+        /// <summary>
+        /// This property contains the minimum value that a stat can have.
+        /// </summary>
+        public int MinimumValue { get; }
+        
     }
     
 }

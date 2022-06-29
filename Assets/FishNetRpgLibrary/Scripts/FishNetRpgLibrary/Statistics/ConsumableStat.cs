@@ -20,6 +20,11 @@ namespace FishNetRpgLibrary.Statistics {
             }
         }
         
+        /// <summary>
+        /// This property is used to check if the stat is consumable.
+        /// </summary>
+        public override bool IsConsumable => true;
+        
         public override void Read(PooledReader reader) {
             base.Read(reader);
             if(reader.ReadBoolean()) _currentValue = reader.ReadSingle();
@@ -80,7 +85,7 @@ namespace FishNetRpgLibrary.Statistics {
             _currentValue = Mathf.Clamp(value, 0, Value);
             return CurrentValue;
         }
-        
+
     }
     
 }

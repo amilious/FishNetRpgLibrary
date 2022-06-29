@@ -19,6 +19,7 @@ namespace FishNetRpgLibrary.Statistics {
         
         private int _baseValue, _value, _cap, _minimumValue;
         private bool _baseValueUpdated, _valueUpdated, _capUpdated,_minimumUpdated;
+        private bool _sorted;
 
         #endregion
         
@@ -28,7 +29,7 @@ namespace FishNetRpgLibrary.Statistics {
         /// <summary>
         /// This list is used to hold the modifiers that are currently applied to this stat.
         /// </summary>
-        private List<StatModifier> _modifiers = new List<StatModifier>();
+        private List<StatModifierSource> _modifierSources = new List<StatModifierSource>();
         
         #endregion
         
@@ -51,6 +52,18 @@ namespace FishNetRpgLibrary.Statistics {
             }
         }
 
+        public void SetStatsManager(StatsManager manager) => Manager = manager; 
+        
+        /// <summary>
+        /// This property contains the manager that this stat belongs to.
+        /// </summary>
+        public StatsManager Manager { get; private set; }
+
+        /// <summary>
+        /// This property is used to check if the stat is consumable.
+        /// </summary>
+        public virtual bool IsConsumable => false;
+        
         /// <summary>
         /// This property is used to get the stat's value.  This is the stat value after the modifiers are
         /// applied. This property can be used to set the value only when on the server.
@@ -106,18 +119,20 @@ namespace FishNetRpgLibrary.Statistics {
         /// <summary>
         /// This method is used to add a modifier to the stat.  This method can only be called on the server.
         /// </summary>
-        /// <param name="modifier">The modifier that you want to add.</param>
-        public void AddModifier(StatModifier modifier) {
+        /// <param name="source">The source with the modifier that you want to add.</param>
+        public void AddModifier(StatModifierSource source) {
             if(!IsServer()) return;
+            _sorted = false;
             //only allow a single override modifier
-            if(modifier.Operation == ModifierOperation.Override) {
-                for(var i =0; i < _modifiers.Count;i++)
-                    if(_modifiers[i].Operation == ModifierOperation.Additive) {
-                        _modifiers[i] = modifier;
+            if(source.Modifier.Operation == ModifierOperation.Override) {
+                for(var i =0; i < _modifierSources.Count;i++)
+                    if(_modifierSources[i].Modifier.Operation == ModifierOperation.Additive) {
+                        _modifierSources[i] = source;
                         CalculateValue();
                     }
             }
-            _modifiers.Add(modifier);
+            _modifierSources.Add(source);
+            if(source.Modifier.Duration >= 0) Manager.WatchDuration(source);
             CalculateValue();
         }
 
@@ -128,7 +143,7 @@ namespace FishNetRpgLibrary.Statistics {
         /// <param name="source">The source of the modifier.</param>
         public void RemoveModifierFromSource(Object source) {
             if(!IsServer()) return;
-            _modifiers = _modifiers.Where(modifier => modifier.HasSource(source)).ToList();
+            _modifierSources = _modifierSources.Where(modifier => modifier.HasSource(source)).ToList();
             CalculateValue();
         }
 
@@ -139,7 +154,7 @@ namespace FishNetRpgLibrary.Statistics {
         /// <param name="sourceId">The id of the source of the modifier.</param>
         public void RemoveModifierFromSource(int sourceId) {
             if(!IsServer()) return;
-            _modifiers = _modifiers.Where(modifier => modifier.HasSource(sourceId)).ToList();
+            _modifierSources = _modifierSources.Where(modifier => modifier.HasSource(sourceId)).ToList();
             CalculateValue();
         }
 
@@ -147,7 +162,16 @@ namespace FishNetRpgLibrary.Statistics {
         /// This method is used to clear all of the stat's modifiers.  This method can only be called on the server.
         /// </summary>
         public void ClearAllModifiers() {
-            _modifiers.Clear();
+            _modifierSources.Clear();
+            CalculateValue();
+        }
+
+        /// <summary>
+        /// This method is used to remove a modifier from the stat.  This method can only be called on the server.
+        /// </summary>
+        /// <param name="modifierSource"></param>
+        public void RemoveModifier(StatModifierSource modifierSource) {
+            _modifierSources.Remove(modifierSource);
             CalculateValue();
         }
         
@@ -211,9 +235,11 @@ namespace FishNetRpgLibrary.Statistics {
             float multiplier = 0;
             var appliedMultiplier = false;
             //sort the modifiers so that they are applied in the correct order.
-            _modifiers.Sort(SortModifiers);
+            if(!_sorted)_modifierSources.Sort(SortModifiers);
+            _sorted = true;
             //apply all of the modifiers
-            foreach(var modifier in _modifiers) {
+            foreach(var source in _modifierSources) {
+                var modifier = source.Modifier;
                 if(modifier.Operation > ModifierOperation.AdditiveMultiplier && !appliedMultiplier) {
                     if(multiplier!=0) newValue = Mathf.RoundToInt(newValue * multiplier);
                     appliedMultiplier = true;
@@ -233,7 +259,7 @@ namespace FishNetRpgLibrary.Statistics {
             //make sure that the value does not exceed the cap
             if(Cap >= 0) newValue = Mathf.Min(newValue, Cap);
             //make sure that the value is not less than the minimum
-            newValue = Mathf.Max(_minimumValue, newValue);
+            newValue = Mathf.Max(Minimum, newValue);
             //set the new value
             Value = newValue;
         }
@@ -244,8 +270,8 @@ namespace FishNetRpgLibrary.Statistics {
         /// <param name="a">The first modifier to compare.</param>
         /// <param name="b">The second modifier to compare.</param>
         /// <returns>The result of the comparison.</returns>
-        protected static int SortModifiers(StatModifier a, StatModifier b) {
-            return a.Operation.CompareTo(b.Operation);
+        protected static int SortModifiers(StatModifierSource a, StatModifierSource b) {
+            return a.Modifier.Operation.CompareTo(b.Modifier.Operation);
         }
         
         /// <summary>
