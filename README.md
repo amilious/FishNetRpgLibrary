@@ -29,9 +29,19 @@
   <a href="#license">License</a>
 </p>
 
+<i>* * please be aware that this project is still in the early development stages and there is not yet a stable release. * *</i>
+
 ## Key Features
 
 * Stat System
+* Experience/Level System
+* Resource System (Health,Mp,Stamina)
+* Inventory/Loot System
+* Spell System
+* Saving System
+* Combat System
+* Dialog System
+* Quest System
 
 ## How To Use
 

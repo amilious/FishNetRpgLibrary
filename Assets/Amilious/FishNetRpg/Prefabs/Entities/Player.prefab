@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _networkBehaviours:
   - {fileID: 2762719621396459611}
+  - {fileID: 4641721812614794154}
   - {fileID: 1264501947926043127}
   - {fileID: 3334874743933255696}
   SceneTransformProperties:
@@ -91,9 +92,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38e7d00860194655912d03682fe3624f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 1
   _addedNetworkObject: {fileID: 8768253350945553637}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 8768253350945553637}
 --- !u!114 &1264501947926043127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6297f15c5b694da0ba731c8c11486816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 1
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8768253350945553637}
   _networkObjectCache: {fileID: 8768253350945553637}
 --- !u!114 &3334874743933255696
@@ -121,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2fa364e3a024f7fa13672fad5c0cf3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 2
+  _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8768253350945553637}
   _networkObjectCache: {fileID: 8768253350945553637}
   health: {fileID: 11400000, guid: 8a712b467b83a3b43ab1625686c53bab, type: 2}

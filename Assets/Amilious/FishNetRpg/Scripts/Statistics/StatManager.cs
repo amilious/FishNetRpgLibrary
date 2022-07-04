@@ -9,6 +9,7 @@ using Object = UnityEngine.Object;
 namespace Amilious.FishNetRpg.Statistics {
     
     [RequireComponent(typeof(Entity))]
+    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Stat Manager")]
     public class StatManager : NetworkBehaviour {
 
         public delegate void OnStatInitializedDelegate(Entity entity, Stat stat);
