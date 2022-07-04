@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Amilious/FunctionGraph/Editor/FunctionTreeEditor.uss?fileID=7433441132597879392&amp;guid=a483af1bc654cc24f959414aa8a36552&amp;type=3#FunctionTreeEditor" />
+    <uie:Toolbar />
+    <Amilious.FunctionGraph.Editor.SplitView fixed-pane-initial-dimension="300">
+        <ui:VisualElement>
+            <ui:Label text="Node Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37); padding-left: 5px;" />
+            <Amilious.FunctionGraph.Editor.InspectorView style="width: auto; flex-grow: 1; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+        </ui:VisualElement>
+        <ui:VisualElement>
+            <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37); padding-left: 5px;" />
+            <Amilious.FunctionGraph.Editor.FunctionTreeView focusable="true" style="flex-grow: 1;" />
+        </ui:VisualElement>
+    </Amilious.FunctionGraph.Editor.SplitView>
+</ui:UXML>

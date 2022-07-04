@@ -1,0 +1,14 @@
+{
+    "name": "Amilious.FunctionGraph",
+    "rootNamespace": "Amilious.FunctionGraph",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
