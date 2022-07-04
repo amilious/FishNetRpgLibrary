@@ -10,5 +10,7 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
 
         public abstract int BaseValue(int level);
 
+        
+
     }
 }

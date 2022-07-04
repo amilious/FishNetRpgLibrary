@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics {
     
-    [CreateAssetMenu(fileName = "NewStat", menuName = FishNetRpg.ASSET_MENU_ROOT+"Stats/Stat",order = 0)]
+    [CreateAssetMenu(fileName = "NewStat", menuName = FishNetRpg.STATS_MENU_ROOT+"Stat",order = 20)]
     public class Stat : ScriptableObject {
 
         [SerializeField] private string statName;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics {
     
-    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishNetRpg.ASSET_MENU_ROOT + "Stats/Stat Modifier", order=1)]
+    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishNetRpg.STATS_MENU_ROOT + "Stat Modifier", order=0)]
     public class StatModifer : ScriptableObject, IStatModifier {
         
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////

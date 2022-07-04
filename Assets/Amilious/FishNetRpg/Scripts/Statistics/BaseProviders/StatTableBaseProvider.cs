@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
     
-    [CreateAssetMenu(fileName = "NewStatBaseProvider", 
-        menuName = FishNetRpg.ASSET_MENU_ROOT + "Stats/Base Value Provider/Table", order=2)]
+    [CreateAssetMenu(fileName = "NewTableBaseProvider",
+        menuName = FishNetRpg.STATS_MENU_ROOT + "Table Base Value Provider", order = 45)]
     public class StatTableBaseProvider : StatBaseValueProvider {
 
         

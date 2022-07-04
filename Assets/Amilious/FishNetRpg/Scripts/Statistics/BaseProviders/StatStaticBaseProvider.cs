@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
     
-    [CreateAssetMenu(fileName = "NewStatBaseProvider", 
-        menuName = FishNetRpg.ASSET_MENU_ROOT + "Stats/Base Value Provider/Static", order=0)]
+    [CreateAssetMenu(fileName = "NewStaticBaseProvider",
+        menuName = FishNetRpg.STATS_MENU_ROOT + "Static Base Value Provider", order = 44)]
     public class StatStaticBaseProvider : StatBaseValueProvider {
         
         [SerializeField] private int cap;

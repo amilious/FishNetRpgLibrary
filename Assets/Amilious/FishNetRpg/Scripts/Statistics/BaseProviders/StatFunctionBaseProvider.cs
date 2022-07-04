@@ -7,8 +7,8 @@ using Amilious.FunctionGraph.Nodes.Hidden.Output;
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
 
-    [CreateAssetMenu(fileName = "NewStatBaseProvider",
-        menuName = FishNetRpg.ASSET_MENU_ROOT + "Stats/Base Value Provider/Function Graph", order = 1)]
+    [CreateAssetMenu(fileName = "NewFunctionBaseProvider",
+        menuName = FishNetRpg.STATS_MENU_ROOT + "Function Base Value Provider", order = 47)]
     public class StatFunctionBaseProvider : StatBaseValueProvider, IFunctionProvider {
 
         [HideInInspector, SerializeField] private FunctionBaseProviderResult resultNode;
