@@ -33,7 +33,8 @@ namespace Amilious.FishNetRpg.Statistics {
         public float Duration => duration;
 
         #endregion
-        
+
+        public ModifierSystems System => ModifierSystems.StatsSystem;
     }
     
 }

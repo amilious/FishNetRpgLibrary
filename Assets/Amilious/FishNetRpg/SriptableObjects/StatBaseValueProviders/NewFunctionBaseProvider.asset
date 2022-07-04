@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d33e658c014bd3a57cec3bb3655afc, type: 3}
+  m_Name: NewFunctionBaseProvider
+  m_EditorClassIdentifier: 
+  resultNode: {fileID: 8795365056384712243}
+  inputNode: {fileID: 6490124518521654771}
+  nodes:
+  - {fileID: 8795365056384712243}
+  - {fileID: 6490124518521654771}
+  - {fileID: 9207686366530409494}
+  graphData: {fileID: 8209738289783043105}
+--- !u!114 &6490124518521654771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Input
+  m_EditorClassIdentifier: Amilious.FishNetRpg:Amilious.FishNetRpg.Statistics.BaseProviders:FunctionBaseProviderInput
+  guid: fe39588aa589eaa4d93730cbb73c233b
+  position: {x: 22, y: 2}
+  inputConnections: []
+  label: level
+--- !u!114 &8209738289783043105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
+  m_Name: GraphData
+  m_EditorClassIdentifier: 
+  position: {x: 185, y: 170, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  groups:
+  - id: 92648cd81458495459c32cb904fc8787
+    title: New Group
+    nodeIds:
+    - c1569fdc53cb9ac4ba4f2341f4c40253
+    - fe39588aa589eaa4d93730cbb73c233b
+--- !u!114 &8795365056384712243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Result
+  m_EditorClassIdentifier: Amilious.FishNetRpg:Amilious.FishNetRpg.Statistics.BaseProviders:FunctionBaseProviderResult
+  guid: c1569fdc53cb9ac4ba4f2341f4c40253
+  position: {x: 188.08002, y: 0.6799927}
+  inputConnections:
+  - outputNode: {fileID: 6490124518521654771}
+    inputPort: 0
+    outputPort: 0
+  label1: Base Value
+  label2: Minimum
+  label3: Cap
+--- !u!114 &9207686366530409494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eef982151ca465ba86da801c9ac9add, type: 3}
+  m_Name: SplitInt
+  m_EditorClassIdentifier: 
+  guid: cdcf0ea5f2252164d85986202e68d206
+  position: {x: 0, y: 0}
+  inputConnections: []

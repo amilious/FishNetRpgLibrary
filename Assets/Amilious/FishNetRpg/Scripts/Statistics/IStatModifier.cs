@@ -3,7 +3,7 @@ namespace Amilious.FishNetRpg.Statistics {
     /// <summary>
     /// This interface is used to modify stats.
     /// </summary>
-    public interface IStatModifier {
+    public interface IStatModifier : IModifier {
         
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
         

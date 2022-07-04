@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Result
   m_EditorClassIdentifier: Amilious.FishNetRpg:Amilious.FishNetRpg.Statistics.BaseProviders:FunctionBaseProviderResult
   guid: 352644b3b18c11941bee00220e921aec
-  position: {x: 388, y: -58.200012}
+  position: {x: 468, y: -93}
   inputConnections:
   - outputNode: {fileID: 1177887151517782270}
     inputPort: 1
@@ -27,6 +27,21 @@ MonoBehaviour:
   label1: Base Value
   label2: Minimum
   label3: Cap
+--- !u!114 &-5500838922462010064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f2130b76c84f78857e8066e33ba23a, type: 3}
+  m_Name: NotEqualFloat
+  m_EditorClassIdentifier: 
+  guid: 35bb5ce3d88de4141bfd4b17a99ea250
+  position: {x: 350, y: 109}
+  inputConnections: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,6 +64,8 @@ MonoBehaviour:
   - {fileID: 5996857997787017971}
   - {fileID: 5300298281600522728}
   - {fileID: 6419532108391645452}
+  - {fileID: -5500838922462010064}
+  - {fileID: 2226267557464670885}
   graphData: {fileID: 8123596920777099536}
 --- !u!114 &1177887151517782270
 MonoBehaviour:
@@ -63,9 +80,24 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: Amilious.FishNetRpg:Amilious.FishNetRpg.Statistics.BaseProviders:FunctionBaseProviderInput
   guid: daf65b135212a7045b5926793cdeb16b
-  position: {x: -62, y: -9}
+  position: {x: -121, y: -52}
   inputConnections: []
   label: level
+--- !u!114 &2226267557464670885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28d336511f64c0bb46e25c8b24ce424, type: 3}
+  m_Name: SplitVector3
+  m_EditorClassIdentifier: 
+  guid: 6e48ba18f4a120247bc6905bbcacaa30
+  position: {x: 78.50004, y: 117.450005}
+  inputConnections: []
 --- !u!114 &5047172639174490463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +189,7 @@ MonoBehaviour:
   m_Name: For
   m_EditorClassIdentifier: 
   guid: 5561676848720274ebbeeb8416bdbb90
-  position: {x: 502, y: 130}
+  position: {x: 623, y: 152}
   inputConnections: []
 --- !u!114 &6801606709529209265
 MonoBehaviour:
@@ -186,6 +218,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: -30, y: 39, z: 0}
+  position: {x: 47, y: -100, z: 0}
   scale: {x: 1, y: 1, z: 1}
   groups: []

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3472188693603441296}
   - component: {fileID: 8768253350945553637}
   - component: {fileID: 2762719621396459611}
+  - component: {fileID: 4641721812614794154}
+  - component: {fileID: 1264501947926043127}
   - component: {fileID: 3334874743933255696}
   m_Layer: 0
   m_Name: Player
@@ -47,7 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _networkBehaviours:
-  - {fileID: 0}
+  - {fileID: 2762719621396459611}
+  - {fileID: 1264501947926043127}
+  - {fileID: 3334874743933255696}
   SceneTransformProperties:
     Position: {x: 0, y: 0, z: 0}
     Rotation: {x: 0, y: 0, z: 0, w: 1}
@@ -72,9 +76,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1433a0325fc40689dc3ed767f170189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _componentIndexCache: 0
+  _addedNetworkObject: {fileID: 8768253350945553637}
+  _networkObjectCache: {fileID: 8768253350945553637}
+--- !u!114 &4641721812614794154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407316351100646850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e7d00860194655912d03682fe3624f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _componentIndexCache: 255
   _addedNetworkObject: {fileID: 8768253350945553637}
   _networkObjectCache: {fileID: 0}
+--- !u!114 &1264501947926043127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407316351100646850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6297f15c5b694da0ba731c8c11486816, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _componentIndexCache: 1
+  _addedNetworkObject: {fileID: 8768253350945553637}
+  _networkObjectCache: {fileID: 8768253350945553637}
 --- !u!114 &3334874743933255696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,8 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2fa364e3a024f7fa13672fad5c0cf3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _componentIndexCache: 255
+  _componentIndexCache: 2
   _addedNetworkObject: {fileID: 8768253350945553637}
-  _networkObjectCache: {fileID: 0}
+  _networkObjectCache: {fileID: 8768253350945553637}
   health: {fileID: 11400000, guid: 8a712b467b83a3b43ab1625686c53bab, type: 2}
   otherStats: []
