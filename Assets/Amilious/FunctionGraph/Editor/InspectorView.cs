@@ -16,16 +16,19 @@ namespace Amilious.FunctionGraph.Editor {
         public InspectorView() { }
 
         public void UpdateSelection(FunctionNodeView nodeView) {
+            Reset();
             SelectedNode = nodeView;
-            Clear();
-            if(Editor == null) Object.DestroyImmediate(Editor); 
             Editor = UnityEditor.Editor.CreateEditor(nodeView.Node);
             EditorContainer = new IMGUIContainer(Editor.OnInspectorGUI);
             Add(EditorContainer);
         }
-        
-        
-        
+
+
+        public void Reset() {
+            SelectedNode = null;
+            Clear();
+            if(Editor != null) Object.DestroyImmediate(Editor);
+        }
     }
     
 }

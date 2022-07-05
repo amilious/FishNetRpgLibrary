@@ -69,7 +69,9 @@ namespace Amilious.FunctionGraph.Editor {
                 port.portName = inputInfo.Name;
                 port.tooltip = GetPortToolTip(inputInfo);
                 port.portColor = _typeColors.TryGetValue(inputInfo.Type, out var color) ? color : Color.black;
+                port.userData = inputInfo;
                 Input.Add(port);
+                inputInfo.SetIndex(Input.IndexOf(port));
                 inputContainer.Add(port);
             }
         }
@@ -84,7 +86,9 @@ namespace Amilious.FunctionGraph.Editor {
                 port.portName = outputInfo.Name;
                 port.tooltip = GetPortToolTip(outputInfo);
                 port.portColor = _typeColors.TryGetValue(outputInfo.Type, out var color) ? color : Color.black;
+                port.userData = outputInfo;
                 Output.Add(port);
+                outputInfo.SetIndex(Output.IndexOf(port));
                 outputContainer.Add(port);
             }
         }

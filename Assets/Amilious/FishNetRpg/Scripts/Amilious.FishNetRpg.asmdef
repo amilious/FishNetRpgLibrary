@@ -3,7 +3,8 @@
     "rootNamespace": "Amilious.FishNetRpg",
     "references": [
         "FishNet.Runtime",
-        "Amilious.FunctionGraph"
+        "Amilious.FunctionGraph",
+        "Amilious.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

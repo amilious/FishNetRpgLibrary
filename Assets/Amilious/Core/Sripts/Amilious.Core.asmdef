@@ -1,9 +1,7 @@
 {
-    "name": "Amilious.FunctionGraph",
-    "rootNamespace": "Amilious.FunctionGraph",
-    "references": [
-        "GUID:b4b5ab0950a711543b7ce174be878fef"
-    ],
+    "name": "Amilious.Core",
+    "rootNamespace": "Amilious.Core",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

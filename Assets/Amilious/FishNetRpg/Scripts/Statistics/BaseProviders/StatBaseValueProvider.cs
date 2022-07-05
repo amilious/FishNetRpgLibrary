@@ -1,8 +1,9 @@
+using Amilious.Core;
 using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
     
-    public abstract class StatBaseValueProvider : ScriptableObject {
+    public abstract class StatBaseValueProvider : AmiliousScriptableObject {
 
         public abstract int GetMinimum(int level);
 

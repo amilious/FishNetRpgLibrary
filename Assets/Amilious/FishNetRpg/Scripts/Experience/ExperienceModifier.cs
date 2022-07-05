@@ -1,5 +1,5 @@
 namespace Amilious.FishNetRpg.Experience {
-    public class ExperienceModifier : IExperienceModifier {
-        public ModifierSystems System => ModifierSystems.LevelSystem;
+    public class ExperienceModifier : Modifier {
+        public override ModifierSystems System => ModifierSystems.LevelSystem;
     }
 }

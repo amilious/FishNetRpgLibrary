@@ -1,9 +1,9 @@
 using UnityEngine;
 
 namespace Amilious.FishNetRpg.Resource {
-    public class ResourceModifier : ScriptableObject, IResourceModifier {
+    public class ResourceModifier : Modifier, IResourceModifier {
         
-        public ModifierSystems System => ModifierSystems.ResourceSystem;
+        public override ModifierSystems System => ModifierSystems.ResourceSystem;
         
     }
 }

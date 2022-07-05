@@ -7,6 +7,7 @@ namespace Amilious.FunctionGraph {
         public FunctionNode outputNode;
         public int inputPort;
         public int outputPort;
+        public string loopGuid = null;
     }
     
 }

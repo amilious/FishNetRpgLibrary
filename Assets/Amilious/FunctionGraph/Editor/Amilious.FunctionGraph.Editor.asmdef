@@ -2,7 +2,8 @@
     "name": "Amilious.FunctionGraph.Editor",
     "rootNamespace": "Amilious.FunctionGraph.Editor",
     "references": [
-        "Amilious.FunctionGraph"
+        "Amilious.FunctionGraph",
+        "Amilious.Core"
     ],
     "includePlatforms": [
         "Editor"

@@ -9,6 +9,8 @@ namespace Amilious.FunctionGraph {
         public bool AllowMultiple { get; }
         public bool Horizontal { get; }
         string Tooltip { get; set; }
+        public int Index { get; }
+        public void SetIndex(int index);
 
         public bool TryGetResult<T>(CalculationId id, out T result) {
             if(this is PortInfo<T> casted) {
@@ -32,6 +34,10 @@ namespace Amilious.FunctionGraph {
         public bool AllowMultiple { get; }
         public bool Horizontal { get; }
         public string Tooltip { get; set; }
+        
+        public int Index { get; private set; }
+
+        public void SetIndex(int index) => Index = index;
 
         public PortInfo<T> SetTooltip(string tooltip) { 
             Tooltip = tooltip;

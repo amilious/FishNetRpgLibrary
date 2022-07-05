@@ -1,9 +1,10 @@
+using Amilious.Core;
 using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics {
     
     [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishNetRpg.STATS_MENU_ROOT + "Stat Modifier", order=0)]
-    public class StatModifer : ScriptableObject, IStatModifier {
+    public class StatModifer : Modifier, IStatModifier {
         
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////
         
@@ -34,7 +35,7 @@ namespace Amilious.FishNetRpg.Statistics {
 
         #endregion
 
-        public ModifierSystems System => ModifierSystems.StatsSystem;
+        public override ModifierSystems System => ModifierSystems.StatsSystem;
     }
     
 }

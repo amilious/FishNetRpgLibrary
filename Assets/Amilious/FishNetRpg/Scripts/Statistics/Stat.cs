@@ -1,11 +1,12 @@
+using UnityEngine;
+using Amilious.Core;
 using Amilious.FishNetRpg.Entities;
 using Amilious.FishNetRpg.Statistics.BaseProviders;
-using UnityEngine;
 
 namespace Amilious.FishNetRpg.Statistics {
     
     [CreateAssetMenu(fileName = "NewStat", menuName = FishNetRpg.STATS_MENU_ROOT+"Stat",order = 20)]
-    public class Stat : ScriptableObject {
+    public class Stat : AmiliousScriptableObject {
 
         [SerializeField] private string statName;
         [SerializeField] private StatBaseValueProvider baseValueProvider;

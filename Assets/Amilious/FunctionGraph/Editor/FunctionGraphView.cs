@@ -9,9 +9,9 @@ using UnityEditor.Experimental.GraphView;
 
 namespace Amilious.FunctionGraph.Editor {
     
-    public class FunctionTreeView : GraphView {
+    public class FunctionGraphView : GraphView {
 
-        public new class UxmlFactory : UxmlFactory<FunctionTreeView, GraphView.UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<FunctionGraphView, GraphView.UxmlTraits> { }
 
         private readonly Dictionary<Group, string> _groups = new Dictionary<Group, string>();
 
@@ -20,7 +20,7 @@ namespace Amilious.FunctionGraph.Editor {
 
         private IFunctionProvider _function;
         
-        public FunctionTreeView() {
+        public FunctionGraphView() {
             
             Insert(0,new GridBackground());
             this.AddManipulator(new ContentZoomer());
@@ -29,7 +29,7 @@ namespace Amilious.FunctionGraph.Editor {
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new EdgeManipulator());
             
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Amilious/FunctionGraph/Editor/FunctionTreeEditor.uss");
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Amilious/FunctionGraph/Editor/FunctionGraphEditor.uss");
             styleSheets.Add(styleSheet);
             viewTransformChanged += ViewChanged;
             elementsAddedToGroup += ElementsAddedToGroup;
@@ -109,10 +109,8 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         public void PopulateView(IFunctionProvider function) {
+            Reset();
             _function = function;
-            graphViewChanged -= OnGraphViewChanged;
-            DeleteElements(graphElements);
-            _groups.Clear();
             function.Initialize();
             viewTransform.position = _function.GraphData.position;
             viewTransform.scale = _function.GraphData.scale;
@@ -150,8 +148,8 @@ namespace Amilious.FunctionGraph.Editor {
                         case Edge edge: {
                             var input = edge.input.node as FunctionNodeView;
                             var output = edge.output.node as FunctionNodeView;
-                            var inputId = input.Input.IndexOf(edge.input);
-                            var outputId = output.Output.IndexOf(edge.output);
+                            var inputId = edge.input.GetIndex();
+                            var outputId = edge.output.GetIndex();
                             _function.RemoveConnection(input.Node,output.Node,inputId, outputId);
                             break;
                         }
@@ -164,11 +162,8 @@ namespace Amilious.FunctionGraph.Editor {
             }
 
             graphViewChange.edgesToCreate?.ForEach(edge => {
-                if(edge.input.node is not FunctionNodeView input || 
-                   edge.output.node is not FunctionNodeView output) return;
-                var inputId = input.Input.IndexOf(edge.input);
-                var outputId = output.Output.IndexOf(edge.output);
-                _function.AddConnection(input.Node, output.Node, inputId, outputId);
+                _function.AddConnection(edge.InputNode(), edge.OutputNode(), 
+                    edge.InputPortIndex(),edge.OutputPortIndex());
             });
             return graphViewChange;
         }
@@ -213,6 +208,13 @@ namespace Amilious.FunctionGraph.Editor {
                 if(FindSubNode(lookFor, con.outputNode)) return true;
             }
             return false;
+        }
+
+        public void Reset() {
+            _function = null;
+            graphViewChanged -= OnGraphViewChanged;
+            DeleteElements(graphElements);
+            _groups.Clear();
         }
     }
     

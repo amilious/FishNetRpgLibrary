@@ -1,5 +1,5 @@
 namespace Amilious.FishNetRpg.Experience {
-    public interface IExperienceModifier: IModifier {
+    public interface IExperienceModifier {
         
     }
 }
