@@ -1,17 +1,15 @@
-namespace Amilious.FishNetRpg.Statistics {
+namespace Amilious.FishNetRpg.Modifiers {
     
     /// <summary>
-    /// This interface is used to modify stats.
+    /// This interface is the base of all modifiers.
     /// </summary>
-    public interface IStatModifier {
-        
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+    public interface IModifier {
         
         /// <summary>
-        /// This property contains the name of the stat that the modifier should be applied to.
+        /// This property contains the system that the modifier is for.
         /// </summary>
-        public string StatName { get; }
-        
+        public Systems System { get; }
+
         /// <summary>
         /// This property contains the modifier's value.
         /// </summary>
@@ -28,8 +26,6 @@ namespace Amilious.FishNetRpg.Statistics {
         /// </summary>
         public float Duration { get; }
         
-        #endregion
-        
     }
-
+    
 }

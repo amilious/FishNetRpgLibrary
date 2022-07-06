@@ -21,7 +21,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// </summary>
         public StatBaseValueProvider BaseValueProvider => baseValueProvider;
 
-        public StatController this[Entity entity] => entity.StatManager[this];
+        public StatController this[Entity entity] => entity.GetSystem<StatManager>()[this];
 
         public bool TryGetValue(Entity entity, out int value) {
             value = 0;
@@ -47,7 +47,7 @@ namespace Amilious.FishNetRpg.Statistics {
         private bool TryGetStatInfo(Entity entity, out StatController statController) {
             statController = default;
             if(entity == null) return false;
-            statController = entity.StatManager[this];
+            statController = this[entity];
             return statController is { Initialized: true };
         }
 

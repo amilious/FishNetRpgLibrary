@@ -3,6 +3,7 @@ using FishNet;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using Amilious.FishNetRpg.Modifiers;
 using FishNet.Object.Synchronizing;
 using Object = UnityEngine.Object;
 
@@ -18,7 +19,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// <summary>
         /// This list is used to hold the modifiers that are currently applied to this stat.
         /// </summary>
-        private List<StatModifierSource> _modifierSources = new List<StatModifierSource>();
+        private List<ModifierSource<IStatModifier>> _modifierSources = new ();
 
         /// <summary>
         /// This bool is used to keep track of if the modifiers are sorted.
@@ -32,7 +33,7 @@ namespace Amilious.FishNetRpg.Statistics {
         
         public bool Initialized { get; private set; }
 
-        public StatManager StatManager { get; }
+        public StatManager StatSystemManager { get; }
         
         public Stat Stat { get; }
         
@@ -64,7 +65,7 @@ namespace Amilious.FishNetRpg.Statistics {
         
         protected Action<Stat, StatEventTrigger> EventTrigger { get; } 
         
-        protected Action<StatModifierSource> WatchDurationModifer { get; }
+        protected Action<ModifierSource<IStatModifier>> WatchDurationModifer { get; }
         
 
         #endregion
@@ -72,9 +73,9 @@ namespace Amilious.FishNetRpg.Statistics {
         
         #region Constructors /////////////////////////////////////////////////////////////////////////////////////////// 
         
-        public StatController(StatManager manager, Stat stat, SyncDictionary<string, StatData> statData, 
-            Action<Stat, StatEventTrigger> eventTrigger, Action<StatModifierSource> watchDurationModifer) {
-            StatManager = manager;
+        public StatController(StatManager systemManager, Stat stat, SyncDictionary<string, StatData> statData, 
+            Action<Stat, StatEventTrigger> eventTrigger, Action<ModifierSource<IStatModifier>> watchDurationModifer) {
+            StatSystemManager = systemManager;
             Stat = stat;
             StatName = stat.StatName;
             StatDataDictionary = statData;
@@ -93,7 +94,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// This method is used to add a modifier to the stat.  This method can only be called on the server.
         /// </summary>
         /// <param name="source">The source with the modifier that you want to add.</param>
-        public void AddModifier(StatModifierSource source) {
+        public void AddModifier(ModifierSource<IStatModifier> source) {
             if(!IsServer()) return;
             _sorted = false;
             //only allow a single override modifier
@@ -143,7 +144,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// This method is used to remove a modifier from the stat.  This method can only be called on the server.
         /// </summary>
         /// <param name="modifierSource"></param>
-        public void RemoveModifier(StatModifierSource modifierSource) {
+        public void RemoveModifier(ModifierSource<IStatModifier> modifierSource) {
             _modifierSources.Remove(modifierSource);
             CalculateValue();
         }
@@ -200,7 +201,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// <param name="a">The first modifier to compare.</param>
         /// <param name="b">The second modifier to compare.</param>
         /// <returns>The result of the comparison.</returns>
-        protected static int SortModifiers(StatModifierSource a, StatModifierSource b) {
+        protected static int SortModifiers(ModifierSource<IStatModifier> a, ModifierSource<IStatModifier> b) {
             return a.Modifier.ModifierType.CompareTo(b.Modifier.ModifierType);
         }
         

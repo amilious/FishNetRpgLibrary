@@ -1,4 +1,4 @@
-namespace Amilious.FishNetRpg {
+namespace Amilious.FishNetRpg.Modifiers {
     
     /// <summary>
     /// This class is used to represent a modifier type.

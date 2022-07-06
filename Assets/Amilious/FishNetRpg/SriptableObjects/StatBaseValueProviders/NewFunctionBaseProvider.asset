@@ -1,5 +1,40 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7040679851088844514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75513ec0b9a47a3aaf7a0ec1633d90f, type: 3}
+  m_Name: If
+  m_EditorClassIdentifier: 
+  guid: 4809d19d0f0d83e4ba716cda524df072
+  position: {x: 335, y: 253}
+  inputConnections:
+  - outputNode: {fileID: 1296180506577424020}
+    inputPort: 0
+    outputPort: 0
+    loopGuid: 
+--- !u!114 &-6966698693054759539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 367848ef88cb4f74a6cf1e08cd8c7047, type: 3}
+  m_Name: FloatToInt
+  m_EditorClassIdentifier: 
+  guid: 61c12c2ba57b63d4795937e8d609c04a
+  position: {x: 20, y: 121}
+  inputConnections: []
+  selection: 0
 --- !u!114 &-3809408618625234870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41,7 +76,29 @@ MonoBehaviour:
   nodes:
   - {fileID: -3809408618625234870}
   - {fileID: 7676873805635794409}
+  - {fileID: -6966698693054759539}
+  - {fileID: 1296180506577424020}
+  - {fileID: -7040679851088844514}
   graphData: {fileID: 4171178371873256908}
+--- !u!114 &1296180506577424020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e7d42c641fc4735b7585769dfcec7fc, type: 3}
+  m_Name: GetBit
+  m_EditorClassIdentifier: 
+  guid: 3b30f89046f1e344dba1b6e9ecc7b112
+  position: {x: 194, y: 119}
+  inputConnections:
+  - outputNode: {fileID: -6966698693054759539}
+    inputPort: 0
+    outputPort: 0
+    loopGuid: 
 --- !u!114 &4171178371873256908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: 340, y: 288, z: 0}
-  scale: {x: 0.49717674, y: 0.49717674, z: 1}
+  position: {x: 142, y: 103, z: 0}
+  scale: {x: 0.65751624, y: 0.65751624, z: 1}
   groups: []
 --- !u!114 &7676873805635794409
 MonoBehaviour:

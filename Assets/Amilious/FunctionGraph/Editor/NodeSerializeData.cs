@@ -41,8 +41,8 @@ namespace Amilious.FunctionGraph.Editor {
             //add the nodes
             foreach(var node in NodeData) {
                 var pos = new Vector2(node.XPos, node.YPos);
-                pos.x -= view.viewTransform.position.x;
-                pos.y -= view.viewTransform.position.y;
+                pos.x += view.viewTransform.position.x;
+                pos.y += view.viewTransform.position.y;
                 var nodeView = view.CreateNode(node.GetCastedType(), pos);
                 database.Add(node.Guid,nodeView);
             }

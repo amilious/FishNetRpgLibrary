@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3472188693603441296}
   - component: {fileID: 8768253350945553637}
   - component: {fileID: 2762719621396459611}
+  - component: {fileID: 4245595892247463170}
   - component: {fileID: 4641721812614794154}
   - component: {fileID: 1264501947926043127}
   - component: {fileID: 3334874743933255696}
@@ -80,6 +81,18 @@ MonoBehaviour:
   _componentIndexCache: 0
   _addedNetworkObject: {fileID: 8768253350945553637}
   _networkObjectCache: {fileID: 8768253350945553637}
+--- !u!114 &4245595892247463170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8407316351100646850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d143c75f22d2445780c9a397d9f509be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4641721812614794154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,5 +138,4 @@ MonoBehaviour:
   _componentIndexCache: 3
   _addedNetworkObject: {fileID: 8768253350945553637}
   _networkObjectCache: {fileID: 8768253350945553637}
-  health: {fileID: 11400000, guid: 8a712b467b83a3b43ab1625686c53bab, type: 2}
   otherStats: []
