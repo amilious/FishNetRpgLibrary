@@ -14,6 +14,8 @@ namespace Amilious.FunctionGraph.Editor {
         
         private FunctionGraphView _graphView;
         private InspectorView _inspectorView;
+        private Label _functionTitle;
+        private Label _inspectorTitle;
     
         [MenuItem("Amilious/FunctionGraphEditor")]
         public static void OpenWindow() {
@@ -43,7 +45,24 @@ namespace Amilious.FunctionGraph.Editor {
             _graphView.OnNodeSelected = OnNodeSelectionChanged;
             _graphView.OnNodeUnselected = OnNodeUnselected;
             _inspectorView = root.Q<InspectorView>();
+            _functionTitle = root.Q<Label>("functionTitle");
+            _inspectorTitle = root.Q<Label>("inspectorTitle");
+            ResetTitles();
             OnSelectionChange();
+        }
+
+        private void ResetTitles() {
+            if(_functionTitle == null || _inspectorTitle == null) return;
+            if(ProviderScriptableObject != null) {
+                _functionTitle.text = "<b>Function Node:</b> " +
+                    $"(<color=#3a86ff>{ProviderScriptableObject.GetType().Name}</color>) " +
+                    $"<color=#8338ec>{ProviderScriptableObject.name}</color>";
+            }else {
+                _functionTitle.text = "<b>Function Node:</b> <i>No Loaded Function Provider</i>";
+            }
+            _inspectorTitle.text = _inspectorView?.SelectedNode?.Node == null ? 
+                "<b>Selected Node:</b> <i>No Node Selected</i>" : 
+                $"<b>Selected Node:</b> <color=#8338ec>{_inspectorView.SelectedNode.Node.name}</color>";
         }
 
         protected void OnSelectionChange() => TryLoad(Selection.activeObject);
@@ -62,12 +81,13 @@ namespace Amilious.FunctionGraph.Editor {
             Provider = provider;
             ProviderScriptableObject = amiliousScriptableObject;
             _graphView.PopulateView(Provider);
+            ResetTitles();
             return true;
         }
         
         [OnOpenAsset(1)]
         public static bool OnOpenAsset(int instanceId, int line) {
-            if(EditorUtility.InstanceIDToObject(instanceId) is not IFunctionProvider provider) return false;
+            if(EditorUtility.InstanceIDToObject(instanceId) is not IFunctionProvider) return false;
             OpenWindow();
             return true;
         }
@@ -79,12 +99,14 @@ namespace Amilious.FunctionGraph.Editor {
             if(_instance == null) return;
             _instance._inspectorView.Reset();
             _instance._graphView.Reset();
+            _instance.ResetTitles();
         }
         
         
 
         private void OnNodeSelectionChanged(FunctionNodeView nodeView) {
             _inspectorView.UpdateSelection(nodeView);
+            ResetTitles();
         }
 
         private void OnNodeUnselected(FunctionNodeView nodeView) {

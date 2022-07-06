@@ -30,7 +30,7 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
             //add result
             resultNode = CreateInstance<FunctionBaseProviderResult>();
             resultNode.name = "Result";
-            resultNode.position = Vector2.right*100;
+            resultNode.SetPositionWithoutSaving(Vector2.right*100);
             resultNode.SetLabel("Base Value", "Minimum", "Cap");
             nodeList.Add(resultNode);
             //add input
@@ -64,8 +64,5 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
             return Mathf.RoundToInt(resultNode.GetResult1(calculationId));
         }
     }
-    
-    public class FunctionBaseProviderInput : InputNode<int> { }
-    public class FunctionBaseProviderResult : ResultNode<float,int,int> { }
-    
+
 }

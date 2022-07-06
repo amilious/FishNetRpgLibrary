@@ -23,8 +23,8 @@ namespace Amilious.FunctionGraph.Editor {
             title = node.name.SplitCamelCase();
             tooltip = node.GetDescription;
             viewDataKey = node.guid;
-            style.left = Node.position.x;
-            style.top = Node.position.y;
+            style.left = Node.Position.x;
+            style.top = Node.Position.y;
             CreateInputPorts();
             CreateOutputPorts();
             Node.ModifyNodeView(this);
@@ -92,13 +92,7 @@ namespace Amilious.FunctionGraph.Editor {
                 outputContainer.Add(port);
             }
         }
-
-        public override void SetPosition(Rect newPos) {
-            base.SetPosition(newPos);
-            Node.position.x = newPos.xMin;
-            Node.position.y = newPos.yMin;
-        }
-
+        
         public override void OnSelected() {
             base.OnSelected();
             OnNodeSelected?.Invoke(this);

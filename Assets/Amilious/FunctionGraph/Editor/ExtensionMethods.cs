@@ -24,17 +24,19 @@ namespace Amilious.FunctionGraph.Editor {
 
         public static FunctionNodeView InputNodeView(this Edge edge) => edge.input.FunctionNodeView();
 
-        public static int InputPortIndex(this Edge edge) => edge.input.GetIndex();
+        public static int InputPort(this Edge edge) => edge.input.GetIndex();
         
         public static FunctionNode OutputNode(this Edge edge) => edge.output.FunctionNode();
 
         public static FunctionNodeView OutputNodeView(this Edge edge) => edge.output.FunctionNodeView();
 
-        public static int OutputPortIndex(this Edge edge) => edge.input.GetIndex();
+        public static int OutputPort(this Edge edge) => edge.input.GetIndex();
 
         public static bool IsLoop(this Edge edge, out string guid) => (guid = edge.userData as string)!=null;
 
         public static void SetLoopGuid(this Edge edge, string guid) => edge.userData = guid;
+
+        public static string GetId(this Group group) => group.userData as string;
 
     }
     

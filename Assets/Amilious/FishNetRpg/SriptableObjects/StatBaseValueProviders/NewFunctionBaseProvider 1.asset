@@ -1,6 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-3809408618625234870
+--- !u!114 &-4857164321081685710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
+  m_Name: GraphData
+  m_EditorClassIdentifier: 
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  groups: []
+--- !u!114 &-1775718609768056796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,10 +27,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9c98b279e5c41929b8f0643d9cd9945, type: 3}
   m_Name: Result
   m_EditorClassIdentifier: 
-  guid: 2ba25bef334727649a26c1f1d787b047
-  position: {x: 137, y: -138}
+  guid: 25c0b3094f167ae43b7e38737b5d9b70
+  position: {x: 100, y: 0}
   inputConnections:
-  - outputNode: {fileID: 7676873805635794409}
+  - outputNode: {fileID: 7561904139930636307}
     inputPort: 0
     outputPort: 0
     loopGuid: 
@@ -32,32 +47,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0d33e658c014bd3a57cec3bb3655afc, type: 3}
-  m_Name: NewFunctionBaseProvider
+  m_Name: NewFunctionBaseProvider 1
   m_EditorClassIdentifier: 
-  guid: 44bae9226de023749819e6cfbddd98a2
+  guid: afd38cdc6bcf44943835e1acf6ebffe1
   fileId: 11400000
-  resultNode: {fileID: -3809408618625234870}
-  inputNode: {fileID: 7676873805635794409}
+  resultNode: {fileID: -1775718609768056796}
+  inputNode: {fileID: 7561904139930636307}
   nodes:
-  - {fileID: -3809408618625234870}
-  - {fileID: 7676873805635794409}
-  graphData: {fileID: 4171178371873256908}
---- !u!114 &4171178371873256908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
-  m_Name: GraphData
-  m_EditorClassIdentifier: 
-  position: {x: 340, y: 288, z: 0}
-  scale: {x: 0.49717674, y: 0.49717674, z: 1}
-  groups: []
---- !u!114 &7676873805635794409
+  - {fileID: -1775718609768056796}
+  - {fileID: 7561904139930636307}
+  graphData: {fileID: -4857164321081685710}
+--- !u!114 &7561904139930636307
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed2971882147424da719551904556733, type: 3}
   m_Name: Input
   m_EditorClassIdentifier: 
-  guid: ba6c1f7aa89c7de4eb74118a3ce5086b
-  position: {x: -160, y: -159}
+  guid: be9d0dce50174b84c929faa9be7ecacc
+  position: {x: 0, y: 0}
   inputConnections: []
   label: level

@@ -73,17 +73,18 @@ namespace Amilious.FunctionGraph {
                 GraphData = ScriptableObject.CreateInstance<FunctionGraphData>();
                 GraphData.name = "GraphData";
                 AssetDatabase.AddObjectToAsset(GraphData, FunctionProvider);
-                EditorUtility.SetDirty(FunctionProvider);
+                EditorUtility.SetDirty(GraphData);
             }
             var toInitialize = InitializeInputAndOutputs() ?? new List<FunctionNode>();
             foreach(var node in toInitialize) {
                 node.guid  = GUID.Generate().ToString();
                 Nodes.Add(node);
                 AssetDatabase.AddObjectToAsset(node, FunctionProvider);
-                EditorUtility.SetDirty(FunctionProvider);
+                EditorUtility.SetDirty(node);
             }
             var provider = FunctionProvider as IFunctionProvider;
             if(toInitialize.Count!=0)AfterInitialization(provider);
+            EditorUtility.SetDirty(FunctionProvider);
             AssetDatabase.SaveAssets();
             #endif
         }

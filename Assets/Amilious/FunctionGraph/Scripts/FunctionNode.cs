@@ -10,10 +10,24 @@ namespace Amilious.FunctionGraph {
     public abstract class FunctionNode : ScriptableObject {
 
         [HideInInspector] public string guid;
-        [HideInInspector] public Vector2 position;
-        [HideInInspector] public List<Connection> inputConnections = new List<Connection>();
+        [SerializeField,HideInInspector] private Vector2 position;
+        [SerializeField,HideInInspector] public List<Connection> inputConnections = new List<Connection>();
 
         [NonSerialized] private bool _initialized = false;
+        
+        public Vector2 Position {
+            get => position;
+            #if UNITY_EDITOR
+            set {
+                if(position == value) return;
+                position = value;
+                UnityEditor.EditorUtility.SetDirty(this);
+                UnityEditor.AssetDatabase.SaveAssets();
+            }
+            #endif
+        }
+
+        public void SetPositionWithoutSaving(Vector2 position) => this.position = position;
         
         public List<Connection> GetInputConnections(int port) =>
             inputConnections.Where(con => con.inputPort == port).ToList();

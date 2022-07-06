@@ -4,42 +4,70 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using Amilious.Core.Extensions;
 using Amilious.FunctionGraph.Nodes.Hidden;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor.Experimental.GraphView;
 
 namespace Amilious.FunctionGraph.Editor {
     
     public class FunctionGraphView : GraphView {
 
-        public new class UxmlFactory : UxmlFactory<FunctionGraphView, GraphView.UxmlTraits> { }
+        public new class UxmlFactory : UxmlFactory<FunctionGraphView, UxmlTraits> { }
 
-        private readonly Dictionary<Group, string> _groups = new Dictionary<Group, string>();
 
         public Action<FunctionNodeView> OnNodeSelected;
         public Action<FunctionNodeView> OnNodeUnselected;
 
         private IFunctionProvider _function;
-        
+
         public FunctionGraphView() {
-            
-            Insert(0,new GridBackground());
+
+            Insert(0, new GridBackground());
             this.AddManipulator(new ContentZoomer());
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new EdgeManipulator());
-            
-            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Amilious/FunctionGraph/Editor/FunctionGraphEditor.uss");
+
+            var styleSheet =
+                AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                    "Assets/Amilious/FunctionGraph/Editor/FunctionGraphEditor.uss");
             styleSheets.Add(styleSheet);
             viewTransformChanged += ViewChanged;
             elementsAddedToGroup += ElementsAddedToGroup;
             elementsRemovedFromGroup += ElementsRemovedFromGroup;
             groupTitleChanged += GroupTitleChanged;
+            var miniMap = new MiniMap();
+            miniMap.SetPosition(new Rect(10, 10, 200, 150));
+            miniMap.maxHeight = 150;
+            miniMap.maxWidth = 200;
+            miniMap.OnResized();
+            Add(miniMap);
+            serializeGraphElements = OnCopy;
+            canPasteSerializedData = CanIPaste;
+            unserializeAndPaste = OnPaste;
         }
 
+        private void OnPaste(string operationName, string data) {
+            var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
+            nodeDate?.PasteValues(this);
+        }
+
+        private bool CanIPaste(string data) {
+            try {
+                var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
+                return nodeDate != null;
+            }catch(Exception) { return false;}
+        }
+
+        private string OnCopy(IEnumerable<GraphElement> elements) {
+            var data = new GraphSerializedData(elements,this);
+            return JsonConvert.SerializeObject(data);
+        }
+       
         private void ElementsAddedToGroup(Group group, IEnumerable<GraphElement> elements) {
-            if(!_groups.TryGetValue(group, out var guid)) return;
-            var funGroup = _function.GraphData.GroupFromId(guid);
+            var funGroup = _function.GraphData.GroupFromId(group.GetId());
             foreach(var element in elements) {
                 if(element is not FunctionNodeView nodeView) continue;
                 funGroup.nodeIds.Add(nodeView.Node.guid);
@@ -47,8 +75,7 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         private void ElementsRemovedFromGroup(Group group, IEnumerable<GraphElement> elements) {
-            if(!_groups.TryGetValue(group, out var guid)) return;
-            var funGroup = _function.GraphData.GroupFromId(guid);
+            var funGroup = _function.GraphData.GroupFromId(group.GetId());
             foreach(var element in elements) {
                 if(!(element is FunctionNodeView nodeView)) continue;
                 funGroup.nodeIds.Remove(nodeView.Node.guid);
@@ -56,8 +83,7 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         private void GroupTitleChanged(Group group, string title) {
-            if(!_groups.TryGetValue(group, out var guid)) return;
-            var funGroup = _function.GraphData.GroupFromId(guid);
+            var funGroup = _function.GraphData.GroupFromId(group.GetId());
             funGroup.title = title;
         }
 
@@ -66,7 +92,6 @@ namespace Amilious.FunctionGraph.Editor {
             _function.GraphData.position = graphview.viewTransform.position;
             _function.GraphData.scale = graphview.viewTransform.scale;
         }
-        
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
             if(_function is null) return;
@@ -82,8 +107,7 @@ namespace Amilious.FunctionGraph.Editor {
             if(selection.Count > 0) {
                 evt.menu.AppendAction("Create Group", a => {
                     var id = GUID.Generate().ToString();
-                    var group = new Group { title = "New Group" };
-                    _groups.Add(group,id);
+                    var group = new Group { title = "New Group", userData = id};
                     _function.GraphData.groups.Add(new FunctionGroup{id = id, title = group.title});
                     Add(group);
                     group.AddElements(selection.FindAll(x=>x is FunctionNodeView).Cast<GraphElement>());
@@ -93,11 +117,10 @@ namespace Amilious.FunctionGraph.Editor {
 
         }
 
-        private void CreateNode(Type type, Vector2 position) {
-            if(!_function.TryCreateNode(type, out var node)) return;
-            Debug.Log(position.ToString());
-            node.position = position;
-            CreateNodeView(node);
+        public FunctionNodeView CreateNode(Type type, Vector2 position) {
+            if(!_function.TryCreateNode(type, out var node)) return null;
+            node.Position = position;
+            return CreateNodeView(node);
         }
 
         private FunctionNodeView FindNodeView(FunctionNode node) {
@@ -115,7 +138,7 @@ namespace Amilious.FunctionGraph.Editor {
             viewTransform.position = _function.GraphData.position;
             viewTransform.scale = _function.GraphData.scale;
             //add nodes
-            function.Nodes.ForEach(CreateNodeView);
+            function.Nodes.ForEach(x=>CreateNodeView(x));
             //add edges
             function.Nodes.ForEach(n => {
                 var inputView = FindNodeView(n);
@@ -130,50 +153,77 @@ namespace Amilious.FunctionGraph.Editor {
             });
             //add groups
             function.GraphData.groups.ForEach(data => {
-                var group = new Group { title = data.title };
-                _groups.Add(group,data.id);
+                var group = new Group { title = data.title, userData = data.id};
+                //_groups.Add(group,data.id);
                 data.nodeIds.ForEach(node=>group.AddElement(FindNodeView(node)));
                 Add(group);
             });
             graphViewChanged += OnGraphViewChanged;
         }
+        
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) {
+            HandleNodeMovement(graphViewChange.movedElements);
             if(graphViewChange.elementsToRemove != null) {
                 var cancel = new List<GraphElement>();
                 graphViewChange.elementsToRemove.ForEach(element => {
                     switch(element) {
-                        case FunctionNodeView { Node: HiddenNode }: cancel.Add(element); break;
-                        case FunctionNodeView nodeView: _function.DeleteNode(nodeView.Node); break;
-                        case Edge edge: {
-                            var input = edge.input.node as FunctionNodeView;
-                            var output = edge.output.node as FunctionNodeView;
-                            var inputId = edge.input.GetIndex();
-                            var outputId = edge.output.GetIndex();
-                            _function.RemoveConnection(input.Node,output.Node,inputId, outputId);
-                            break;
-                        }
-                        case Group group:
-                            _function.GraphData.RemoveGroup(_groups[group]);
-                            _groups.Remove(group); break;
+                        case FunctionNodeView nodeView: HandleRemoveNode(nodeView,cancel); break;
+                        case Edge edge: HandleRemovingEdge(edge,cancel); break;
+                        case Group group: HandleRemovingGroup(group, cancel); break;
                     }
                 });
                 foreach(var ele in cancel) graphViewChange.elementsToRemove.Remove(ele);
             }
-
-            graphViewChange.edgesToCreate?.ForEach(edge => {
-                _function.AddConnection(edge.InputNode(), edge.OutputNode(), 
-                    edge.InputPortIndex(),edge.OutputPortIndex());
-            });
+            if(graphViewChange.edgesToCreate!=null)
+                foreach(var edge in graphViewChange.edgesToCreate) HandleCreatingEdgeConnection(edge);
             return graphViewChange;
         }
 
-        private void CreateNodeView(FunctionNode node) {
+        public void HandleRemovingGroup(Group group, List<GraphElement> cancel = null) {
+            if(group == null || _function == null) return;
+            _function.GraphData.RemoveGroup(group.GetId());
+        }
+
+        public void HandleRemovingEdge(Edge edge, List<GraphElement> cancel =null) {
+            if(edge == null||_function==null) return;
+            _function.RemoveConnection(edge.InputNode(),edge.OutputNode(),edge.InputPort(),edge.OutputPort());
+        }
+
+        
+        public void HandleRemoveNode(FunctionNodeView node, List<GraphElement> cancel =null) {
+            if(node == null || _function == null) return;
+            if(node.Node is HiddenNode && cancel != null) { cancel.Add(node); return; }
+            _function.DeleteNode(node.Node);
+        }
+
+        /// <summary>
+        /// This method is used to create the connection for the newly created edge.
+        /// </summary>
+        /// <param name="edge">The newly created edge.</param>
+        public void HandleCreatingEdgeConnection(Edge edge) {
+            if(edge == null || _function == null) return;
+            _function.AddConnection(edge.InputNode(), edge.OutputNode(), edge.InputPort(),edge.OutputPort());
+        }
+
+        /// <summary>
+        /// This method is used to save locations of nodes after they have stopped moving.
+        /// </summary>
+        /// <param name="movedElements">The elements that were moved.</param>
+        public static void HandleNodeMovement(List<GraphElement> movedElements) {
+            movedElements?.ForEach(element => {
+                if(element is not FunctionNodeView view) return;
+                view.Node.Position = view.GetPosition().MinPosition();
+            });
+        }
+
+        private FunctionNodeView CreateNodeView(FunctionNode node) {
             var nodeView = new FunctionNodeView(node) {
                 OnNodeSelected = OnNodeSelected,
                 OnNodeUnselected = OnNodeUnselected
             };
             AddElement(nodeView);
+            return nodeView;
         }
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {
@@ -202,20 +252,24 @@ namespace Amilious.FunctionGraph.Editor {
             return list;
         }
 
-        private bool FindSubNode(FunctionNode lookFor, FunctionNode currentNode) {
-            if(currentNode.guid == lookFor.guid) return true;
-            foreach(var con in currentNode.inputConnections) {
-                if(FindSubNode(lookFor, con.outputNode)) return true;
-            }
-            return false;
+        /// <summary>
+        /// This is a recursive check to try find a node by following the connects of the starting node.
+        /// </summary>
+        /// <param name="lookFor">The node that you are looking for.</param>
+        /// <param name="startingNode">The node that you want to start looking in.</param>
+        /// <returns>True if the node that you were looking for was found, otherwise false.</returns>
+        private static bool FindSubNode(FunctionNode lookFor, FunctionNode startingNode) {
+            return startingNode.guid == lookFor.guid || startingNode.inputConnections.
+                Any(con => FindSubNode(lookFor, con.outputNode));
         }
 
         public void Reset() {
             _function = null;
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
-            _groups.Clear();
         }
+        
+        
     }
     
 }

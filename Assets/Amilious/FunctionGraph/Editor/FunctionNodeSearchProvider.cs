@@ -15,7 +15,7 @@ namespace Amilious.FunctionGraph.Editor {
         private static bool _loaded;
         private static readonly List<SearchTreeEntry> SearchList = new List<SearchTreeEntry>();
         
-        private Action<Type,Vector2> Callback { get; set; }
+        private Func<Type,Vector2,FunctionNodeView> Callback { get; set; }
         private Vector2 NodePosition { get; set; }
 
         public FunctionNodeSearchProvider() {
@@ -49,7 +49,7 @@ namespace Amilious.FunctionGraph.Editor {
             _loaded = true;
         }
         
-        public FunctionNodeSearchProvider AddCallback(Action<Type, Vector2> callback, Vector2 nodePosition) {
+        public FunctionNodeSearchProvider AddCallback(Func<Type, Vector2,FunctionNodeView> callback, Vector2 nodePosition) {
             Callback = callback;
             NodePosition = nodePosition;
             return this;
