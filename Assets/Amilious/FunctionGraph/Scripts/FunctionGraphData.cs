@@ -8,8 +8,6 @@ namespace Amilious.FunctionGraph {
         [SerializeField] public Vector3 position = Vector3.zero;
         [SerializeField] public Vector3 scale = Vector3.one;
         [SerializeField] public List<FunctionGroup> groups = new List<FunctionGroup>();
-        
-        
 
         public FunctionGroup GroupFromId(string id) {
             return groups.FirstOrDefault(x => x.id == id);

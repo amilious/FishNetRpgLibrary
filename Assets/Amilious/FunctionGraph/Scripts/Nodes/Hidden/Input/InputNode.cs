@@ -7,7 +7,9 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
 
         private T _value;
         [HideInInspector] public string label;
-        
+
+        public override bool IsInputNode => true;
+
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<T>(label,GetValue));
         }
@@ -40,6 +42,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
         private T2 _value2;
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
+        
+        public override bool IsInputNode => true;
         
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<T1>(label1,GetValue1));
@@ -80,6 +84,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
         [HideInInspector] public string label3 = "value 3";
+        
+        public override bool IsInputNode => true;
         
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<T1>(label1,GetValue1));
@@ -127,6 +133,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
         [HideInInspector] public string label2 = "value 2";
         [HideInInspector] public string label3 = "value 3";
         [HideInInspector] public string label4 = "value 4";
+        
+        public override bool IsInputNode => true;
         
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<T1>(label1,GetValue1));
@@ -181,6 +189,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
         [HideInInspector] public string label3 = "value 3";
         [HideInInspector] public string label4 = "value 4";
         [HideInInspector] public string label5 = "value 5";
+        
+        public override bool IsInputNode => true;
         
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<T1>(label1,GetValue1));

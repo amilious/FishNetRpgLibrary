@@ -29,7 +29,7 @@ namespace Amilious.FunctionGraph {
 
         protected bool Initialized { get; set; }
         
-        public List<Connection> GetInputConnections(FunctionNode node, int inputId) {
+        public IEnumerable<Connection> GetInputConnections(FunctionNode node, int inputId) {
             return node.GetInputConnections(inputId);
         }
         
@@ -48,16 +48,31 @@ namespace Amilious.FunctionGraph {
 
         public void DeleteNode(FunctionNode node) {
             Nodes.Remove(node);
+            //remove the connections from the child nodes
+            node.outputConnections.ForEach(x=>x.inputNode.RemoveInputConnection(x));
+            node.inputConnections.ForEach(x=>x.outputNode.RemoveOutputConnection(x));
+            //remove the node's scriptable object.
             AssetDatabase.RemoveObjectFromAsset(node);
             AssetDatabase.SaveAssets();
         }
 
-        public void AddConnection(FunctionNode inputNode, FunctionNode outputNode, int inputId, int outputId) {
-            inputNode.AddInputConnection(outputNode, outputId, inputId);
+        public Connection AddConnection(Connection connection) {
+            connection.inputNode.AddInputConnection(connection);
+            connection.outputNode.AddOutputConnection(connection);
+            return connection;
         }
 
-        public void RemoveConnection(FunctionNode inputNode, FunctionNode outputNode, int inputId, int outputId) {
-            inputNode.RemoveInputConnection(outputNode, inputId, outputId);
+        public void RemoveConnection(Connection connection) {
+            connection.inputNode.RemoveInputConnection(connection);
+            connection.outputNode.RemoveOutputConnection(connection);
+        }
+
+        public void RemoveConnectionsTo(FunctionNode node) {
+            
+        }
+
+        public void RemoveConnection(UnityEditor.Experimental.GraphView.Edge edge) {
+            
         }
 
         #endif

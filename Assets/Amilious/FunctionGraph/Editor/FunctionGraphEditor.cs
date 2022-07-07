@@ -1,8 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Amilious.Core;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Amilious.FunctionGraph.Editor {
     public class FunctionGraphEditor : EditorWindow {
@@ -16,7 +22,13 @@ namespace Amilious.FunctionGraph.Editor {
         private InspectorView _inspectorView;
         private Label _functionTitle;
         private Label _inspectorTitle;
-    
+        private Button _clearUnconnected;
+        private Label _selectedGroups;
+        private Label _selectedConnections;
+        private Label _selectedNodes;
+        private Label _scale;
+        private Label _position;
+        
         [MenuItem("Amilious/FunctionGraphEditor")]
         public static void OpenWindow() {
             var window = GetWindow<FunctionGraphEditor>(false,"Function Graph Editor");
@@ -42,21 +54,50 @@ namespace Amilious.FunctionGraph.Editor {
         
             //get views
             _graphView = root.Q<FunctionGraphView>();
-            _graphView.OnNodeSelected = OnNodeSelectionChanged;
-            _graphView.OnNodeUnselected = OnNodeUnselected;
+            _graphView.OnSelectionChanged += OnGraphSelectionChanged;
+            _graphView.viewTransformChanged += ViewChanged;
             _inspectorView = root.Q<InspectorView>();
             _functionTitle = root.Q<Label>("functionTitle");
             _inspectorTitle = root.Q<Label>("inspectorTitle");
+            _clearUnconnected = root.Q<Button>("clearUnconnected");
+            _clearUnconnected.clicked += ClearUnconnected;
+            _selectedGroups = root.Q<Label>("selectedGroups");
+            _selectedConnections = root.Q<Label>("selectedConnections");
+            _selectedNodes = root.Q<Label>("selectedNodes");
+            _scale = root.Q<Label>("scale");
+            _position = root.Q<Label>("position");
             ResetTitles();
             OnSelectionChange();
+            OnGraphSelectionChanged(_graphView.selection);
+            ViewChanged(_graphView);
         }
 
-        private void ResetTitles() {
+        private void ClearUnconnected() => _graphView.ClearUnconnected();
+
+        private void ViewChanged(GraphView graphview) {
+            var pos = graphview.viewTransform.position;
+            _position.text = $"{pos.x}x{pos.y}";
+            var scale = graphview.viewTransform.scale;
+            _scale.text = $"{scale.x}";
+        }
+
+        private void OnGraphSelectionChanged(IReadOnlyList<ISelectable> obj) {
+            var nodes = obj.Count(x => x is FunctionNodeView);
+            _selectedNodes.text = nodes.ToString();
+            _selectedConnections.text = obj.Count(x => x is Edge).ToString();
+            _selectedGroups.text = obj.Count(x => x is Group).ToString();
+            if(nodes == 0) return;
+            _inspectorView.UpdateSelection(obj.First(x=>x is FunctionNodeView) as FunctionNodeView);
+            ResetTitles();
+        }
+
+        private void ResetTitles(string newName = null) {
             if(_functionTitle == null || _inspectorTitle == null) return;
             if(ProviderScriptableObject != null) {
+                newName ??= ProviderScriptableObject.name;
                 _functionTitle.text = "<b>Function Node:</b> " +
-                    $"(<color=#3a86ff>{ProviderScriptableObject.GetType().Name}</color>) " +
-                    $"<color=#8338ec>{ProviderScriptableObject.name}</color>";
+                                      $"(<color=#3a86ff>{ProviderScriptableObject.GetType().Name}</color>) " +
+                                      $"<color=#8338ec>{newName}</color>";
             }else {
                 _functionTitle.text = "<b>Function Node:</b> <i>No Loaded Function Provider</i>";
             }
@@ -102,17 +143,11 @@ namespace Amilious.FunctionGraph.Editor {
             _instance.ResetTitles();
         }
         
-        
-
-        private void OnNodeSelectionChanged(FunctionNodeView nodeView) {
-            _inspectorView.UpdateSelection(nodeView);
-            ResetTitles();
+        public static void AssetBeingRenamed(string guid, string newName) {
+            if(ProviderScriptableObject == null) return;
+            if(ProviderScriptableObject.AssetGuid != guid) return;
+            if(_instance!=null)_instance.ResetTitles(newName);
         }
 
-        private void OnNodeUnselected(FunctionNodeView nodeView) {
-        
-        }
-
-        
     }
 }

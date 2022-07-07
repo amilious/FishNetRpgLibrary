@@ -21,8 +21,6 @@ namespace Amilious.FunctionGraph.Nodes.Loops {
             inputPorts.Add(new PortInfo<int>("last index"));
             inputPorts.Add(new PortInfo<float>("end loop"));
             outputPorts.Add(new PortInfo<float>("result",GetResult));
-            outputPorts.Add(new PortInfo<int>("index",GetIndex));
-            outputPorts.Add(new PortInfo<float>("start loop",GetLoop));
         }
 
         private float GetResult(CalculationId id) {
@@ -50,11 +48,11 @@ namespace Amilious.FunctionGraph.Nodes.Loops {
             return _lastValue = _currentValue;
         }
         
-        private int GetIndex(CalculationId id) => _currentIndex;
+        public int GetIndex(CalculationId id) => _currentIndex;
 
         
         /// This is the start of the loop
-        private float GetLoop(CalculationId arg) => _currentValue;
+        public float GetLoop(CalculationId arg) => _currentValue;
         
         
         

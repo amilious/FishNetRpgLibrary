@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Experimental.GraphView;
 
 namespace Amilious.FunctionGraph {
 
@@ -8,10 +7,12 @@ namespace Amilious.FunctionGraph {
         public string Name { get; }
         public bool AllowMultiple { get; }
         public bool Horizontal { get; }
-        string Tooltip { get; set; }
+        string Tooltip { get; }
         public int Index { get; }
         public void SetIndex(int index);
-
+        
+        public bool IsLoopPort { get; }
+        
         public bool TryGetResult<T>(CalculationId id, out T result) {
             if(this is PortInfo<T> casted) {
                 var function = casted.OutputFunction;
@@ -26,6 +27,7 @@ namespace Amilious.FunctionGraph {
                 return false;
             }
         }
+        
     }
     
     public class PortInfo<T> : IPortInfo {
@@ -38,9 +40,15 @@ namespace Amilious.FunctionGraph {
         public int Index { get; private set; }
 
         public void SetIndex(int index) => Index = index;
+        public bool IsLoopPort { get; private set; }
 
         public PortInfo<T> SetTooltip(string tooltip) { 
             Tooltip = tooltip;
+            return this;
+        }
+
+        public PortInfo<T> MarkLoop() {
+            IsLoopPort = true;
             return this;
         }
 
@@ -63,4 +71,7 @@ namespace Amilious.FunctionGraph {
         }
         
     }
+
+    
+    
 }

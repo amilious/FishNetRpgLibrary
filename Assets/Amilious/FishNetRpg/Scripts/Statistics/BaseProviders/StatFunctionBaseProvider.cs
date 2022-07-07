@@ -43,7 +43,8 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
         }
 
         public void AfterInitialization(IFunctionProvider provider) {
-            provider.AddConnection(resultNode,inputNode,0,0);
+            var con = new Connection(resultNode, 0, inputNode, 0);
+            provider.AddConnection(con);
         }
 
         public override int GetMinimum(int level) {

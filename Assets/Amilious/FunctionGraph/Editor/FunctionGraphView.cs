@@ -15,9 +15,7 @@ namespace Amilious.FunctionGraph.Editor {
 
         public new class UxmlFactory : UxmlFactory<FunctionGraphView, UxmlTraits> { }
 
-
-        public Action<FunctionNodeView> OnNodeSelected;
-        public Action<FunctionNodeView> OnNodeUnselected;
+        public event Action<IReadOnlyList<ISelectable>> OnSelectionChanged; 
 
         private IFunctionProvider _function;
 
@@ -48,6 +46,21 @@ namespace Amilious.FunctionGraph.Editor {
             canPasteSerializedData = CanIPaste;
             unserializeAndPaste = OnPaste;
         }
+        
+        public override void ClearSelection() {
+            base.ClearSelection();
+            OnSelectionChanged?.Invoke(selection);
+        }
+
+        public override void AddToSelection(ISelectable selectable) {
+            base.AddToSelection(selectable);
+            OnSelectionChanged?.Invoke(selection);
+        }
+
+        public override void RemoveFromSelection(ISelectable selectable) {
+            base.RemoveFromSelection(selectable);
+            OnSelectionChanged?.Invoke(selection);
+        }
 
         private void OnPaste(string operationName, string data) {
             var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
@@ -76,6 +89,7 @@ namespace Amilious.FunctionGraph.Editor {
 
         private void ElementsRemovedFromGroup(Group group, IEnumerable<GraphElement> elements) {
             var funGroup = _function.GraphData.GroupFromId(group.GetId());
+            if(funGroup == null) return;
             foreach(var element in elements) {
                 if(!(element is FunctionNodeView nodeView)) continue;
                 funGroup.nodeIds.Remove(nodeView.Node.guid);
@@ -106,15 +120,20 @@ namespace Amilious.FunctionGraph.Editor {
             evt.menu.AppendSeparator();
             if(selection.Count > 0) {
                 evt.menu.AppendAction("Create Group", a => {
-                    var id = GUID.Generate().ToString();
-                    var group = new Group { title = "New Group", userData = id};
-                    _function.GraphData.groups.Add(new FunctionGroup{id = id, title = group.title});
-                    Add(group);
+                    var group = AddGroup();
                     group.AddElements(selection.FindAll(x=>x is FunctionNodeView).Cast<GraphElement>());
                 });
             }
             base.BuildContextualMenu(evt);
 
+        }
+
+        public Group AddGroup(string name = "New Group") {
+            var id = GUID.Generate().ToString();
+            var group = new Group { title = name, userData = id};
+            _function.GraphData.groups.Add(new FunctionGroup{id = id, title = group.title});
+            Add(group);
+            return group;
         }
 
         public FunctionNodeView CreateNode(Type type, Vector2 position) {
@@ -143,12 +162,12 @@ namespace Amilious.FunctionGraph.Editor {
             function.Nodes.ForEach(n => {
                 var inputView = FindNodeView(n);
                 for(int i = 0; i < n.InputPortInfo.Count; i++) {
-                    var connections = function.GetInputConnections(n, i);
-                    connections.ForEach(c => {
-                        var outputView = FindNodeView(c.outputNode);
-                        var edge = outputView.Output[c.outputPort].ConnectTo(inputView.Input[c.inputPort]);
+                    foreach(var con in function.GetInputConnections(n, i)){
+                        var outputView = FindNodeView(con.outputNode);
+                        var edge = outputView.Output[con.outputPort].ConnectTo(inputView.Input[con.inputPort]);
+                        edge.userData = con;
                         AddElement(edge);
-                    });
+                    }
                 }
             });
             //add groups
@@ -187,7 +206,7 @@ namespace Amilious.FunctionGraph.Editor {
 
         public void HandleRemovingEdge(Edge edge, List<GraphElement> cancel =null) {
             if(edge == null||_function==null) return;
-            _function.RemoveConnection(edge.InputNode(),edge.OutputNode(),edge.InputPort(),edge.OutputPort());
+            _function.RemoveConnection(edge.Connection());
         }
 
         
@@ -203,7 +222,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="edge">The newly created edge.</param>
         public void HandleCreatingEdgeConnection(Edge edge) {
             if(edge == null || _function == null) return;
-            _function.AddConnection(edge.InputNode(), edge.OutputNode(), edge.InputPort(),edge.OutputPort());
+            _function.AddConnection(edge.Connection());
         }
 
         /// <summary>
@@ -218,10 +237,7 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         private FunctionNodeView CreateNodeView(FunctionNode node) {
-            var nodeView = new FunctionNodeView(node) {
-                OnNodeSelected = OnNodeSelected,
-                OnNodeUnselected = OnNodeUnselected
-            };
+            var nodeView = new FunctionNodeView(node);
             AddElement(nodeView);
             return nodeView;
         }
@@ -242,15 +258,25 @@ namespace Amilious.FunctionGraph.Editor {
             //check for loops and duplicate connections
             var remove = new List<Port>();
             foreach(var port in list) {
-                var start = startPort.FunctionNode();
-                var end = port.FunctionNode();
+                //check if the connection already exists
                 if(startPort.HasConnectionTo(port)) { remove.Add(port); continue; }
-                if(FindSubNode(end, start)) { remove.Add(port); continue; }
-                if(FindSubNode(start, end)) { remove.Add(port); continue; }
+                //check for loops
+                var inputPort = startPort.direction == Direction.Input?startPort:port;
+                var outputPort = startPort.direction == Direction.Output?startPort:port;
+                if(inputPort.FunctionNode().HasOutputConnectionToNode(outputPort.FunctionNode())) {
+                    remove.Add(port);
+                    continue;
+                }
+                if(outputPort.FunctionNode().HasInputConnectionToNode(inputPort.FunctionNode())) {
+                    remove.Add(port);
+                    continue;
+                }
             }
             foreach(var rm in remove) list.Remove(rm);
             return list;
         }
+        
+        
 
         /// <summary>
         /// This is a recursive check to try find a node by following the connects of the starting node.
@@ -268,7 +294,28 @@ namespace Amilious.FunctionGraph.Editor {
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
         }
-        
+
+
+        public void OnTestButton() {
+            Debug.Log("test button clicked");
+            var size = Vector3.Scale(new Vector3(contentRect.width, contentRect.height),viewTransform.scale);
+            Debug.LogFormat("screen size {0}",size);
+            size = size.Unscale(viewTransform.scale);
+            Debug.LogFormat("unscaled screen size {0}",size);
+            size = Vector3.Scale(size,viewTransform.scale);
+            Debug.LogFormat("rescaled screen size {0}",size);
+        }
+
+
+        public void ClearUnconnected() {
+            Debug.Log("This function is not yet implemented!");
+           /* foreach(var node in nodes.Cast<FunctionNodeView>()) {
+                if(node.Node.IsInputNode||node.Node.IsResultNode) continue;
+                if(node.Node.inputConnections.Count!=0) continue;
+                if(node.Node.outputConnections.Count!=0) continue;
+                HandleRemoveNode(node);                
+            }*/
+        }
         
     }
     

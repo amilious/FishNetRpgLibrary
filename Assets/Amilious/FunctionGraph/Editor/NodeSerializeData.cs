@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Amilious.Core.Extensions;
 using Amilious.FunctionGraph.Nodes.Hidden;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -23,6 +24,7 @@ namespace Amilious.FunctionGraph.Editor {
            NodeData = new List<NodeSerializeData>();
             ConnectionData = new List<ConnectionSerializedData>();
             Groups = new List<GroupSerializeData>();
+            var offset = view.viewTransform.position;
             foreach(var element in elements) {
                 //add the nodes
                 if(element is FunctionNodeView node) {
@@ -37,13 +39,16 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         public void PasteValues(FunctionGraphView view) {
+            view.ClearSelection();
             var database = new Dictionary<string, FunctionNodeView>();
+            var offset = view.viewTransform.position;
+            var correction = Vector3.Scale(Vector3.one,view.viewTransform.scale);
             //add the nodes
             foreach(var node in NodeData) {
-                var pos = new Vector2(node.XPos, node.YPos);
-                pos.x += view.viewTransform.position.x;
-                pos.y += view.viewTransform.position.y;
+                var pos = new Vector3(node.XPos - offset.x - correction.x, node.YPos - offset.y - correction.y,0);
+                //pos = Vector3.Scale(pos,view.viewTransform.scale);
                 var nodeView = view.CreateNode(node.GetCastedType(), pos);
+                view.AddToSelection(nodeView);
                 database.Add(node.Guid,nodeView);
             }
             //add the connections
@@ -52,21 +57,24 @@ namespace Amilious.FunctionGraph.Editor {
                    !database.TryGetValue(con.OutputNode,out var output)) continue;
                 var edge = output.Output[con.OutputPort].ConnectTo(input.Input[con.InputPort]);
                 view.Add(edge);
+                view.AddToSelection(edge);
                 view.HandleCreatingEdgeConnection(edge);
             }
             //add the groups
+            var members = new List<GraphElement>();
             foreach(var group in Groups) {
                 if(!group.Members.Any(x=>database.ContainsKey(x))) continue;
-                var graphGroup = new Group {
-                    userData = GUID.Generate().ToString(),
-                    title = group.Name
-                };
+                members.Clear();
                 foreach(var member in group.Members) {
                     if(!database.TryGetValue(member, out var nodeView)) continue;
-                    graphGroup.Add(nodeView);
+                    members.Add(nodeView);
+                    //graphGroup.Add(nodeView);
                 }
-                view.Add(graphGroup);
+                var groupObj = view.AddGroup(group.Name);
+                groupObj.AddElements(members);
+                view.AddToSelection(groupObj);
             }
+            view.FrameSelection();
         }
 
     }
@@ -103,8 +111,15 @@ namespace Amilious.FunctionGraph.Editor {
         public NodeSerializeData(FunctionNodeView nodeView, FunctionGraphView view) {
             Type = nodeView.Node.GetType().Name;
             Guid = nodeView.Node.guid;
-            XPos = nodeView.Node.Position.x - view.viewTransform.position.x;
-            YPos = nodeView.Node.Position.y - view.viewTransform.position.y;
+            
+            var start = new Vector3(nodeView.Node.Position.x, nodeView.Node.Position.y, 0);
+            //start += Vector3.Scale(new Vector3(view.contentRect.width/2, view.contentRect.height/2),view.viewTransform.scale);
+            //start = start.Unscale(view.viewTransform.scale);
+            //start += view.viewTransform.position;
+            start += view.viewTransform.position;
+            start += Vector3.Scale(Vector3.one,view.viewTransform.scale);
+            XPos = start.x;
+            YPos = start.y;
         }
 
         public string Type { get; set; }

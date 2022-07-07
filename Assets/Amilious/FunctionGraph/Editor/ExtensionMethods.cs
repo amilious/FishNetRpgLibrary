@@ -16,7 +16,7 @@ namespace Amilious.FunctionGraph.Editor {
             if(start.direction == port.direction) return false;
             var input = start.direction == Direction.Input ? start : port;
             var output = start.direction == Direction.Output ? start : port;
-            return input.FunctionNode().ContainsConnectionFrom(output.FunctionNode(), 
+            return input.FunctionNode().ContainsInputConnectionFrom(output.FunctionNode(), 
                 output.GetIndex(), input.GetIndex());
         }
 
@@ -30,11 +30,14 @@ namespace Amilious.FunctionGraph.Editor {
 
         public static FunctionNodeView OutputNodeView(this Edge edge) => edge.output.FunctionNodeView();
 
-        public static int OutputPort(this Edge edge) => edge.input.GetIndex();
+        public static int OutputPort(this Edge edge) => edge.output.GetIndex();
 
-        public static bool IsLoop(this Edge edge, out string guid) => (guid = edge.userData as string)!=null;
-
-        public static void SetLoopGuid(this Edge edge, string guid) => edge.userData = guid;
+        public static Connection Connection(this Edge edge) {
+            if(edge.userData is Connection connection) return connection;
+            var con = new Connection(edge.InputNode(),edge.InputPort(),edge.OutputNode(),edge.OutputPort());
+            edge.userData = con;
+            return con;
+        }
 
         public static string GetId(this Group group) => group.userData as string;
 

@@ -93,15 +93,6 @@ namespace Amilious.FunctionGraph.Editor {
             }
         }
         
-        public override void OnSelected() {
-            base.OnSelected();
-            OnNodeSelected?.Invoke(this);
-        }
-
-        public override void OnUnselected() {
-            base.OnUnselected();
-            OnNodeUnselected?.Invoke(this);
-        }
     }
     
 }
