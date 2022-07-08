@@ -140,7 +140,7 @@ namespace Amilious.FunctionGraph {
 
         public string GetDescription =>GetAttribute()?.Description;
 
-        public bool IsHidden => GetAttribute() is { Hidden: true } || typeof(HiddenNode).IsAssignableFrom(GetType());
+        public bool IsHidden => GetAttribute() is { Hidden: true } || this is HiddenNode;
 
         public virtual void ModifyNodeView(UnityEditor.Experimental.GraphView.Node nodeView){}
         

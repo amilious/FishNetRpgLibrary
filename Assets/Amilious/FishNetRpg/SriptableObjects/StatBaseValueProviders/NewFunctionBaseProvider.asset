@@ -34,7 +34,7 @@ MonoBehaviour:
   m_Name: FloatToInt
   m_EditorClassIdentifier: 
   guid: 62eed9964da2e444da104a5ceeeed23d
-  position: {x: 751, y: -5}
+  position: {x: 634, y: -39}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 5913788521201593407}
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Name: Result
   m_EditorClassIdentifier: 
   guid: b744c76ba7a0b1646be13093e052c4b0
-  position: {x: 98, y: -151}
+  position: {x: 433, y: -67}
   inputConnections:
   - inputNode: {fileID: 5139521920123867358}
     outputNode: {fileID: 6668519678610577240}
@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: 559, y: 167, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: -149, y: 89, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   groups:
   - id: dcebe6bfdb145ed46a494a60fe89a5f0
     title: New Group
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: FloatToInt
   m_EditorClassIdentifier: 
   guid: cf1c9e669f71b954d9e977d931777809
-  position: {x: 920, y: 21}
+  position: {x: 803, y: -13}
   inputConnections:
   - inputNode: {fileID: 5913788521201593407}
     outputNode: {fileID: -514944926666986062}
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   guid: 8e3120eba558e6e468da9e0ab76afa6a
-  position: {x: 0, y: 0}
+  position: {x: 335, y: 84}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 5139521920123867358}

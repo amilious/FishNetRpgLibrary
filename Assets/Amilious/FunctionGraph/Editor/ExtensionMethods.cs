@@ -1,4 +1,5 @@
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 namespace Amilious.FunctionGraph.Editor {
     
@@ -41,6 +42,11 @@ namespace Amilious.FunctionGraph.Editor {
 
         public static string GetId(this Group group) => group.userData as string;
 
+        public static string GetStringKey(this ITransform viewTransform) {
+            return viewTransform == null ? string.Empty : 
+                $"{viewTransform.position.x}x{viewTransform.position.y}scale{viewTransform.scale}";
+        }
+        
     }
     
 }

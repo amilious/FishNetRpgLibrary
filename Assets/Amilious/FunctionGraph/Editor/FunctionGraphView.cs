@@ -28,8 +28,7 @@ namespace Amilious.FunctionGraph.Editor {
             this.AddManipulator(new RectangleSelector());
             this.AddManipulator(new EdgeManipulator());
 
-            var styleSheet =
-                AssetDatabase.LoadAssetAtPath<StyleSheet>(
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(
                     "Assets/Amilious/FunctionGraph/Editor/FunctionGraphEditor.uss");
             styleSheets.Add(styleSheet);
             viewTransformChanged += ViewChanged;
@@ -45,26 +44,42 @@ namespace Amilious.FunctionGraph.Editor {
             serializeGraphElements = OnCopy;
             canPasteSerializedData = CanIPaste;
             unserializeAndPaste = OnPaste;
+            
         }
         
+        /// <summary>
+        /// This is the method that is used to clear the selection.
+        /// </summary>
         public override void ClearSelection() {
             base.ClearSelection();
             OnSelectionChanged?.Invoke(selection);
         }
 
+        /// <summary>
+        /// This is the method that is used to add an item to the selection.
+        /// </summary>
+        /// <param name="selectable">The selectable item that is being added to the selection</param>
         public override void AddToSelection(ISelectable selectable) {
             base.AddToSelection(selectable);
             OnSelectionChanged?.Invoke(selection);
         }
 
+        /// <summary>
+        /// This is the method that is used to remove an item from the selection.
+        /// </summary>
+        /// <param name="selectable">The selectable item that is being removed from the selection.</param>
         public override void RemoveFromSelection(ISelectable selectable) {
             base.RemoveFromSelection(selectable);
             OnSelectionChanged?.Invoke(selection);
         }
 
+        
         private void OnPaste(string operationName, string data) {
             var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
             nodeDate?.PasteValues(this);
+            //the data will be updated when pasted but we need to write the changes
+            EditorGUIUtility.systemCopyBuffer = "application/vnd.unity.graphview.elements " + 
+                                                JsonConvert.SerializeObject(nodeDate);
         }
 
         private bool CanIPaste(string data) {
