@@ -33,6 +33,10 @@ namespace Amilious.FunctionGraph {
             return node.GetInputConnections(inputId);
         }
         
+        public FunctionNode GetInputNode { get; }
+        
+        public FunctionNode GetResultNode { get; }
+        
         #if UNITY_EDITOR
 
         public bool TryCreateNode(Type type, out FunctionNode node) {

@@ -4,7 +4,7 @@ using Amilious.FunctionGraph.Attributes;
 namespace Amilious.FunctionGraph.Nodes.Loops {
     
     [FunctionNode("This node is used to act as a for loop.")]
-    public class For : LoopNodes {
+    public class WhileLoop : LoopNodes, ILoopSource {
 
         private bool _running;
         private CalculationId _lastId;
@@ -12,14 +12,15 @@ namespace Amilious.FunctionGraph.Nodes.Loops {
         private float _startValue;
         private int _startIndex;
         private int _lastIndex;
+        private int _maxLoops;
         private int _currentIndex;
         private float _currentValue;
 
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             inputPorts.Add(new PortInfo<float>("start value"));
-            inputPorts.Add(new PortInfo<int>("start index"));
-            inputPorts.Add(new PortInfo<int>("last index"));
-            inputPorts.Add(new PortInfo<float>("end loop"));
+            inputPorts.Add(new PortInfo<int>("max loops"));
+            inputPorts.Add(new PortInfo<bool>("condition").MarkLoop());
+            inputPorts.Add(new PortInfo<float>("end loop").MarkLoop());
             outputPorts.Add(new PortInfo<float>("result",GetResult));
         }
 
@@ -27,34 +28,30 @@ namespace Amilious.FunctionGraph.Nodes.Loops {
             if(_lastId == id) return _lastValue;
             _lastId = id;
             TryGetPortValue(0, id, out _startValue);
-            TryGetPortValue(1, id, out _startIndex);
-            TryGetPortValue(2, id, out _lastIndex);
-            if(_lastIndex < _startIndex) return _lastValue = _startValue;
-            _currentIndex = _startIndex;
+            TryGetPortValue(1, id, out _maxLoops);
+            _currentIndex = 0;
             //start pulling
             _currentValue = _startValue;
             
             //loop
-            while(_currentIndex<=_lastIndex){
+            while(_currentIndex<=_maxLoops){
                 //increment the index
                 _currentIndex++;
                 // need to generate new id so we do not get cached values
                 var pullId = new CalculationId();
-                if(!TryGetPortValue(3, pullId, out _currentValue))
+                TryGetPortValue(2, pullId, out bool condition);
+                if(!condition) { return _lastValue = _currentValue; }
+                if(!TryGetPortValue(3, pullId, out float pullValue))
                     //if the loop is not complete return the start value
                     return _lastValue = _startValue;
+                _currentValue = pullValue;
             }
             //end loop
             return _lastValue = _currentValue;
         }
-        
-        public int GetIndex(CalculationId id) => _currentIndex;
 
-        
-        /// This is the start of the loop
-        public float GetLoop(CalculationId arg) => _currentValue;
-        
-        
+        public int CurrentIndex => _currentIndex;
+        public float CurrentValue => _currentValue;
         
     }
 }

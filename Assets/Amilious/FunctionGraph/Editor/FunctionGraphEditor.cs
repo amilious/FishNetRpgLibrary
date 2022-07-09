@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Amilious.Core;
-using UnityEditor;
-using UnityEditor.Callbacks;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
+using System.Linq;
+using UnityEditor;
+using Amilious.Core;
+using UnityEditor.Callbacks;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
+using UnityEditor.Experimental.GraphView;
 
 namespace Amilious.FunctionGraph.Editor {
     public class FunctionGraphEditor : EditorWindow {
@@ -23,9 +21,14 @@ namespace Amilious.FunctionGraph.Editor {
         private Label _functionTitle;
         private Label _inspectorTitle;
         private Button _clearUnconnected;
+        private Button _focusInput;
+        private Button _focusResult;
         private Label _selectedGroups;
         private Label _selectedConnections;
         private Label _selectedNodes;
+        private Label _totalNodes;
+        private Label _totalConnections;
+        private Label _totalGroups;
         private Label _scale;
         private Label _position;
         
@@ -38,8 +41,7 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
 
-        public void CreateGUI()
-        {
+        public void CreateGUI() {
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
 
@@ -56,20 +58,39 @@ namespace Amilious.FunctionGraph.Editor {
             _graphView = root.Q<FunctionGraphView>();
             _graphView.OnSelectionChanged += OnGraphSelectionChanged;
             _graphView.viewTransformChanged += ViewChanged;
+            _graphView.OnCountUpdated += CountUpdated;
             _inspectorView = root.Q<InspectorView>();
             _functionTitle = root.Q<Label>("functionTitle");
             _inspectorTitle = root.Q<Label>("inspectorTitle");
             _clearUnconnected = root.Q<Button>("clearUnconnected");
+            _focusInput = root.Q<Button>("focusInput");
+            _focusResult = root.Q<Button>("focusResult");
             _clearUnconnected.clicked += ClearUnconnected;
+            _focusInput.clicked += FocusInput;
+            _focusResult.clicked += FocusResult;
             _selectedGroups = root.Q<Label>("selectedGroups");
             _selectedConnections = root.Q<Label>("selectedConnections");
             _selectedNodes = root.Q<Label>("selectedNodes");
+            _totalGroups = root.Q<Label>("totalGroups");
+            _totalConnections = root.Q<Label>("totalConnections");
+            _totalNodes = root.Q<Label>("totalNodes");
             _scale = root.Q<Label>("scale");
             _position = root.Q<Label>("position");
             ResetTitles();
             OnSelectionChange();
             OnGraphSelectionChanged(_graphView.selection);
             ViewChanged(_graphView);
+            _graphView.TriggerCountUpdate();
+        }
+
+        private void FocusResult() => _graphView?.FocusResult();
+
+        private void FocusInput() => _graphView?.FocusInput();
+
+        private void CountUpdated(int nodes, int connections, int groups) {
+            if(_totalNodes!=null)_totalNodes.text = nodes.ToString();
+            if(_totalConnections!=null)_totalConnections.text = connections.ToString();
+            if(_totalGroups!=null)_totalGroups.text = groups.ToString();
         }
 
         private void ClearUnconnected() => _graphView.ClearUnconnected();

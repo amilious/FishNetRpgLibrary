@@ -150,7 +150,6 @@ namespace Amilious.FishNetRpg.Statistics {
         private void Awake() {
             Initialize();
         }
-
         
         private void Initialize() {
             if(Initialized) return;

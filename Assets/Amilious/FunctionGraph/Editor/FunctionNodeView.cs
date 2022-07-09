@@ -17,8 +17,9 @@ namespace Amilious.FunctionGraph.Editor {
 
         public readonly List<Port> Output = new List<Port>();
         
-        public FunctionNodeView(FunctionNode node) {
+        public FunctionNodeView(FunctionNode node, IFunctionProvider provider) {
             Node = node;
+            Node.FunctionProvider = provider;
             Node.Initialize();
             title = node.name.SplitCamelCase();
             tooltip = node.GetDescription;

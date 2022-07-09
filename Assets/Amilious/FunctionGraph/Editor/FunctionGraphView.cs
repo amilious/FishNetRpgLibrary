@@ -15,7 +15,10 @@ namespace Amilious.FunctionGraph.Editor {
 
         public new class UxmlFactory : UxmlFactory<FunctionGraphView, UxmlTraits> { }
 
-        public event Action<IReadOnlyList<ISelectable>> OnSelectionChanged; 
+        public delegate void OnCountUpdatedDelegate(int nodes, int connections, int groups);
+
+        public event Action<IReadOnlyList<ISelectable>> OnSelectionChanged;
+        public event OnCountUpdatedDelegate OnCountUpdated;
 
         private IFunctionProvider _function;
 
@@ -193,6 +196,7 @@ namespace Amilious.FunctionGraph.Editor {
                 Add(group);
             });
             graphViewChanged += OnGraphViewChanged;
+            OnCountUpdated?.Invoke(nodes.Count(),edges.Count(),_function.GraphData.groups.Count);
         }
         
 
@@ -211,7 +215,19 @@ namespace Amilious.FunctionGraph.Editor {
             }
             if(graphViewChange.edgesToCreate!=null)
                 foreach(var edge in graphViewChange.edgesToCreate) HandleCreatingEdgeConnection(edge);
+            /*
+            var nCount = nodes.Count() - 
+                graphViewChange.elementsToRemove?.Count(x => x is FunctionNodeView)??0;
+            var cCount = edges.ToList().Count - graphViewChange.elementsToRemove?.Count(x => x is Edge)??0;
+            cCount += graphViewChange.edgesToCreate?.Count??0;
+            var gCount = _function.GraphData.groups.Count;
+            OnCountUpdated?.Invoke(nCount,cCount, gCount);*/
             return graphViewChange;
+        }
+
+        public void TriggerCountUpdate() {
+            if(_function==null){ OnCountUpdated?.Invoke(0,0,0); return; }
+            OnCountUpdated?.Invoke(nodes.Count(),edges.Count(),_function.GraphData.groups.Count);
         }
 
         public void HandleRemovingGroup(Group group, List<GraphElement> cancel = null) {
@@ -252,8 +268,10 @@ namespace Amilious.FunctionGraph.Editor {
         }
 
         private FunctionNodeView CreateNodeView(FunctionNode node) {
-            var nodeView = new FunctionNodeView(node);
+            if(_function == null) return null;
+            var nodeView = new FunctionNodeView(node,_function);
             AddElement(nodeView);
+            TriggerCountUpdate();
             return nodeView;
         }
 
@@ -323,13 +341,36 @@ namespace Amilious.FunctionGraph.Editor {
 
 
         public void ClearUnconnected() {
-            Debug.Log("This function is not yet implemented!");
-           /* foreach(var node in nodes.Cast<FunctionNodeView>()) {
+            foreach(var node in nodes.Cast<FunctionNodeView>()) {
                 if(node.Node.IsInputNode||node.Node.IsResultNode) continue;
                 if(node.Node.inputConnections.Count!=0) continue;
                 if(node.Node.outputConnections.Count!=0) continue;
-                HandleRemoveNode(node);                
-            }*/
+                HandleRemoveNode(node);
+                RemoveElement(node);
+            }
+            MarkDirtyRepaint();
+        }
+
+        public void FocusInput() {
+            if(_function == null) return;
+            var input = _function.GetInputNode;
+            if(input == null) return;
+            var inputView = FindNodeView(input);
+            if(inputView == null) return;
+            ClearSelection();
+            AddToSelection(inputView);
+            FrameSelection();
+        }
+
+        public void FocusResult() {
+            if(_function == null) return;
+            var result = _function.GetResultNode;
+            if(result == null) return;
+            var resultView = FindNodeView(result);
+            if(resultView == null) return;
+            ClearSelection();
+            AddToSelection(resultView);
+            FrameSelection();
         }
         
     }

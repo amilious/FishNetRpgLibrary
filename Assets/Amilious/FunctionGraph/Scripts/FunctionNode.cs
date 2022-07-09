@@ -33,6 +33,8 @@ namespace Amilious.FunctionGraph {
         public virtual bool IsResultNode => false;
 
         public virtual bool IsInputNode => false;
+
+        public IFunctionProvider FunctionProvider { get; set; }
         
         public void SetPositionWithoutSaving(Vector2 position) => this.position = position;
         
@@ -41,13 +43,22 @@ namespace Amilious.FunctionGraph {
 
         public IEnumerable<Connection> GetOutputConnections(int port) =>
             outputConnections.Where(con => con.outputPort == port);
-
+        
         protected bool TryGetPortValues<T>(int inputPort, CalculationId calculationId, out List<T> values) {
             values = new List<T>();
             var cons = GetInputConnections(inputPort);
-            foreach(var con in cons)
-                if(con.outputNode.OutputPortInfo[con.outputPort].TryGetResult(calculationId, out T result))
-                    values.Add(result);
+            var type = typeof(T);
+            foreach(var con in cons) {
+                var outType = con.outputNode.OutputPortInfo[con.outputPort].Type;
+                if(outType == typeof(int) && type == typeof(float)) { //cast an int to a float
+                    if(con.outputNode.OutputPortInfo[con.outputPort].TryGetResult(calculationId, out int intResult))
+                        values.Add((T)Convert.ChangeType(intResult,type));
+                } else { //handle matching cases
+                    if(con.outputNode.OutputPortInfo[con.outputPort].TryGetResult(calculationId, out T result)) {
+                        values.Add(result);
+                    }
+                }
+            }
             return values.Count > 0;
         }
 
@@ -105,17 +116,29 @@ namespace Amilious.FunctionGraph {
             return false;
         }*/
 
-        public bool IsPartOfLoop(out FunctionNode loop,FunctionNode excludedNode=null) {
+        public bool HasInputConnectionToLoop(out FunctionNode loop,FunctionNode excludedNode=null) {
             foreach(var input in inputConnections) {
-                if(input.outputNode.IsLoop && input.outputNode.OutputPortInfo[input.outputPort].IsLoopPort) {
+                if(input.outputNode.OutputPortInfo[input.outputPort].IsLoopPort) {
                     if(input.outputNode == excludedNode) continue;
                     loop = input.outputNode;
                     return true;
                 }
+                if(input.outputNode.HasInputConnectionToLoop(out loop, excludedNode)) return true;
             }
-            foreach(var output in outputConnections)
-                if(output.inputNode.IsPartOfLoop(out loop,excludedNode)) return true;
             loop = null;
+            return false;
+        }
+
+        public bool HasOutputConnectionToLoop(out FunctionNode loopNode, FunctionNode excludedNode = null) {
+            foreach(var output in outputConnections) {
+                if(output.inputNode.InputPortInfo[output.inputPort].IsLoopPort) {
+                    if(output.inputNode == excludedNode) continue;
+                    loopNode = output.inputNode;
+                    return true;
+                }
+                if(output.inputNode.HasOutputConnectionToLoop(out loopNode, excludedNode)) return true;
+            }
+            loopNode = null;
             return false;
         }
 

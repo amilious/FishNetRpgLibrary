@@ -1,8 +1,6 @@
 using UnityEngine;
 using Amilious.FunctionGraph;
 using System.Collections.Generic;
-using Amilious.FunctionGraph.Nodes.Hidden.Input;
-using Amilious.FunctionGraph.Nodes.Hidden.Output;
 
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
@@ -19,6 +17,8 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
         FunctionGraphData IFunctionProvider.GetGraphData() => graphData;
         void IFunctionProvider.SetGraphData(FunctionGraphData data) => graphData = data;
         bool IFunctionProvider.Initialized { get; set; }
+        public FunctionNode GetInputNode => inputNode;
+        public FunctionNode GetResultNode => resultNode;
         public List<FunctionNode> GetNodes() => nodes;
         public ScriptableObject FunctionProvider => this;
 
