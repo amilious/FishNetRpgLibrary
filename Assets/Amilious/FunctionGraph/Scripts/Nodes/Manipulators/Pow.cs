@@ -20,7 +20,7 @@ namespace Amilious.FunctionGraph.Nodes.Manipulators {
             if(_lastId == id) return _lastValue;
             _lastId = id;
             TryGetPortValue(0, id, out float value);
-            TryGetPortValue(0, id, out float power);
+            TryGetPortValue(1, id, out float power);
             return _lastValue = Mathf.Pow(value, power);
         }
 

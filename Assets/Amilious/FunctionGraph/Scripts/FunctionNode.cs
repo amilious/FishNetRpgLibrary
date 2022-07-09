@@ -11,9 +11,9 @@ namespace Amilious.FunctionGraph {
     public abstract class FunctionNode : ScriptableObject {
 
         [HideInInspector] public string guid;
-        [SerializeField] private Vector2 position;
-        [SerializeField] public List<Connection> inputConnections = new ();
-        [SerializeField] public List<Connection> outputConnections = new ();
+        [SerializeField,HideInInspector] private Vector2 position;
+        [SerializeField,HideInInspector] public List<Connection> inputConnections = new ();
+        [SerializeField,HideInInspector] public List<Connection> outputConnections = new ();
         [NonSerialized] private bool _initialized = false;
 
         public Vector2 Position {

@@ -21,38 +21,16 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   - inputNode: {fileID: -8123317346462429955}
-    outputNode: {fileID: -8104059687562496589}
+    outputNode: {fileID: -3443071011838376174}
     inputPort: 0
     outputPort: 0
     loopGuid: 
   outputConnections:
-  - inputNode: {fileID: -2283175345876846975}
+  - inputNode: {fileID: 2832733740807984896}
     outputNode: {fileID: -8123317346462429955}
     inputPort: 0
     outputPort: 0
     loopGuid: 
---- !u!114 &-8104059687562496589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5dde5d11e7d947a6850fcfa79c13a544, type: 3}
-  m_Name: FloatNode
-  m_EditorClassIdentifier: 
-  guid: 711a30d446b7e9d489799fcad7bf7de6
-  position: {x: -766, y: 109}
-  inputConnections: []
-  outputConnections:
-  - inputNode: {fileID: -8123317346462429955}
-    outputNode: {fileID: -8104059687562496589}
-    inputPort: 0
-    outputPort: 0
-    loopGuid: 
-  value: 10
 --- !u!114 &-6552857907158855346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +44,7 @@ MonoBehaviour:
   m_Name: Pow
   m_EditorClassIdentifier: 
   guid: f18d456fdf860154cb53b15233bb70b3
-  position: {x: -1211, y: 376}
+  position: {x: -1085, y: 522}
   inputConnections:
   - inputNode: {fileID: -6552857907158855346}
     outputNode: {fileID: 5594645256558064009}
@@ -97,9 +75,15 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   guid: 04a04e775ca944442915a5f6e01da313
-  position: {x: -199, y: -79}
+  position: {x: -729, y: 46}
   inputConnections: []
-  outputConnections: []
+  outputConnections:
+  - inputNode: {fileID: -8123317346462429955}
+    outputNode: {fileID: -3443071011838376174}
+    inputPort: 0
+    outputPort: 0
+    loopGuid: 
+  defaultValue: 3
   label: level
 --- !u!114 &-2965726306012267661
 MonoBehaviour:
@@ -113,10 +97,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: 439, y: 54, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
-  groups: []
---- !u!114 &-2283175345876846975
+  position: {x: 1362, y: 59, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  groups:
+  - id: 2546b12b7f68ebd46a324526d4aafa85
+    title: Loop
+    nodeIds:
+    - 53c6f00b6e1247544867ebbe8b7875c1
+    - de8119078863a8a44ab058b986ea23ba
+    - 2a8cadd63061c5742863e0be06be71e0
+    - 667826e8981231545afc66a3167d59e6
+    - 2b4ed0cb6cbfff74885e405840615503
+    - f18d456fdf860154cb53b15233bb70b3
+    - 99add28698dfb504982c08a86c5352ed
+    - 424692b7d2fe2434ea1ba9ecbd04b1f9
+    - ad93fda10c403624cb2e8fe07fb7e7f1
+    - 7c8aac4997f71a2489e02f7e01ef9734
+--- !u!114 &-2571771376491221826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,24 +122,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 367848ef88cb4f74a6cf1e08cd8c7047, type: 3}
-  m_Name: FloatToInt
+  m_Script: {fileID: 11500000, guid: 3327b967eed94eba9a17ee582dcc7412, type: 3}
+  m_Name: IntNode
   m_EditorClassIdentifier: 
-  guid: 62f77970e33adc845b0e1190a57852ec
-  position: {x: -477, y: 170}
-  inputConnections:
-  - inputNode: {fileID: -2283175345876846975}
-    outputNode: {fileID: -8123317346462429955}
-    inputPort: 0
-    outputPort: 0
-    loopGuid: 
+  guid: e8f9de324cdaa3743b2e89ac01ece2f2
+  position: {x: 205, y: 430}
+  inputConnections: []
   outputConnections:
-  - inputNode: {fileID: 1374819858234911834}
-    outputNode: {fileID: -2283175345876846975}
-    inputPort: 2
+  - inputNode: {fileID: 3050607769062448615}
+    outputNode: {fileID: -2571771376491221826}
+    inputPort: 1
     outputPort: 0
     loopGuid: 
-  selection: 0
+  value: 0
 --- !u!114 &-2036997853200528786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +148,7 @@ MonoBehaviour:
   m_Name: FloatNode
   m_EditorClassIdentifier: 
   guid: 2b4ed0cb6cbfff74885e405840615503
-  position: {x: -1173, y: 491}
+  position: {x: -1063, y: 454}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 478703584499762567}
@@ -165,37 +157,6 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   value: 300
---- !u!114 &-1683548580174030873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efe39a9006cf482e90f2dc11b5f25719, type: 3}
-  m_Name: IntToFloat
-  m_EditorClassIdentifier: 
-  guid: f4285d88adb4b964fa5bc2cac29503e6
-  position: {x: -1085.9047, y: 269.1949}
-  inputConnections:
-  - inputNode: {fileID: -1683548580174030873}
-    outputNode: {fileID: 4823473365289897818}
-    inputPort: 0
-    outputPort: 1
-    loopGuid: 
-  outputConnections:
-  - inputNode: {fileID: 4981771091563032311}
-    outputNode: {fileID: -1683548580174030873}
-    inputPort: 0
-    outputPort: 0
-    loopGuid: 
-  - inputNode: {fileID: 5594645256558064009}
-    outputNode: {fileID: -1683548580174030873}
-    inputPort: 0
-    outputPort: 0
-    loopGuid: 
 --- !u!114 &-1148188154044248369
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,7 +206,6 @@ MonoBehaviour:
   - {fileID: 4823473365289897818}
   - {fileID: 4899519924529835717}
   - {fileID: -8123317346462429955}
-  - {fileID: -2283175345876846975}
   - {fileID: 4303331208837495952}
   - {fileID: 4981771091563032311}
   - {fileID: -6552857907158855346}
@@ -255,17 +215,15 @@ MonoBehaviour:
   - {fileID: 478703584499762567}
   - {fileID: 8413830556014242638}
   - {fileID: 3458123867257235190}
-  - {fileID: 9177658641630682569}
   - {fileID: 6031250944316902025}
   - {fileID: 3550778378379755947}
   - {fileID: 4978497901302034454}
   - {fileID: -1148188154044248369}
   - {fileID: -2036997853200528786}
   - {fileID: 2255894929181909686}
-  - {fileID: -8104059687562496589}
-  - {fileID: -1683548580174030873}
-  - {fileID: 7231320456305878563}
-  - {fileID: 2429261343843352406}
+  - {fileID: 1160408652778236650}
+  - {fileID: -2571771376491221826}
+  - {fileID: 2832733740807984896}
   graphData: {fileID: -2965726306012267661}
 --- !u!114 &478703584499762567
 MonoBehaviour:
@@ -280,7 +238,7 @@ MonoBehaviour:
   m_Name: Multiply
   m_EditorClassIdentifier: 
   guid: ad93fda10c403624cb2e8fe07fb7e7f1
-  position: {x: -1040, y: 375}
+  position: {x: -928, y: 521}
   inputConnections:
   - inputNode: {fileID: 478703584499762567}
     outputNode: {fileID: -6552857907158855346}
@@ -296,6 +254,27 @@ MonoBehaviour:
   - inputNode: {fileID: 4981771091563032311}
     outputNode: {fileID: 478703584499762567}
     inputPort: 0
+    outputPort: 0
+    loopGuid: 
+--- !u!114 &1160408652778236650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f212142b4540e695e4202f8cbfba81, type: 3}
+  m_Name: IntMax
+  m_EditorClassIdentifier: 
+  guid: eb481987f619a4840935d5b8498bc4c1
+  position: {x: 204, y: 460}
+  inputConnections: []
+  outputConnections:
+  - inputNode: {fileID: 3050607769062448615}
+    outputNode: {fileID: 1160408652778236650}
+    inputPort: 2
     outputPort: 0
     loopGuid: 
 --- !u!114 &1374819858234911834
@@ -319,11 +298,6 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   - inputNode: {fileID: 1374819858234911834}
-    outputNode: {fileID: -2283175345876846975}
-    inputPort: 2
-    outputPort: 0
-    loopGuid: 
-  - inputNode: {fileID: 1374819858234911834}
     outputNode: {fileID: 8413830556014242638}
     inputPort: 3
     outputPort: 0
@@ -331,6 +305,11 @@ MonoBehaviour:
   - inputNode: {fileID: 1374819858234911834}
     outputNode: {fileID: 6031250944316902025}
     inputPort: 0
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: 1374819858234911834}
+    outputNode: {fileID: 2832733740807984896}
+    inputPort: 2
     outputPort: 0
     loopGuid: 
   outputConnections:
@@ -352,7 +331,7 @@ MonoBehaviour:
   m_Name: FloatNode
   m_EditorClassIdentifier: 
   guid: 667826e8981231545afc66a3167d59e6
-  position: {x: -1496, y: 466}
+  position: {x: -1346, y: 609}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 5594645256558064009}
@@ -383,7 +362,7 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   value: 1
---- !u!114 &2429261343843352406
+--- !u!114 &2832733740807984896
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -392,19 +371,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3327b967eed94eba9a17ee582dcc7412, type: 3}
-  m_Name: IntNode
+  m_Script: {fileID: 11500000, guid: 367848ef88cb4f74a6cf1e08cd8c7047, type: 3}
+  m_Name: FloatToInt
   m_EditorClassIdentifier: 
-  guid: ff1506a63545cdb40b8ac871092a3a2e
-  position: {x: -822.25006, y: 764.75006}
-  inputConnections: []
-  outputConnections:
-  - inputNode: {fileID: 7231320456305878563}
-    outputNode: {fileID: 2429261343843352406}
+  guid: f49abb032b85d3e438c08d8f318cc5cb
+  position: {x: -473, y: 193}
+  inputConnections:
+  - inputNode: {fileID: 2832733740807984896}
+    outputNode: {fileID: -8123317346462429955}
     inputPort: 0
     outputPort: 0
     loopGuid: 
-  value: 10
+  outputConnections:
+  - inputNode: {fileID: 1374819858234911834}
+    outputNode: {fileID: 2832733740807984896}
+    inputPort: 2
+    outputPort: 0
+    loopGuid: 
+  selection: 0
 --- !u!114 &3050607769062448615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,6 +409,16 @@ MonoBehaviour:
     inputPort: 0
     outputPort: 0
     loopGuid: 
+  - inputNode: {fileID: 3050607769062448615}
+    outputNode: {fileID: 1160408652778236650}
+    inputPort: 2
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: 3050607769062448615}
+    outputNode: {fileID: -2571771376491221826}
+    inputPort: 1
+    outputPort: 0
+    loopGuid: 
   outputConnections: []
   label1: Base Value
   label2: Minimum
@@ -442,7 +436,7 @@ MonoBehaviour:
   m_Name: FloatNode
   m_EditorClassIdentifier: 
   guid: 424692b7d2fe2434ea1ba9ecbd04b1f9
-  position: {x: -1329, y: 371}
+  position: {x: -1199, y: 452}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: -6552857907158855346}
@@ -521,7 +515,7 @@ MonoBehaviour:
   m_Name: Floor
   m_EditorClassIdentifier: 
   guid: de8119078863a8a44ab058b986ea23ba
-  position: {x: -676, y: 394}
+  position: {x: -625, y: 522}
   inputConnections:
   - inputNode: {fileID: 4303331208837495952}
     outputNode: {fileID: 4981771091563032311}
@@ -547,7 +541,7 @@ MonoBehaviour:
   m_Name: StartLoop
   m_EditorClassIdentifier: 
   guid: 7c8aac4997f71a2489e02f7e01ef9734
-  position: {x: -1184, y: 103}
+  position: {x: -1367, y: 432}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 8413830556014242638}
@@ -555,7 +549,12 @@ MonoBehaviour:
     inputPort: 0
     outputPort: 0
     loopGuid: 
-  - inputNode: {fileID: -1683548580174030873}
+  - inputNode: {fileID: 4981771091563032311}
+    outputNode: {fileID: 4823473365289897818}
+    inputPort: 0
+    outputPort: 1
+    loopGuid: 
+  - inputNode: {fileID: 5594645256558064009}
     outputNode: {fileID: 4823473365289897818}
     inputPort: 0
     outputPort: 1
@@ -618,7 +617,7 @@ MonoBehaviour:
   m_Name: Sum
   m_EditorClassIdentifier: 
   guid: 2a8cadd63061c5742863e0be06be71e0
-  position: {x: -824, y: 361}
+  position: {x: -764, y: 522}
   inputConnections:
   - inputNode: {fileID: 4981771091563032311}
     outputNode: {fileID: 478703584499762567}
@@ -626,9 +625,9 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   - inputNode: {fileID: 4981771091563032311}
-    outputNode: {fileID: -1683548580174030873}
+    outputNode: {fileID: 4823473365289897818}
     inputPort: 0
-    outputPort: 0
+    outputPort: 1
     loopGuid: 
   outputConnections:
   - inputNode: {fileID: 4303331208837495952}
@@ -649,7 +648,7 @@ MonoBehaviour:
   m_Name: Division
   m_EditorClassIdentifier: 
   guid: 99add28698dfb504982c08a86c5352ed
-  position: {x: -1375, y: 400}
+  position: {x: -1242, y: 545}
   inputConnections:
   - inputNode: {fileID: 5594645256558064009}
     outputNode: {fileID: 1419021269178839027}
@@ -657,9 +656,9 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   - inputNode: {fileID: 5594645256558064009}
-    outputNode: {fileID: -1683548580174030873}
+    outputNode: {fileID: 4823473365289897818}
     inputPort: 0
-    outputPort: 0
+    outputPort: 1
     loopGuid: 
   outputConnections:
   - inputNode: {fileID: -6552857907158855346}
@@ -689,27 +688,6 @@ MonoBehaviour:
     outputPort: 0
     loopGuid: 
   value: 0
---- !u!114 &7231320456305878563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b5bdc3a38ba4a58adf5d4ba2958cb95, type: 3}
-  m_Name: TestFloat
-  m_EditorClassIdentifier: 
-  guid: ad6258064fbb5ff41890d2bc8d3ed28a
-  position: {x: -649.75, y: 725.6501}
-  inputConnections:
-  - inputNode: {fileID: 7231320456305878563}
-    outputNode: {fileID: 2429261343843352406}
-    inputPort: 0
-    outputPort: 0
-    loopGuid: 
-  outputConnections: []
 --- !u!114 &8413830556014242638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,7 +701,7 @@ MonoBehaviour:
   m_Name: Sum
   m_EditorClassIdentifier: 
   guid: 53c6f00b6e1247544867ebbe8b7875c1
-  position: {x: -511, y: 307}
+  position: {x: -616, y: 298}
   inputConnections:
   - inputNode: {fileID: 8413830556014242638}
     outputNode: {fileID: 4303331208837495952}
@@ -741,20 +719,3 @@ MonoBehaviour:
     inputPort: 3
     outputPort: 0
     loopGuid: 
---- !u!114 &9177658641630682569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3327b967eed94eba9a17ee582dcc7412, type: 3}
-  m_Name: IntNode
-  m_EditorClassIdentifier: 
-  guid: 9c59353eff905d0469d784fc5e92161a
-  position: {x: -742, y: 3}
-  inputConnections: []
-  outputConnections: []
-  value: 0

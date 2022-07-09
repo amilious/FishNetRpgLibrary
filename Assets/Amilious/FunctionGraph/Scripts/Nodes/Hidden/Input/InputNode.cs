@@ -4,8 +4,11 @@ using UnityEngine;
 namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
     
     public abstract class InputNode<T> : HiddenNode {
-
+        
+        [SerializeField] private T defaultValue;
+        
         private T _value;
+        private bool _setValue;
         [HideInInspector] public string label;
 
         public override bool IsInputNode => true;
@@ -14,7 +17,7 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
             outputPorts.Add(new PortInfo<T>(label,GetValue));
         }
 
-        private T GetValue(CalculationId calculationId) => _value;
+        private T GetValue(CalculationId calculationId) => !_setValue?defaultValue:_value;
 
         #if UNITY_EDITOR
 
@@ -27,6 +30,7 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
         #endif
         
         public void SetValue(T value) {
+            _setValue = true;
             _value = value;
         }
 
@@ -38,8 +42,12 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
     
     public abstract class InputNode<T1,T2> : HiddenNode {
 
+        [SerializeField] private T1 defaultValue1;
+        [SerializeField] private T2 defaultValue2;
+        
         private T1 _value1;
         private T2 _value2;
+        private bool _setValues;
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
         
@@ -60,13 +68,14 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
 
         #endif
 
-        private T2 GetValue2(CalculationId arg) => _value2;
+        private T2 GetValue2(CalculationId arg) => !_setValues?defaultValue2:_value2;
 
-        private T1 GetValue1(CalculationId calculationId) => _value1;
+        private T1 GetValue1(CalculationId calculationId) => !_setValues?defaultValue1:_value1;
 
         public void SetValues(T1 value1, T2 value2) {
             _value1 = value1;
             _value2 = value2;
+            _setValues = true;
         }
 
         public void SetLabels(string label1, string label2) {
@@ -78,9 +87,14 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
     
     public abstract class InputNode<T1,T2,T3> : HiddenNode {
 
+        [SerializeField] private T1 defaultValue1;
+        [SerializeField] private T2 defaultValue2;
+        [SerializeField] private T3 defaultValue3;
+        
         private T1 _value1;
         private T2 _value2;
         private T3 _value3;
+        private bool _setValues;
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
         [HideInInspector] public string label3 = "value 3";
@@ -103,16 +117,17 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
 
         #endif
 
-        private T3 GetValue3(CalculationId arg) => _value3;
+        private T3 GetValue3(CalculationId arg) =>!_setValues?defaultValue3:_value3;
 
-        private T2 GetValue2(CalculationId arg) => _value2;
+        private T2 GetValue2(CalculationId arg) => !_setValues?defaultValue2:_value2;
 
-        private T1 GetValue1(CalculationId calculationId) => _value1;
+        private T1 GetValue1(CalculationId calculationId) => !_setValues?defaultValue1:_value1;
 
         public void SetValues(T1 value1, T2 value2, T3 value3) {
             _value1 = value1;
             _value2 = value2;
             _value3 = value3;
+            _setValues = true;
         }
 
         public void SetLabels(string label1, string label2, string label3) {
@@ -125,10 +140,16 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
     
     public abstract class InputNode<T1,T2,T3,T4> : HiddenNode {
 
+        [SerializeField] private T1 defaultValue1;
+        [SerializeField] private T2 defaultValue2;
+        [SerializeField] private T3 defaultValue3;
+        [SerializeField] private T4 defaultValue4;
+        
         private T1 _value1;
         private T2 _value2;
         private T3 _value3;
         private T4 _value4;
+        private bool _setValues;
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
         [HideInInspector] public string label3 = "value 3";
@@ -153,19 +174,20 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
 
         #endif
         
-        private T4 GetValue4(CalculationId arg) => _value4;
+        private T4 GetValue4(CalculationId arg) => !_setValues?defaultValue4:_value4;
         
-        private T3 GetValue3(CalculationId arg) => _value3;
+        private T3 GetValue3(CalculationId arg) => !_setValues?defaultValue3:_value3;
 
-        private T2 GetValue2(CalculationId arg) => _value2;
+        private T2 GetValue2(CalculationId arg) => !_setValues?defaultValue2:_value2;
 
-        private T1 GetValue1(CalculationId calculationId) => _value1;
+        private T1 GetValue1(CalculationId calculationId) => !_setValues?defaultValue1:_value1;
 
         public void SetValues(T1 value1, T2 value2, T3 value3, T4 value4) {
             _value1 = value1;
             _value2 = value2;
             _value3 = value3;
             _value4 = value4;
+            _setValues = true;
         }
 
         public void SetLabels(string label1, string label2, string label3, string label4) {
@@ -179,11 +201,18 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
     
     public abstract class InputNode<T1,T2,T3,T4,T5> : HiddenNode {
 
+
+        [SerializeField] private T1 defaultValue1;
+        [SerializeField] private T2 defaultValue2;
+        [SerializeField] private T3 defaultValue3;
+        [SerializeField] private T4 defaultValue4;
+        [SerializeField] private T5 defaultValue5;
         private T1 _value1;
         private T2 _value2;
         private T3 _value3;
         private T4 _value4;
         private T5 _value5;
+        private bool _setValues;
         [HideInInspector] public string label1 = "value 1";
         [HideInInspector] public string label2 = "value 2";
         [HideInInspector] public string label3 = "value 3";
@@ -210,15 +239,15 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
 
         #endif
         
-        private T5 GetValue5(CalculationId arg) => _value5;
+        private T5 GetValue5(CalculationId arg) => !_setValues?defaultValue5:_value5;
         
-        private T4 GetValue4(CalculationId arg) => _value4;
+        private T4 GetValue4(CalculationId arg) => !_setValues?defaultValue4:_value4;
         
-        private T3 GetValue3(CalculationId arg) => _value3;
+        private T3 GetValue3(CalculationId arg) => !_setValues?defaultValue3:_value3;
 
-        private T2 GetValue2(CalculationId arg) => _value2;
+        private T2 GetValue2(CalculationId arg) => !_setValues?defaultValue2:_value2;
 
-        private T1 GetValue1(CalculationId calculationId) => _value1;
+        private T1 GetValue1(CalculationId calculationId) => !_setValues?defaultValue1:_value1;
 
         public void SetValues(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5) {
             _value1 = value1;
@@ -226,6 +255,7 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Input {
             _value3 = value3;
             _value4 = value4;
             _value5 = value5;
+            _setValues = true;
         }
 
         public void SetLabels(string label1, string label2, string label3, string label4, string label5) {
