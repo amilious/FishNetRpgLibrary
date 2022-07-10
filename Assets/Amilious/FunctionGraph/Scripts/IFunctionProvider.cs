@@ -150,8 +150,8 @@ namespace Amilious.FunctionGraph {
         public void DeleteNode(FunctionNode node) {
             Nodes.Remove(node);
             //remove the connections from the child nodes
-            node.outputConnections.ForEach(x=>x.inputNode.RemoveInputConnection(x));
-            node.inputConnections.ForEach(x=>x.outputNode.RemoveOutputConnection(x));
+            node.outputConnections.ForEach(x=>x.inputNode.RemoveConnection(x));
+            node.inputConnections.ForEach(x=>x.outputNode.RemoveConnection(x));
             //remove the node's scriptable object.
             UnityEditor.AssetDatabase.RemoveObjectFromAsset(node);
             UnityEditor.AssetDatabase.SaveAssets();
@@ -162,8 +162,8 @@ namespace Amilious.FunctionGraph {
         /// </summary>
         /// <param name="connection">The connection that you want to add.</param>
         public void AddConnection(Connection connection) {
-            connection.inputNode.AddInputConnection(connection);
-            connection.outputNode.AddOutputConnection(connection);
+            connection.inputNode.AddConnection(connection);
+            connection.outputNode.AddConnection(connection);
         }
 
         /// <summary>
@@ -171,8 +171,8 @@ namespace Amilious.FunctionGraph {
         /// </summary>
         /// <param name="connection">The connection that you want to remove.</param>
         public void RemoveConnection(Connection connection) {
-            connection.inputNode.RemoveInputConnection(connection);
-            connection.outputNode.RemoveOutputConnection(connection);
+            connection.inputNode.RemoveConnection(connection);
+            connection.outputNode.RemoveConnection(connection);
         }
 
         #endif

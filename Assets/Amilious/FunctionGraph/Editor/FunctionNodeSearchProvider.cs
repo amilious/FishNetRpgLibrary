@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Amilious.Core.Extensions;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using Amilious.FunctionGraph.Nodes.Hidden;
