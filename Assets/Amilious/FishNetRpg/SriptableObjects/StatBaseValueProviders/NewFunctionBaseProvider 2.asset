@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   guid: c834ee3c54302f045ab598c8ac96d027
-  position: {x: 0, y: 0}
+  position: {x: 0, y: 1}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: -4113187135534780554}
@@ -99,10 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: 348, y: 67, z: 0}
+  position: {x: 386, y: 127, z: 0}
   scale: {x: 1, y: 1, z: 1}
-  groups:
-  - id: 047fc0aed44229940b45d5694225c4f6
-    title: New Group
-    nodeIds:
-    - 6f3db1fcf5da70d4da854d7db2f2ecc2
+  groups: []

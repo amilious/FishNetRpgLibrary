@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using Amilious.Core.Extensions;
+using Amilious.FunctionGraph.Editor.Serialization;
 using Amilious.FunctionGraph.Nodes.Hidden;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor.Experimental.GraphView;
@@ -14,6 +15,8 @@ namespace Amilious.FunctionGraph.Editor {
     public class FunctionGraphView : GraphView {
 
         public new class UxmlFactory : UxmlFactory<FunctionGraphView, UxmlTraits> { }
+
+        public const string SERIALIZE_PREFIX = "Amilious/FunctionGraph ";
 
         public delegate void OnCountUpdatedDelegate(int nodes, int connections, int groups);
 
@@ -47,7 +50,6 @@ namespace Amilious.FunctionGraph.Editor {
             serializeGraphElements = OnCopy;
             canPasteSerializedData = CanIPaste;
             unserializeAndPaste = OnPaste;
-            
         }
         
         /// <summary>
@@ -76,25 +78,41 @@ namespace Amilious.FunctionGraph.Editor {
             OnSelectionChanged?.Invoke(selection);
         }
 
-        
+        /// <summary>
+        /// This method is called when items are pasted.
+        /// </summary>
+        /// <param name="operationName">The operation name.</param>
+        /// <param name="data">The serialized data that is being pasted.</param>
         private void OnPaste(string operationName, string data) {
-            var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
+            if(!data.StartsWith(SERIALIZE_PREFIX)) return;
+            data = data.Substring(SERIALIZE_PREFIX.Length);
+            var nodeDate = JsonConvert.DeserializeObject<FunctionGraphSerializedData>(data);
             nodeDate?.PasteValues(this);
             //the data will be updated when pasted but we need to write the changes
             EditorGUIUtility.systemCopyBuffer = "application/vnd.unity.graphview.elements " + 
-                                                JsonConvert.SerializeObject(nodeDate);
+                SERIALIZE_PREFIX + JsonConvert.SerializeObject(nodeDate);
         }
 
-        private bool CanIPaste(string data) {
-            try {
-                var nodeDate = JsonConvert.DeserializeObject<GraphSerializedData>(data);
-                return nodeDate != null;
-            }catch(Exception) { return false;}
+        /// <summary>
+        /// This method is used to check if the provided data can be pasted in this graph.
+        /// </summary>
+        /// <param name="data">The data that is available to paste.</param>
+        /// <returns>True if the data can be pasted, otherwise false.</returns>
+        private static bool CanIPaste(string data) {
+            if(!data.StartsWith(SERIALIZE_PREFIX)) return false;
+            data = data[SERIALIZE_PREFIX.Length..];
+            var nodeDate = JsonConvert.DeserializeObject<FunctionGraphSerializedData>(data);
+            return nodeDate != null;
         }
 
+        /// <summary>
+        /// This method is used to serialize the give data when using copy.
+        /// </summary>
+        /// <param name="elements">The elements that are being copied.</param>
+        /// <returns>The serialized data for the given elements.</returns>
         private string OnCopy(IEnumerable<GraphElement> elements) {
-            var data = new GraphSerializedData(elements,this);
-            return JsonConvert.SerializeObject(data);
+            var data = new FunctionGraphSerializedData(elements,this);
+            return SERIALIZE_PREFIX + JsonConvert.SerializeObject(data);
         }
        
         private void ElementsAddedToGroup(Group group, IEnumerable<GraphElement> elements) {
@@ -109,7 +127,7 @@ namespace Amilious.FunctionGraph.Editor {
             var funGroup = _function.GraphData.GroupFromId(group.GetId());
             if(funGroup == null) return;
             foreach(var element in elements) {
-                if(!(element is FunctionNodeView nodeView)) continue;
+                if(element is not FunctionNodeView nodeView) continue;
                 funGroup.nodeIds.Remove(nodeView.Node.guid);
             }
         }
@@ -125,19 +143,20 @@ namespace Amilious.FunctionGraph.Editor {
             _function.GraphData.scale = graphview.viewTransform.scale;
         }
 
+        /// <inheritdoc />
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt) {
             if(_function is null) return;
-            var position = this.ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
+            var pos = this.ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
             var mouse = evt.mousePosition;
             mouse.x += 120;
             mouse.y += 15;
-            evt.menu.AppendAction("Add Node", a => {
+            evt.menu.AppendAction("Add Node", _ => {
                 SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(mouse)),
-                    ScriptableObject.CreateInstance<FunctionNodeSearchProvider>().AddCallback(CreateNode, position));
+                    ScriptableObject.CreateInstance<FunctionNodeSearchProvider>().UpdateCallback(CreateNode, pos));
             });
             evt.menu.AppendSeparator();
             if(selection.Count > 0) {
-                evt.menu.AppendAction("Create Group", a => {
+                evt.menu.AppendAction("Create Group", _ => {
                     var group = AddGroup();
                     group.AddElements(selection.FindAll(x=>x is FunctionNodeView).Cast<GraphElement>());
                 });
@@ -146,9 +165,9 @@ namespace Amilious.FunctionGraph.Editor {
 
         }
 
-        public Group AddGroup(string name = "New Group") {
+        public Group AddGroup(string groupName = "New Group") {
             var id = GUID.Generate().ToString();
-            var group = new Group { title = name, userData = id};
+            var group = new Group { title = groupName, userData = id};
             _function.GraphData.groups.Add(new FunctionGroup{id = id, title = group.title});
             Add(group);
             TriggerCountUpdate();
@@ -278,16 +297,17 @@ namespace Amilious.FunctionGraph.Editor {
             return nodeView;
         }
 
+        /// <inheritdoc />
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter) {
             var list = ports.ToList().Where(endPort =>
                 endPort.direction != startPort.direction && endPort.node != startPort.node &&
                 endPort.portType == startPort.portType).ToList();
             //allow ints to connect to floats but not the other way around
-            if(startPort.direction == Direction.Output && startPort.portType == typeof(int)) {
+            if(startPort.IsOutPut() && startPort.IsType<int>()) {
                 list.AddRange(ports.Where(endPort =>
                     endPort.direction == Direction.Input && endPort.portType == typeof(float)));
             }
-            if(startPort.direction == Direction.Input && startPort.portType == typeof(float)) {
+            if(startPort.IsInput() && startPort.IsType<float>()) {
                 list.AddRange(ports.Where(endPort =>
                     endPort.direction == Direction.Output && endPort.portType == typeof(int)));
             }
@@ -296,23 +316,20 @@ namespace Amilious.FunctionGraph.Editor {
             foreach(var port in list) {
                 //check if the connection already exists
                 if(startPort.HasConnectionTo(port)) { remove.Add(port); continue; }
-                //check for loops
-                var inputPort = startPort.direction == Direction.Input?startPort:port;
-                var outputPort = startPort.direction == Direction.Output?startPort:port;
+                var inputPort = startPort.IsInput()?startPort:port;
+                var outputPort = startPort.IsOutPut()?startPort:port;
+                //check for loops 
                 if(inputPort.FunctionNode().HasOutputConnectionToNode(outputPort.FunctionNode())) {
-                    remove.Add(port);
-                    continue;
+                    remove.Add(port); continue;
                 }
                 if(outputPort.FunctionNode().HasInputConnectionToNode(inputPort.FunctionNode())) {
-                    remove.Add(port);
-                    continue;
+                    remove.Add(port); continue;
                 }
+                //check for loop non loop mismatch
             }
             foreach(var rm in remove) list.Remove(rm);
             return list;
         }
-        
-        
 
         /// <summary>
         /// This is a recursive check to try find a node by following the connects of the starting node.
@@ -325,24 +342,18 @@ namespace Amilious.FunctionGraph.Editor {
                 Any(con => FindSubNode(lookFor, con.outputNode));
         }
 
+        /// <summary>
+        /// This method is used to reset the graph.
+        /// </summary>
         public void Reset() {
             _function = null;
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
         }
 
-
-        public void OnTestButton() {
-            Debug.Log("test button clicked");
-            var size = Vector3.Scale(new Vector3(contentRect.width, contentRect.height),viewTransform.scale);
-            Debug.LogFormat("screen size {0}",size);
-            size = size.Unscale(viewTransform.scale);
-            Debug.LogFormat("unscaled screen size {0}",size);
-            size = Vector3.Scale(size,viewTransform.scale);
-            Debug.LogFormat("rescaled screen size {0}",size);
-        }
-
-
+        /// <summary>
+        /// This method is used to remove nodes that do not have any connections.
+        /// </summary>
         public void ClearUnconnected() {
             foreach(var node in nodes.Cast<FunctionNodeView>()) {
                 if(node.Node.IsInputNode||node.Node.IsResultNode) continue;
@@ -354,6 +365,9 @@ namespace Amilious.FunctionGraph.Editor {
             MarkDirtyRepaint();
         }
 
+        /// <summary>
+        /// This method is used to focus the input node.
+        /// </summary>
         public void FocusInput() {
             if(_function == null) return;
             var input = _function.GetInputNode;
@@ -365,6 +379,9 @@ namespace Amilious.FunctionGraph.Editor {
             FrameSelection();
         }
 
+        /// <summary>
+        /// This method is used to focus the result node.
+        /// </summary>
         public void FocusResult() {
             if(_function == null) return;
             var result = _function.GetResultNode;

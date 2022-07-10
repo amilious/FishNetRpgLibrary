@@ -14,10 +14,10 @@ namespace Amilious.FunctionGraph.Editor {
         public static IFunctionProvider Provider { get; private set; }
         public static AmiliousScriptableObject ProviderScriptableObject { get; private set; }
 
-        private static FunctionGraphEditor _instance;
+        public static FunctionGraphEditor Instance;
         
         private FunctionGraphView _graphView;
-        private InspectorView _inspectorView;
+        private FunctionNodeInspectorView _functionNodeInspectorView;
         private Label _functionTitle;
         private Label _inspectorTitle;
         private Button _clearUnconnected;
@@ -36,7 +36,7 @@ namespace Amilious.FunctionGraph.Editor {
         public static void OpenWindow() {
             var window = GetWindow<FunctionGraphEditor>(false,"Function Graph Editor");
             if(window == null) return;
-            _instance = window;
+            Instance = window;
             window.OnSelectionChange();
         }
 
@@ -59,7 +59,7 @@ namespace Amilious.FunctionGraph.Editor {
             _graphView.OnSelectionChanged += OnGraphSelectionChanged;
             _graphView.viewTransformChanged += ViewChanged;
             _graphView.OnCountUpdated += CountUpdated;
-            _inspectorView = root.Q<InspectorView>();
+            _functionNodeInspectorView = root.Q<FunctionNodeInspectorView>();
             _functionTitle = root.Q<Label>("functionTitle");
             _inspectorTitle = root.Q<Label>("inspectorTitle");
             _clearUnconnected = root.Q<Button>("clearUnconnected");
@@ -108,7 +108,7 @@ namespace Amilious.FunctionGraph.Editor {
             _selectedConnections.text = obj.Count(x => x is Edge).ToString();
             _selectedGroups.text = obj.Count(x => x is Group).ToString();
             if(nodes == 0) return;
-            _inspectorView.UpdateSelection(obj.First(x=>x is FunctionNodeView) as FunctionNodeView);
+            _functionNodeInspectorView.UpdateSelection(obj.First(x=>x is FunctionNodeView) as FunctionNodeView);
             ResetTitles();
         }
 
@@ -122,9 +122,9 @@ namespace Amilious.FunctionGraph.Editor {
             }else {
                 _functionTitle.text = "<b>Function Node:</b> <i>No Loaded Function Provider</i>";
             }
-            _inspectorTitle.text = _inspectorView?.SelectedNode?.Node == null ? 
+            _inspectorTitle.text = _functionNodeInspectorView?.SelectedNode?.Node == null ? 
                 "<b>Selected Node:</b> <i>No Node Selected</i>" : 
-                $"<b>Selected Node:</b> <color=#8338ec>{_inspectorView.SelectedNode.Node.name}</color>";
+                $"<b>Selected Node:</b> <color=#8338ec>{_functionNodeInspectorView.SelectedNode.Node.name}</color>";
         }
 
         protected void OnSelectionChange() => TryLoad(Selection.activeObject);
@@ -158,16 +158,16 @@ namespace Amilious.FunctionGraph.Editor {
             if(ProviderScriptableObject == null) return;
             if(ProviderScriptableObject.AssetGuid != guid) return;
             //the currently loaded asset is being deleted.
-            if(_instance == null) return;
-            _instance._inspectorView.Reset();
-            _instance._graphView.Reset();
-            _instance.ResetTitles();
+            if(Instance == null) return;
+            Instance._functionNodeInspectorView.Reset();
+            Instance._graphView.Reset();
+            Instance.ResetTitles();
         }
         
         public static void AssetBeingRenamed(string guid, string newName) {
             if(ProviderScriptableObject == null) return;
             if(ProviderScriptableObject.AssetGuid != guid) return;
-            if(_instance!=null)_instance.ResetTitles(newName);
+            if(Instance!=null)Instance.ResetTitles(newName);
         }
 
     }

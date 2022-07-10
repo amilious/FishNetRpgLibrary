@@ -18,12 +18,14 @@ namespace Amilious.FunctionGraph.Nodes.Tests {
             if(_lastId == id) return _lastResult;
             _lastId = id;
             TryGetPortValue(0, id, out Vector2 value);
-            return _lastResult = value;
+            _lastResult = value;
+            #if UNITY_EDITOR
+            SetLabel(id,_lastResult.ToString());
+            #endif
+            return _lastResult;
         }
 
-        protected override string TestValue(CalculationId id) {
-            return GetInput(id).ToString();
-        }
-        
+        protected override void TestValue(CalculationId id) => GetInput(id);
+
     }
 }

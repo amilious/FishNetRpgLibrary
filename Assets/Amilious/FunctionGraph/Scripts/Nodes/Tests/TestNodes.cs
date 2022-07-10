@@ -17,13 +17,19 @@ namespace Amilious.FunctionGraph.Nodes.Tests {
 
         private void OnClick() {
             var testId = new CalculationId();
-            _label.text = $"Calculation Id: {testId.Id}\n";
-            _label.text += $"Value: {TestValue(testId)}";
+            TestValue(testId);
         }
         
         #endif
 
-        protected abstract string TestValue(CalculationId id);
+        protected void SetLabel(CalculationId id, string value) {
+            #if UNITY_EDITOR
+            _label.text = $"Calculation Id: {id.Id}\n";
+            _label.text += $"Value: {value}";
+            #endif
+        }
+
+        protected abstract void TestValue(CalculationId id);
 
     }
 }

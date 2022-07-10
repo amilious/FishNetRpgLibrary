@@ -8,16 +8,54 @@ using Amilious.FunctionGraph.Nodes.Hidden;
 
 namespace Amilious.FunctionGraph.Editor {
     
+    /// <summary>
+    /// This class is used to display the different types of function nodes.
+    /// </summary>
     public class FunctionNodeSearchProvider : ScriptableObject, ISearchWindowProvider {
 
-        private static readonly Dictionary<string, Type> OptionCache = new Dictionary<string, Type>();
-        private static readonly List<string> SortedOptions = new List<string>();
-        private static bool _loaded;
-        private static readonly List<SearchTreeEntry> SearchList = new List<SearchTreeEntry>();
+        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
         
+        /// <summary>
+        /// This field is used to cache the search options.
+        /// </summary>
+        private static readonly Dictionary<string, Type> OptionCache = new ();
+        
+        /// <summary>
+        /// This field is used to hold the sorted options.
+        /// </summary>
+        private static readonly List<string> SortedOptions = new ();
+        
+        /// <summary>
+        /// This field is used to hold the state of the search provider.
+        /// </summary>
+        private static bool _loaded;
+        
+        /// <summary>
+        /// This field is used to hold the search list.
+        /// </summary>
+        private static readonly List<SearchTreeEntry> SearchList = new ();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This property contains the callback method.
+        /// </summary>
         private Func<Type,Vector2,FunctionNodeView> Callback { get; set; }
+        
+        /// <summary>
+        /// This property contains the position that the node should be created at.
+        /// </summary>
         private Vector2 NodePosition { get; set; }
-
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                    
+        #region Constructors ///////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This constructor is used to create a new search provider.
+        /// </summary>
         public FunctionNodeSearchProvider() {
             if(_loaded) return;
             var types = TypeCache.GetTypesDerivedFrom<FunctionNode>()
@@ -49,12 +87,24 @@ namespace Amilious.FunctionGraph.Editor {
             _loaded = true;
         }
         
-        public FunctionNodeSearchProvider AddCallback(Func<Type, Vector2,FunctionNodeView> callback, Vector2 nodePosition) {
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to update update the callback for the search provider.
+        /// </summary>
+        /// <param name="callback">The callback methods.</param>
+        /// <param name="nodePosition">The position to send back with the callback.</param>
+        /// <returns>The reference to this search provider.</returns>
+        public FunctionNodeSearchProvider UpdateCallback(Func<Type, Vector2,FunctionNodeView> callback, 
+            Vector2 nodePosition) {
             Callback = callback;
             NodePosition = nodePosition;
             return this;
         }
         
+        /// <inheritdoc />
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context) {
             if(SearchList.Count>0) return SearchList;
             SearchList.Add(new SearchTreeGroupEntry(new GUIContent("Function Nodes"),0));
@@ -80,11 +130,13 @@ namespace Amilious.FunctionGraph.Editor {
             return SearchList;
         }
 
+        /// <inheritdoc />
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context) {
             Callback?.Invoke((Type)searchTreeEntry.userData,NodePosition);
             return true;
         }
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
-    
 }

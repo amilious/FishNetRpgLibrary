@@ -12,7 +12,7 @@
         </ui:VisualElement>
         <ui:VisualElement>
             <ui:Label text="Tree View" display-tooltip-when-elided="true" name="functionTitle" style="background-color: rgb(37, 37, 37); padding-left: 5px; -unity-slice-left: 0; padding-right: 5px; padding-top: 1px; padding-bottom: 1px;" />
-            <Amilious.FunctionGraph.Editor.FunctionGraphView focusable="true" style="flex-grow: 1; flex-direction: column; background-color: rgb(0, 0, 0); color: rgba(210, 210, 210, 255);" />
+            <Amilious.FunctionGraph.Editor.FunctionGraphView focusable="true" style="flex-grow: 1; flex-direction: column; background-color: rgb(0, 0, 0); color: rgb(210, 210, 210);" />
         </ui:VisualElement>
     </Amilious.FunctionGraph.Editor.SplitView>
     <uie:Toolbar style="flex-direction: row-reverse; background-color: rgb(37, 37, 37); min-width: 900px;">
