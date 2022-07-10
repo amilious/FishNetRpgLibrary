@@ -9,6 +9,7 @@ namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
         private CalculationId _lastId;
         private bool _lastValue;
 
+        /// <inheritdoc />
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             inputPorts.Add(new PortInfo<int>("value"));
             inputPorts.Add(new PortInfo<int>("bit index"));

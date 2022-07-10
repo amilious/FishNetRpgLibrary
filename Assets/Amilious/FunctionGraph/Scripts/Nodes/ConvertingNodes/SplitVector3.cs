@@ -10,6 +10,7 @@ namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
         private CalculationId _lastId;
         private Vector3 _lastValue;
         
+        /// <inheritdoc />
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             inputPorts.Add(new PortInfo<Vector3>("Vector3"));
             outputPorts.Add(new PortInfo<float>("x",GetXValue));
