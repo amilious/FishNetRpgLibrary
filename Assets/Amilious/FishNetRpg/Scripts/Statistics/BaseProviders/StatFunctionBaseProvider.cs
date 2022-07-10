@@ -1,6 +1,7 @@
 using UnityEngine;
 using Amilious.FunctionGraph;
 using System.Collections.Generic;
+using Amilious.Core;
 
 
 namespace Amilious.FishNetRpg.Statistics.BaseProviders {
@@ -20,7 +21,7 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
         public FunctionNode GetInputNode => inputNode;
         public FunctionNode GetResultNode => resultNode;
         public List<FunctionNode> GetNodes() => nodes;
-        public ScriptableObject FunctionProvider => this;
+        public AmiliousScriptableObject FunctionProvider => this;
 
         public List<FunctionNode> InitializeInputAndOutputs() {
             //do no initialize if already done

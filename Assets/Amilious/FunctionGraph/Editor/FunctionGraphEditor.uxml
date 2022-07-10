@@ -1,14 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
     <Style src="project://database/Assets/Amilious/FunctionGraph/Editor/FunctionGraphEditor.uss?fileID=7433441132597879392&amp;guid=a483af1bc654cc24f959414aa8a36552&amp;type=3#FunctionGraphEditor" />
     <uie:Toolbar style="min-width: 900px;">
-        <uie:ToolbarButton text="Clear Unconnected Nodes" display-tooltip-when-elided="true" tooltip="This button is used for test operations." name="clearUnconnected" />
         <uie:ToolbarButton text="Focus Input" display-tooltip-when-elided="true" tooltip="This button is used to focus the input node." name="focusInput" style="color: rgb(58, 134, 255);" />
         <uie:ToolbarButton text="Focus Reuslt" display-tooltip-when-elided="true" tooltip="This button is used to focus the result node." name="focusResult" style="color: rgb(131, 56, 236);" />
+        <uie:ToolbarButton text="Clear Unconnected Nodes" display-tooltip-when-elided="true" tooltip="This button is used for test operations." name="clearUnconnected" />
     </uie:Toolbar>
     <Amilious.FunctionGraph.Editor.SplitView fixed-pane-initial-dimension="300" style="min-width: 900px;">
         <ui:VisualElement>
             <ui:Label text="Node Inspector" display-tooltip-when-elided="true" name="inspectorTitle" style="background-color: rgb(37, 37, 37); padding-left: 5px; padding-right: 5px; padding-top: 1px;" />
-            <Amilious.FunctionGraph.Editor.InspectorView style="width: auto; flex-grow: 1; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+            <Amilious.FunctionGraph.Editor.FunctionNodeInspectorView style="flex-grow: 1;" />
         </ui:VisualElement>
         <ui:VisualElement>
             <ui:Label text="Tree View" display-tooltip-when-elided="true" name="functionTitle" style="background-color: rgb(37, 37, 37); padding-left: 5px; -unity-slice-left: 0; padding-right: 5px; padding-top: 1px; padding-bottom: 1px;" />

@@ -97,8 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
   m_Name: GraphData
   m_EditorClassIdentifier: 
-  position: {x: 350, y: -36, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: 753, y: 132, z: 0}
+  scale: {x: 0.49717674, y: 0.49717674, z: 1}
   groups:
   - id: 2546b12b7f68ebd46a324526d4aafa85
     title: Loop

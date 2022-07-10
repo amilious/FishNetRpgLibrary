@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: Input
   m_EditorClassIdentifier: 
   guid: e7773187b0dfac44596a6eda045a0a16
-  position: {x: 0, y: 0}
+  position: {x: 1, y: -53}
   inputConnections: []
   outputConnections:
   - inputNode: {fileID: 6225753571316837434}
@@ -95,6 +95,7 @@ MonoBehaviour:
     inputPort: 2
     outputPort: 0
     loopGuid: 
+  defaultValue: 0
   label: level
 --- !u!114 &6225753571316837434
 MonoBehaviour:
@@ -109,7 +110,7 @@ MonoBehaviour:
   m_Name: Result
   m_EditorClassIdentifier: 
   guid: bd98ce64ffd9b5641b0e8cad5c6d8a45
-  position: {x: 100, y: 0}
+  position: {x: 99, y: 0}
   inputConnections:
   - inputNode: {fileID: 6225753571316837434}
     outputNode: {fileID: 2629125541430436876}
