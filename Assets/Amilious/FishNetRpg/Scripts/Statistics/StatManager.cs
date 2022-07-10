@@ -227,7 +227,6 @@ namespace Amilious.FishNetRpg.Statistics {
             foreach(var stat in _statInfo.Values) 
                 stat.RemoveModifierFromSource(sourceId);
         }
-        
 
         protected void EventTrigger(Stat stat, StatEventTrigger eventToTrigger) {
             switch(eventToTrigger) {

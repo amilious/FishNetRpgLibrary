@@ -151,6 +151,7 @@ namespace Amilious.FunctionGraph.Editor {
             var group = new Group { title = name, userData = id};
             _function.GraphData.groups.Add(new FunctionGroup{id = id, title = group.title});
             Add(group);
+            TriggerCountUpdate();
             return group;
         }
 
@@ -215,13 +216,15 @@ namespace Amilious.FunctionGraph.Editor {
             }
             if(graphViewChange.edgesToCreate!=null)
                 foreach(var edge in graphViewChange.edgesToCreate) HandleCreatingEdgeConnection(edge);
-            /*
-            var nCount = nodes.Count() - 
-                graphViewChange.elementsToRemove?.Count(x => x is FunctionNodeView)??0;
-            var cCount = edges.ToList().Count - graphViewChange.elementsToRemove?.Count(x => x is Edge)??0;
+
+            var nCount = nodes.Count();
+            nCount -= graphViewChange.elementsToRemove?.Where(x => x is FunctionNodeView).Count()??0;
+            var cCount = edges.ToList().Count;
+            cCount -= graphViewChange.elementsToRemove?.Where(x => x is Edge).Count()??0;
             cCount += graphViewChange.edgesToCreate?.Count??0;
             var gCount = _function.GraphData.groups.Count;
-            OnCountUpdated?.Invoke(nCount,cCount, gCount);*/
+            OnCountUpdated?.Invoke(nCount,cCount, gCount);
+            
             return graphViewChange;
         }
 

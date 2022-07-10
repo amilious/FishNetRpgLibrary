@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6375510996055670673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2971882147424da719551904556733, type: 3}
+  m_Name: Input
+  m_EditorClassIdentifier: 
+  guid: c834ee3c54302f045ab598c8ac96d027
+  position: {x: 0, y: 0}
+  inputConnections: []
+  outputConnections:
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 0
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 1
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 2
+    outputPort: 0
+    loopGuid: 
+  defaultValue: 0
+  label: level
+--- !u!114 &-4113187135534780554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c98b279e5c41929b8f0643d9cd9945, type: 3}
+  m_Name: Result
+  m_EditorClassIdentifier: 
+  guid: 1bb3da30f6460c040a8ea979bfb8e976
+  position: {x: 100, y: 0}
+  inputConnections:
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 0
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 1
+    outputPort: 0
+    loopGuid: 
+  - inputNode: {fileID: -4113187135534780554}
+    outputNode: {fileID: -6375510996055670673}
+    inputPort: 2
+    outputPort: 0
+    loopGuid: 
+  outputConnections: []
+  label1: Base Value
+  label2: Minimum
+  label3: Cap
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d33e658c014bd3a57cec3bb3655afc, type: 3}
+  m_Name: NewFunctionBaseProvider 2
+  m_EditorClassIdentifier: 
+  guid: e28c1fc77257b0b4691d4dd0d02c1c7c
+  fileId: 11400000
+  resultNode: {fileID: -4113187135534780554}
+  inputNode: {fileID: -6375510996055670673}
+  nodes:
+  - {fileID: -4113187135534780554}
+  - {fileID: -6375510996055670673}
+  graphData: {fileID: 3020349400562251830}
+--- !u!114 &3020349400562251830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
+  m_Name: GraphData
+  m_EditorClassIdentifier: 
+  position: {x: 348, y: 67, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  groups:
+  - id: 047fc0aed44229940b45d5694225c4f6
+    title: New Group
+    nodeIds:
+    - 6f3db1fcf5da70d4da854d7db2f2ecc2
