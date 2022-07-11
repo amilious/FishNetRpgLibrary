@@ -91,7 +91,7 @@ namespace Amilious.FunctionGraph.Editor {
             Node.FunctionProvider = provider;
             Node.Initialize();
             title = node.name.SplitCamelCase();
-            tooltip = node.GetDescription;
+            tooltip = node.Description;
             viewDataKey = node.guid;
             style.left = Node.Position.x;
             style.top = Node.Position.y;

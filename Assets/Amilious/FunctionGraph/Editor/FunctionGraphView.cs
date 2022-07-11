@@ -7,7 +7,6 @@ using Amilious.Core.Extensions;
 using System.Collections.Generic;
 using Unity.Plastic.Newtonsoft.Json;
 using UnityEditor.Experimental.GraphView;
-using Amilious.FunctionGraph.Nodes.Hidden;
 using Amilious.FunctionGraph.Editor.Serialization;
 
 namespace Amilious.FunctionGraph.Editor {
@@ -344,7 +343,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="cancel">The cancel remove list.</param>
         public void HandleRemoveNode(FunctionNodeView node, List<GraphElement> cancel =null) {
             if(node == null || _function == null) return;
-            if(node.Node is HiddenNode && cancel != null) { cancel.Add(node); return; }
+            if(!node.Node.Removable) { cancel?.Add(node); return; }
             _function.DeleteNode(node.Node);
         }
 

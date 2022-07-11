@@ -1,11 +1,13 @@
 {
-    "name": "Amilious.FunctionGraph",
-    "rootNamespace": "Amilious.FunctionGraph",
+    "name": "Amilious.Inspector.Editor",
+    "rootNamespace": "Amilious.Inspector.Editor",
     "references": [
         "Amilious.Core",
         "Amilious.Inspector"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

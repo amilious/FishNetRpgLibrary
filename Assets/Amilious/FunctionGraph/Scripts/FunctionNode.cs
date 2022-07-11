@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using Amilious.FunctionGraph.Attributes;
-using Amilious.FunctionGraph.Nodes.Hidden;
 
 namespace Amilious.FunctionGraph {
     
@@ -300,6 +299,8 @@ namespace Amilious.FunctionGraph {
             if(AttributeCache.TryGetValue(type, out var value)) return value;
             //get the attribute
             var attribute = type.GetCustomAttribute<FunctionNodeAttribute>();
+            //make sure that there is a default attribute.
+            attribute ??= new FunctionNodeAttribute("");
             AttributeCache.Add(type,attribute);
             return attribute;
         }
@@ -313,12 +314,17 @@ namespace Amilious.FunctionGraph {
         /// <summary>
         /// This property is used to get the node's description.
         /// </summary>
-        public string GetDescription =>GetAttribute()?.Description;
+        public string Description =>GetAttribute()?.Description;
 
         /// <summary>
         /// This property is used to check if the node is hidden.
         /// </summary>
-        public bool IsHidden => GetAttribute() is { Hidden: true } || this is HiddenNode;
+        public bool IsHidden => GetAttribute() is { Hidden: true };
+
+        /// <summary>
+        /// This property is true if a node can be deleted, otherwise false.
+        /// </summary>
+        public bool Removable => GetAttribute() is { Removable: true };
 
         /// <summary>
         /// This method is used to modify the node view. THIS METHOD SHOULD BE WRAPPED AS SUCH:

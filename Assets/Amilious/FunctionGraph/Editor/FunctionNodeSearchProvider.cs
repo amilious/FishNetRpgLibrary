@@ -5,7 +5,6 @@ using UnityEngine;
 using Amilious.Core.Extensions;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using Amilious.FunctionGraph.Nodes.Hidden;
 
 namespace Amilious.FunctionGraph.Editor {
     
@@ -60,7 +59,7 @@ namespace Amilious.FunctionGraph.Editor {
         public FunctionNodeSearchProvider() {
             if(_loaded) return;
             var types = TypeCache.GetTypesDerivedFrom<FunctionNode>()
-                .Where(t => !t.IsAbstract&&!typeof(HiddenNode).IsAssignableFrom(t));
+                .Where(t => !t.IsAbstract&&!FunctionNode.GetAttribute(t).Hidden);
             foreach(var type in types) {
                 var menu = type.SplitCamelCase();
                 var test = type.BaseType;

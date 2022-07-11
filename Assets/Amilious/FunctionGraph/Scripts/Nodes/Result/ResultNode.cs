@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using Amilious.FunctionGraph.Attributes;
 using UnityEngine;
 
-namespace Amilious.FunctionGraph.Nodes.Hidden.Output {
+namespace Amilious.FunctionGraph.Nodes.Result {
     
-    public abstract class ResultNode<T> : HiddenNode {
+    // ReSharper disable ParameterHidesMember
+    
+    [FunctionNode("This node is the result node for the function",true,false)]
+    public abstract class ResultNode<T> : FunctionNode {
         
         [HideInInspector] public string label = "result";
         
@@ -35,7 +39,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Output {
 
     }
     
-    public abstract class ResultNode<T1,T2> : HiddenNode {
+    [FunctionNode("This node is the result node for the function",true,false)]
+    public abstract class ResultNode<T1,T2> : FunctionNode {
         
         [HideInInspector] public string label1 = "result 1";
         [HideInInspector] public string label2 = "result 2";
@@ -73,7 +78,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Output {
         }
     }
     
-    public abstract class ResultNode<T1,T2,T3> : HiddenNode {
+    [FunctionNode("This node is the result node for the function",true,false)]
+    public abstract class ResultNode<T1,T2,T3> : FunctionNode {
         
         [HideInInspector] public string label1 = "result 1";
         [HideInInspector] public string label2 = "result 2";
@@ -117,7 +123,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Output {
         }
     }
     
-    public abstract class ResultNode<T1,T2,T3,T4> : HiddenNode {
+    [FunctionNode("This node is the result node for the function",true,false)]
+    public abstract class ResultNode<T1,T2,T3,T4> : FunctionNode {
         
         [HideInInspector] public string label1 = "result 1";
         [HideInInspector] public string label2 = "result 2";
@@ -167,7 +174,8 @@ namespace Amilious.FunctionGraph.Nodes.Hidden.Output {
         }
     }
     
-    public abstract class ResultNode<T1,T2,T3,T4,T5> : HiddenNode {
+    [FunctionNode("This node is the result node for the function",true,false)]
+    public abstract class ResultNode<T1,T2,T3,T4,T5> : FunctionNode {
         
         [HideInInspector] public string label1 = "result 1";
         [HideInInspector] public string label2 = "result 2";

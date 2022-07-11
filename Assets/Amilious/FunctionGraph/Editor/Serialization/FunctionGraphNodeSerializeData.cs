@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Amilious.FunctionGraph.Nodes.Hidden;
 
 namespace Amilious.FunctionGraph.Editor.Serialization {
     
@@ -69,7 +68,7 @@ namespace Amilious.FunctionGraph.Editor.Serialization {
         /// <returns>The type of the node.</returns>
         public Type GetCastedType() {
             var type = TypeCache.GetTypesDerivedFrom<FunctionNode>()
-                .Where(t => !t.IsAbstract&&!typeof(HiddenNode).IsAssignableFrom(t))
+                .Where(t => !t.IsAbstract&&!FunctionNode.GetAttribute(t).Hidden)
                 .FirstOrDefault(x=>x.Name==Type);
             return type;
         }

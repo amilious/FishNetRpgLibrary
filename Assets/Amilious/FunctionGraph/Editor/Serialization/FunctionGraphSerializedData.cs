@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using Amilious.FunctionGraph.Nodes.Hidden;
 
 namespace Amilious.FunctionGraph.Editor.Serialization {
    
@@ -69,7 +68,7 @@ namespace Amilious.FunctionGraph.Editor.Serialization {
             foreach(var element in elements) {
                 //add the nodes
                 if(element is FunctionNodeView node) {
-                    if(node.Node is HiddenNode) continue;
+                    if(node.Node.IsHidden) continue;
                     NodeData.Add(new FunctionGraphNodeSerializeData(node, offset,scale));
                 }
                 //add the edges
