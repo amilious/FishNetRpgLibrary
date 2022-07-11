@@ -1,8 +1,14 @@
 namespace Amilious.FunctionGraph.Nodes.Repeaters {
+    
+    /// <summary>
+    /// This is the base class for all repeater nodes.
+    /// </summary>
     public abstract class RepeaterNodes : FunctionNode {
         
-#if UNITY_EDITOR
-        
+        #region Editor Only Methods ////////////////////////////////////////////////////////////////////////////////////
+        #if UNITY_EDITOR
+
+        /// <inheritdoc />
         public override void ModifyNodeView(UnityEditor.Experimental.GraphView.Node nodeView) {
             nodeView.titleContainer.Clear();
             nodeView.titleButtonContainer.Clear();
@@ -11,7 +17,8 @@ namespace Amilious.FunctionGraph.Nodes.Repeaters {
             nodeView.outputContainer.style.height = 20;
         }
         
-#endif
+        #endif
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }
