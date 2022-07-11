@@ -19,7 +19,6 @@ MonoBehaviour:
     outputNode: {fileID: -3157745185119342453}
     inputPort: 0
     outputPort: 0
-    loopGuid: 
   outputConnections: []
 --- !u!114 &-3157745185119342453
 MonoBehaviour:
@@ -41,7 +40,6 @@ MonoBehaviour:
     outputNode: {fileID: -3157745185119342453}
     inputPort: 0
     outputPort: 0
-    loopGuid: 
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,17 +82,14 @@ MonoBehaviour:
     outputNode: {fileID: 2629125541430436876}
     inputPort: 0
     outputPort: 0
-    loopGuid: 
   - inputNode: {fileID: 6225753571316837434}
     outputNode: {fileID: 2629125541430436876}
     inputPort: 1
     outputPort: 0
-    loopGuid: 
   - inputNode: {fileID: 6225753571316837434}
     outputNode: {fileID: 2629125541430436876}
     inputPort: 2
     outputPort: 0
-    loopGuid: 
   defaultValue: 0
   label: level
 --- !u!114 &6225753571316837434
@@ -116,17 +111,14 @@ MonoBehaviour:
     outputNode: {fileID: 2629125541430436876}
     inputPort: 0
     outputPort: 0
-    loopGuid: 
   - inputNode: {fileID: 6225753571316837434}
     outputNode: {fileID: 2629125541430436876}
     inputPort: 1
     outputPort: 0
-    loopGuid: 
   - inputNode: {fileID: 6225753571316837434}
     outputNode: {fileID: 2629125541430436876}
     inputPort: 2
     outputPort: 0
-    loopGuid: 
   outputConnections: []
   label1: Base Value
   label2: Minimum

@@ -52,12 +52,12 @@ namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
         /// <summary>
         /// This method is used to get the value of this nodes first output port.
         /// </summary>
-        /// <param name="calculationId">The calculation id.</param>
+        /// <param name="id">The calculation id.</param>
         /// <returns>The value.</returns>
-        private int GetValue(CalculationId calculationId) {
-            if(calculationId == _lastAction) return _lastResult;
-            _lastAction = calculationId;
-            TryGetPortValue(0, calculationId, out float value);
+        private int GetValue(CalculationId id) {
+            if(id == _lastAction) return _lastResult;
+            _lastAction = id;
+            TryGetPortValue(0, id, out float value);
             _lastResult = selection switch {
                 0 => Mathf.RoundToInt(value),
                 1 => Mathf.FloorToInt(value),

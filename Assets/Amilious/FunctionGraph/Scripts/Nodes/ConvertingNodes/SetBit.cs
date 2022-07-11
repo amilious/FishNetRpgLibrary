@@ -3,11 +3,27 @@ using Amilious.FunctionGraph.Attributes;
 
 namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
     
+    /// <summary>
+    /// This node is used to set a bool representation for the bit at the given index (0-31) of the value.
+    /// </summary>
     [FunctionNode("This node is used to set a bool representation for the bit at the given index (0-31) of the value.")]
     public class SetBit : ConvertingNodes {
         
+        #region Non-Serialized Feilds //////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This field is used to store the last calculation id.
+        /// </summary>
         private CalculationId _lastId;
+        
+        /// <summary>
+        /// This field is used to store the last calculated value.
+        /// </summary>
         private int _lastValue;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <inheritdoc />
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
@@ -17,6 +33,11 @@ namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
             outputPorts.Add(new PortInfo<int>("result",GetValue));
         }
 
+        /// <summary>
+        /// This method is used to get the value of this nodes first output port.
+        /// </summary>
+        /// <param name="id">The calculation id.</param>
+        /// <returns>The value.</returns>
         private int GetValue(CalculationId id) {
             if(_lastId == id) return _lastValue;
             _lastId = id;
@@ -26,6 +47,8 @@ namespace Amilious.FunctionGraph.Nodes.ConvertingNodes {
             TryGetPortValue(2, id, out bool bit);
             return _lastValue = bit ? value | (1 << index) : value & ~(1 << index);
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }
