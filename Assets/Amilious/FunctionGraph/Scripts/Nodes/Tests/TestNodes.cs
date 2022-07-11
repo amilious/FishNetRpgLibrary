@@ -1,12 +1,18 @@
 using UnityEngine.UIElements;
 
 namespace Amilious.FunctionGraph.Nodes.Tests {
+    
+    /// <summary>
+    /// This is the base class for the test nodes.
+    /// </summary>
     public abstract class TestNodes : FunctionNode {
         
+        #region Editor Only Methods ////////////////////////////////////////////////////////////////////////////////////
         #if UNITY_EDITOR
         
         private Label _label;
 
+        /// <inheritdocs />
         public override void ModifyNodeView(UnityEditor.Experimental.GraphView.Node nodeView) {
             base.ModifyNodeView(nodeView);
             _label = new Label("no test executed") { style = { marginLeft = 5, marginRight = 5 } };
@@ -15,13 +21,17 @@ namespace Amilious.FunctionGraph.Nodes.Tests {
             nodeView.extensionContainer.Add(button);
         }
 
-        private void OnClick() {
-            var testId = new CalculationId();
-            TestValue(testId);
-        }
+        /// <summary>
+        /// This method is called when the test button is clicked.
+        /// </summary>
+        private void OnClick() => TestValue(new CalculationId());
         
         #endif
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Private & Protected Methods ////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdocs />
         protected void SetLabel(CalculationId id, string value) {
             #if UNITY_EDITOR
             _label.text = $"Calculation Id: {id.Id}\n";
@@ -29,7 +39,13 @@ namespace Amilious.FunctionGraph.Nodes.Tests {
             #endif
         }
 
+        /// <summary>
+        /// This method is called when the test button is pressed.
+        /// </summary>
+        /// <param name="id">The test calculation id.</param>
         protected abstract void TestValue(CalculationId id);
 
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }
