@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Amilious.Inspector.Attributes;
-using Amilious.Inspector.Editor.Modifiers;
 using UnityEditor;
 using UnityEngine;
+using System.Reflection;
+using System.Collections.Generic;
+using Amilious.Inspector.Attributes;
+using Amilious.Inspector.Editor.Modifiers;
 
 namespace Amilious.Inspector.Editor.Drawers {
     public abstract class AmiliousPropertyDrawer : PropertyDrawer {
@@ -33,7 +33,6 @@ namespace Amilious.Inspector.Editor.Drawers {
         private bool _hideDraw;
         public readonly Dictionary<AmiliousModifierAttribute, AmiliousPropertyModifier> Modifiers = new ();
 
-        
         public sealed override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             //initialize the property if not yet done.
             Initialize(property);

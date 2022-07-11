@@ -1,10 +1,10 @@
 {
-    "name": "Amilious.FunctionGraph.Editor",
-    "rootNamespace": "Amilious.FunctionGraph.Editor",
+    "name": "Amilious.FishNetRpg.Editor",
+    "rootNamespace": "Amilious.FishNetRpg.Editor",
     "references": [
-        "Amilious.FunctionGraph",
-        "Amilious.Core",
-        "Amilious.Inspector.Editor"
+        "Amilious.FishNetRpg",
+        "Amilious.Inspector.Editor",
+        "Amilious.Core"
     ],
     "includePlatforms": [
         "Editor"

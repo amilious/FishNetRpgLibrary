@@ -89,7 +89,7 @@ namespace Amilious.FunctionGraph.Editor {
         public FunctionNodeView(FunctionNode node, IFunctionProvider provider) {
             Node = node;
             Node.FunctionProvider = provider;
-            Node.Initialize();
+            Node.Initialize(true);
             title = node.name.SplitCamelCase();
             tooltip = node.Description;
             viewDataKey = node.guid;

@@ -160,12 +160,10 @@ namespace Amilious.FunctionGraph.Editor {
                 endPort.portType == startPort.portType).ToList();
             //allow ints to connect to floats but not the other way around
             if(startPort.IsOutPut() && startPort.IsType<int>()) {
-                list.AddRange(ports.Where(endPort =>
-                    endPort.direction == Direction.Input && endPort.portType == typeof(float)));
+                list.AddRange(ports.Where(endPort => endPort.IsInput() && endPort.IsType<float>()));
             }
             if(startPort.IsInput() && startPort.IsType<float>()) {
-                list.AddRange(ports.Where(endPort =>
-                    endPort.direction == Direction.Output && endPort.portType == typeof(int)));
+                list.AddRange(ports.Where(endPort => endPort.IsOutPut() && endPort.IsType<int>()));
             }
             //check for loops and duplicate connections
             var remove = new List<Port>();
@@ -251,6 +249,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="group">The group the elements were removed from.</param>
         /// <param name="elements">The elements that were removed from the group.</param>
         private void ElementsRemovedFromGroup(Group group, IEnumerable<GraphElement> elements) {
+            if(group == null||_function?.GraphData==null) return;
             var funGroup = _function.GraphData.GroupFromId(group.GetId());
             if(funGroup == null) return;
             foreach(var element in elements) {
@@ -292,7 +291,19 @@ namespace Amilious.FunctionGraph.Editor {
             if(group == null || _function == null) return;
             _function.GraphData.RemoveGroup(group.GetId());
         }
-        
+
+        private void HandleGroupMovement(List<GraphElement> movedElements) {
+            if(movedElements == null) return;
+            var add = new List<GraphElement>();
+            foreach(var group in movedElements.Where(x => x is Group).Cast<Group>()) {
+                var groupData = _function.GraphData.groups.FirstOrDefault(x => x.id == group.GetId());
+                if(groupData == null) continue;
+                add.AddRange(groupData.nodeIds.Select(FindNodeView).Where(node => node != null));
+            }
+            movedElements.AddRange(add);
+        }
+
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
                    
         #region Node Methods ///////////////////////////////////////////////////////////////////////////////////////////
@@ -401,6 +412,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="graphViewChange">The changes.</param>
         /// <returns>The changes that should be applied.</returns>
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) {
+            HandleGroupMovement(graphViewChange.movedElements);
             HandleNodeMovement(graphViewChange.movedElements);
             if(graphViewChange.elementsToRemove != null) {
                 var cancel = new List<GraphElement>();
@@ -426,7 +438,7 @@ namespace Amilious.FunctionGraph.Editor {
             
             return graphViewChange;
         }
-        
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Other Public Methods ///////////////////////////////////////////////////////////////////////////////////

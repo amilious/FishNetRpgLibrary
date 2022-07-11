@@ -137,9 +137,12 @@ namespace Amilious.FunctionGraph {
         /// <summary>
         /// This method is called to initialize the node.
         /// </summary>
-        public void Initialize() {
-            if(_initialized) return;
+        /// <param name="force">If true this will force a reload.</param>
+        public void Initialize(bool force = false) {
+            if(_initialized&&!force) return;
             _initialized = true;
+            _inputPorts.Clear();
+            _outputPorts.Clear();
             SetUpPorts(_inputPorts, _outputPorts);
         }
         
@@ -358,7 +361,7 @@ namespace Amilious.FunctionGraph {
                 outputConnections.RemoveAll(x => x.Equals(connection));
             else inputConnections.RemoveAll(x => x.Equals(connection));
         }
-        
+
         #endif
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -34,7 +34,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// </summary>
         /// <param name="port">The port.</param>
         /// <returns>The <see cref="IPortInfo"/> associated with the port.</returns>
-        public static IPortInfo PortInfo(this Port port) => ((IPortInfo)port.userData);
+        public static IPortInfo PortInfo(this Port port) => (IPortInfo)port.userData;
 
         /// <summary>
         /// This method is used to check if the port is a loop port.
@@ -49,7 +49,7 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="port">The port.</param>
         /// <typeparam name="T">The type that you want to check.</typeparam>
         /// <returns>True if the port is of the given type, otherwise false.</returns>
-        public static bool IsType<T>(this Port port) => port.portType is T;
+        public static bool IsType<T>(this Port port) => port.portType == typeof(T);
 
         /// <summary>
         /// This method is used to check if the port is an input port.

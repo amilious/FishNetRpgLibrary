@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4770819664049234531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9c98b279e5c41929b8f0643d9cd9945, type: 3}
+  m_Name: Result
+  m_EditorClassIdentifier: 
+  guid: e993e1b9cf743504da19eb043a18476b
+  position: {x: 100, y: 0}
+  inputConnections:
+  - inputNode: {fileID: -4770819664049234531}
+    outputNode: {fileID: 2692288274130260752}
+    inputPort: 0
+    outputPort: 0
+  outputConnections: []
+  label1: Base Value
+  label2: Minimum
+  label3: Cap
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d33e658c014bd3a57cec3bb3655afc, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  guid: 8a0e898a3a5f17145bc07c3c8c477ada
+  fileId: 11400000
+  resultNode: {fileID: -4770819664049234531}
+  sourceNode: {fileID: 2692288274130260752}
+  nodes:
+  - {fileID: -4770819664049234531}
+  - {fileID: 2692288274130260752}
+  graphData: {fileID: 8196498697007708225}
+--- !u!114 &2692288274130260752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2971882147424da719551904556733, type: 3}
+  m_Name: Input
+  m_EditorClassIdentifier: 
+  guid: 98c88f3a8b298514584e46bd6bb2e38f
+  position: {x: 0, y: 0}
+  inputConnections: []
+  outputConnections:
+  - inputNode: {fileID: -4770819664049234531}
+    outputNode: {fileID: 2692288274130260752}
+    inputPort: 0
+    outputPort: 0
+  defaultValue: 0
+  label: level
+--- !u!114 &8196498697007708225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7bea7c8c3a44fd9eb64721a1e5b149, type: 3}
+  m_Name: GraphData
+  m_EditorClassIdentifier: 
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  groups: []

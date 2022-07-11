@@ -77,7 +77,7 @@ namespace Amilious.FunctionGraph {
         public IEnumerable<Connection> GetInputConnections(FunctionNode node, int inputId) {
             return node.GetInputConnections(inputId);
         }
-        
+
         /// <summary>
         /// This method is called by the editor to initialize 
         /// </summary>

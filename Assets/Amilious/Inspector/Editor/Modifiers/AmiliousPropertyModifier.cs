@@ -1,8 +1,8 @@
 using System;
-using System.Reflection;
-using Amilious.Inspector.Editor.Drawers;
 using UnityEditor;
 using UnityEngine;
+using System.Reflection;
+using Amilious.Inspector.Editor.Drawers;
 
 namespace Amilious.Inspector.Editor.Modifiers {
     public abstract class AmiliousPropertyModifier : PropertyDrawer {

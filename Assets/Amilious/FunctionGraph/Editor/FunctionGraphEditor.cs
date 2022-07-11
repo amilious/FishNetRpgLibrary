@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Linq;
 using UnityEditor;
@@ -115,7 +116,7 @@ namespace Amilious.FunctionGraph.Editor {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Static Methods /////////////////////////////////////////////////////////////////////////////////////////
-        
+
         /// <summary>
         /// This method is used to open the editor window.
         /// </summary>
