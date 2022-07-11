@@ -3,18 +3,40 @@ using Amilious.FunctionGraph.Attributes;
 
 namespace Amilious.FunctionGraph.Nodes.LogicNodes {
     
+    /// <summary>
+    /// This node is used to check if the given values are not equal.
+    /// </summary>
     [FunctionNode("This node is used to check if the given values are not equal.")]
     public class NotEqualFloat : LogicNodes {
         
+        #region Non-Serialized Fields //////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This last calculation id.
+        /// </summary>
         private CalculationId _lastId;
+        
+        /// <summary>
+        /// The last cached value.
+        /// </summary>
         private bool _lastValue;
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Protected & Private Methods ////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc />
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             inputPorts.Add(new PortInfo<float>("value 1"));
             inputPorts.Add(new PortInfo<float>("value 2"));
             outputPorts.Add(new PortInfo<bool>("result", GetResult));
         }
        
+        /// <summary>
+        /// This method is used to calculate the value.
+        /// </summary>
+        /// <param name="id">The calculation id.</param>
+        /// <returns>The calculated value.</returns>
         private bool GetResult(CalculationId id) {
             if(id == _lastId) return _lastValue;
             _lastId = id;
@@ -23,6 +45,7 @@ namespace Amilious.FunctionGraph.Nodes.LogicNodes {
             return _lastValue = value != value2;
         }
         
-        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 }

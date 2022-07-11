@@ -1,15 +1,11 @@
-using UnityEngine;
 using System.Collections.Generic;
 using Amilious.FunctionGraph.Attributes;
-using PlasticPipe.PlasticProtocol.Messages;
 
 namespace Amilious.FunctionGraph.Nodes.Loops {
     
     [FunctionNode("This node is used as the starting point of a loop.")]
     public class StartLoop : LoopNodes {
 
-        [SerializeField] private FunctionNode loopNode;
-        
         protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
             outputPorts.Add(new PortInfo<float>("value",GetValue).MarkLoop());
             outputPorts.Add(new PortInfo<int>("index",GetIndex).MarkLoop());
