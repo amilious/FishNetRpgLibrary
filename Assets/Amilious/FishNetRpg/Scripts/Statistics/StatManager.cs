@@ -9,6 +9,9 @@ using Amilious.FishNetRpg.Modifiers;
 
 namespace Amilious.FishNetRpg.Statistics {
     
+    /// <summary>
+    /// This class is used to manage an entities stats.
+    /// </summary>
     [RequireComponent(typeof(Entity),typeof(ModifierManager))]
     [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Stat Manager")]
     public class StatManager : NetworkBehaviour, ISystemManager {
@@ -141,42 +144,17 @@ namespace Amilious.FishNetRpg.Statistics {
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public bool AddStat(Stat stat) {
-            if(_statInfo.ContainsKey(stat.StatName)) return false;
-            InitializeStat(stat);
-            return true;
-        }
+        #region Unity Methods //////////////////////////////////////////////////////////////////////////////////////////
+             
+        /// <summary>
+        /// Use the awake method to initialize the stat manager.
+        /// </summary>
+        private void Awake() => Initialize();             
         
-        private void Awake() {
-            Initialize();
-        }
-        
-        private void Initialize() {
-            if(Initialized) return;
-            Initialized = true;
-            foreach(var stat in stats) InitializeStat(stat);
-            OnStatManagerInitialized?.Invoke(Entity,this);
-        }
-
-        protected virtual void InitializeStat(Stat stat) {
-            if(_statInfo.ContainsKey(stat.StatName)) {
-                Debug.LogWarningFormat(FishNetRpg.EXISTING_STAT,Entity.name,stat.StatName);
-                return;
-            }
-            if(IsServer) {
-                var baseValue = stat.BaseValueProvider.BaseValue(1);
-                var statData = new StatData {
-                    Level = 1,
-                    BaseValue = baseValue,
-                    Value = baseValue
-                };
-                _statData[stat.StatName] = statData;
-            }
-            //add stat to the stat dictionary
-            _statInfo[stat.StatName] = new StatController(this, stat,_statData,EventTrigger,WatchDurationModifer);
-        }
-        
-        private void Update() {
+        /// <summary>
+        /// This method is used to remove duration modifiers after they expire.
+        /// </summary>
+        private void FixedUpdate() {
             if(!IsServer||_durationModifiers.Count==0) return;
             //check if modifiers have expired
             var currentTime = Time.realtimeSinceStartup;
@@ -186,7 +164,29 @@ namespace Amilious.FishNetRpg.Statistics {
                 }
             }
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to add a stat to the stat manager.
+        /// </summary>
+        /// <param name="stat">The stat that you want to add to the stat manager.</param>
+        /// <returns>True if the stat was added, otherwise false if the stat already existed.</returns>
+        public bool AddStat(Stat stat) {
+            if(_statInfo.ContainsKey(stat.StatName)) return false;
+            InitializeStat(stat);
+            return true;
+        }
+        
+        /// <summary>
+        /// This method is used to add a modifier to a stat.  This method should only be
+        /// called by the server.
+        /// </summary>
+        /// <param name="source">The source that is applying the modifier.</param>
+        /// <param name="modifier">The modifier that you want to apply.</param>
+        /// <returns>True if able to apply the modifier, otherwise false.</returns>
         [Server]
         public bool ApplyModifier(Object source, IStatModifier modifier) {
             //make sure that the manager is initialized
@@ -199,6 +199,13 @@ namespace Amilious.FishNetRpg.Statistics {
             return true;
         }
         
+        /// <summary>
+        /// This method is used to add a modifier to a stat.  This method should only be
+        /// called by the server.
+        /// </summary>
+        /// <param name="sourceId">The source that is applying the modifier.</param>
+        /// <param name="modifier">The modifier that you want to apply.</param>
+        /// <returns>True if able to apply the modifier, otherwise false.</returns>
         [Server]
         public bool ApplyModifier(int sourceId, IStatModifier modifier) {
             Initialize();
@@ -210,6 +217,10 @@ namespace Amilious.FishNetRpg.Statistics {
             return true;
         }
 
+        /// <summary>
+        /// This method is used to remove all the modifiers that were assigned by the given source.
+        /// </summary>
+        /// <param name="source">The source.</param>
         [Server]
         public void RemoveModifiersFromSource(Object source) {
             Initialize();
@@ -227,19 +238,69 @@ namespace Amilious.FishNetRpg.Statistics {
             foreach(var stat in _statInfo.Values) 
                 stat.RemoveModifierFromSource(sourceId);
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private & Protected Methods ////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to initialize the stat manager.
+        /// </summary>
+        private void Initialize() {
+            if(Initialized) return;
+            Initialized = true;
+            foreach(var stat in stats) InitializeStat(stat);
+            OnStatManagerInitialized?.Invoke(Entity,this);
+        }
 
+        /// <summary>
+        /// This method is used to initialize the given stat.
+        /// </summary>
+        /// <param name="stat">The stat that needs to be initialized.</param>
+        protected virtual void InitializeStat(Stat stat) {
+            if(_statInfo.ContainsKey(stat.StatName)) {
+                Debug.LogWarningFormat(FishNetRpg.EXISTING_STAT,Entity.name,stat.StatName);
+                return;
+            }
+            if(IsServer) {
+                var baseValue = stat.BaseValueProvider.BaseValue(1);
+                var statData = new StatData {
+                    Level = 1,
+                    BaseValue = baseValue,
+                    Value = baseValue
+                };
+                _statData[stat.StatName] = statData;
+            }
+            //add stat to the stat dictionary
+            _statInfo[stat.StatName] = new StatController(this, stat,_statData,EventTrigger,WatchDurationModifer);
+        }
+
+        /// <summary>
+        /// This method is called from a stat controller when an event needs to be triggered.
+        /// </summary>
+        /// <param name="stat">The stat triggering the event.</param>
+        /// <param name="eventToTrigger">The event that is being triggered.</param>
         protected void EventTrigger(Stat stat, StatEventTrigger eventToTrigger) {
             switch(eventToTrigger) {
                 case StatEventTrigger.Initialized:OnStatInitialized?.Invoke(Entity,stat); break;
                 case StatEventTrigger.Updated:OnStatValueUpdated?.Invoke(Entity,stat); break;
-                default: throw new ArgumentOutOfRangeException(nameof(eventToTrigger), eventToTrigger, null);
+                default: return;
             }
         }
 
+        /// <summary>
+        /// This method is called by a stat controller when a duration modifier is applied.
+        /// </summary>
+        /// <param name="source">The modifier source.</param>
         protected void WatchDurationModifer(ModifierSource<IStatModifier> source) => _durationModifiers.Add(source);
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
+    /// <summary>
+    /// This enum is used to trigger a stats event.
+    /// </summary>
     public enum StatEventTrigger{Initialized,Updated}
     
 }

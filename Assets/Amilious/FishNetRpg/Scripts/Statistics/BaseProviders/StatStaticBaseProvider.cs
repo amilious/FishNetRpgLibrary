@@ -10,11 +10,13 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
         [SerializeField] private int minimum;
         [SerializeField] private int baseValue = 100;
 
-
+        /// <inheritdoc />
         public override int GetMinimum(int level) => minimum;
 
+        /// <inheritdoc />
         public override int GetCap(int level) => cap;
 
+        /// <inheritdoc />
         public override int BaseValue(int level) => baseValue;
         
     }

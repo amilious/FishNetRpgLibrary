@@ -10,10 +10,13 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
         [SerializeField]private int minimum;
         [SerializeField]private AnimationCurve curve = GenerateDefault();
 
+        /// <inheritdoc />
         public override int GetMinimum(int level) => minimum;
 
+        /// <inheritdoc />
         public override int GetCap(int level) => cap;
 
+        /// <inheritdoc />
         public override int BaseValue(int level) => Mathf.RoundToInt(curve.Evaluate(level));
         
         public static AnimationCurve GenerateDefault() {

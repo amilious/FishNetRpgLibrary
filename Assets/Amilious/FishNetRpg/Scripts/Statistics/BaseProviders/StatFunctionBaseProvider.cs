@@ -48,18 +48,21 @@ namespace Amilious.FishNetRpg.Statistics.BaseProviders {
             provider.AddConnection(con);
         }
 
+        /// <inheritdoc />
         public override int GetMinimum(int level) {
             var calculationId = new CalculationId();
             sourceNode.SetValue(level);
             return resultNode.GetResult2(calculationId);
         }
 
+        /// <inheritdoc />
         public override int GetCap(int level) {
             var calculationId = new CalculationId();
             sourceNode.SetValue(level);
             return resultNode.GetResult3(calculationId);
         }
 
+        /// <inheritdoc />
         public override int BaseValue(int level) {
             var calculationId = new CalculationId();
             sourceNode.SetValue(level);
