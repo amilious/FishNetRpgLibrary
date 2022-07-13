@@ -1,6 +1,7 @@
 using UnityEngine;
+using Amilious.FishNetRpg.Modifiers;
 
-namespace Amilious.FishNetRpg.Modifiers {
+namespace Amilious.FishNetRpg.Statistics {
     
     /// <summary>
     /// This class is used to modify values in the stat's system.
@@ -11,14 +12,17 @@ namespace Amilious.FishNetRpg.Modifiers {
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////
         
         [SerializeField, Tooltip("The name of the stat that the modifier will be applied to.")] 
-        private string statName;
+        private Stat stat;
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Public Properties //////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc/>
-        public string StatName => statName;
+        public string StatName => stat.StatName;
+
+        /// <inheritdoc/>
+        public Stat Stat => stat;
         
         /// <inheritdoc/>
         public override Systems System => Systems.StatsSystem;

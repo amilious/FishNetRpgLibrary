@@ -3,9 +3,9 @@ using FishNet;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
-using Amilious.FishNetRpg.Modifiers;
-using FishNet.Object.Synchronizing;
 using Object = UnityEngine.Object;
+using FishNet.Object.Synchronizing;
+using Amilious.FishNetRpg.Modifiers;
 
 namespace Amilious.FishNetRpg.Statistics {
     

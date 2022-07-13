@@ -239,8 +239,7 @@ namespace Amilious.FishNetRpg.Statistics {
         protected void WatchDurationModifer(ModifierSource<IStatModifier> source) => _durationModifiers.Add(source);
 
     }
-    
-    
+
     public enum StatEventTrigger{Initialized,Updated}
     
 }
