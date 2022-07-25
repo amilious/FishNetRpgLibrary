@@ -6,7 +6,7 @@ namespace Amilious.FishNetRpg.Modifiers {
     /// <summary>
     /// This class is used to modify values in the stat's system.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishNetRpg.STATS_MENU_ROOT + "Modifier", order=0)]
+    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishNetRpg.MODIFIERS_MENU_ROOT + "Stat")]
     public class StatModifer : Modifier, IStatModifier {
         
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////

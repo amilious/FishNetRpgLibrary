@@ -30,6 +30,11 @@ namespace Amilious.FishNetRpg {
         /// <summary>
         /// This value is the root path of the resource asset menu.
         /// </summary>
+        public const string MODIFIERS_MENU_ROOT = ASSET_MENU_ROOT + "Modifiers (FishNetRpg)/";
+
+        /// <summary>
+        /// This value is the root path of the resource asset menu.
+        /// </summary>
         public const string RESOURCES_MENU_ROOT = ASSET_MENU_ROOT + "Resources (FishNetRpg)/";
 
         /// <summary>
