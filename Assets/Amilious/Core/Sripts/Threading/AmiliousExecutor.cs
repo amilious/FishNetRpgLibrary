@@ -9,7 +9,7 @@ namespace Amilious.Core.Threading {
     /// <summary>
     /// This <see cref="MonoBehaviour"/> is used to execute code on the main game thread when using multiple threads.
     /// </summary>
-    [AddComponentMenu("Amilious/Threading/Executor")]
+    [AddComponentMenu(AmiliousCore.THREADING_CONTEXT_MENU+"Executor")]
     public class AmiliousExecutor : MonoBehaviour {
         
         #region Constants //////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,12 +60,7 @@ namespace Amilious.Core.Threading {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
                    
         #region Non-Serialized Fields //////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This field is used to store the active instance of the executor.
-        /// </summary>
-        private static AmiliousExecutor _instance;
-
+        
         /// <summary>
         /// This dictionary is used to store queued actions.
         /// </summary>
@@ -99,54 +94,50 @@ namespace Amilious.Core.Threading {
             { UpdateType.Update, 0 }, { UpdateType.FixedUpdate, 0 }, { UpdateType.LateUpdate, 0 }
         };
 
+        /// <summary>
+        /// This field is used to check if the executor has been initialized.
+        /// </summary>
+        private bool _initialized;
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////   
 
+        
         public static Thread MainThread { get; private set; }
         
         public static int MaxQueueSize { get; private set; }
 
         public static bool IsMainThread => Thread.CurrentThread == MainThread;
+        
+        /// <summary>
+        /// This property is used to store the active instance of the executor.
+        /// </summary>
+        public static AmiliousExecutor Instance { get; private set;}
+
+        /// <summary>
+        /// This property is used to get the instance if it exists.  Otherwise it will create one and
+        /// return it.
+        /// </summary>
+        public static AmiliousExecutor InstanceOrCreate {
+            get {
+                if(Instance) return Instance;
+                Instance = new GameObject("AmiliousExecutor").AddComponent<AmiliousExecutor>();
+                return Instance;
+            }
+        }
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Unity Methods //////////////////////////////////////////////////////////////////////////////////////////
 
-        private void Awake() => OnEnable();
+        private void Awake() => Initialize();
 
-        private void OnDestroy() { if(_instance == this) _instance = null; }
+        private void OnDestroy() { if(Instance == this) Instance = null; }
 
-        private void OnDisable() { if(_instance == this) _instance = null; }
+        private void OnDisable() { if(Instance == this) Instance = null; }
 
-        private void OnEnable() {
-            if(_instance && _instance != this) {
-                DestroyImmediate(this);
-                return;
-            }
-            if(_instance == this) return; //the executor is already set up.
-            //make sure that the queue is set up
-            ActionQueue.TryAdd(UpdateType.Update, new ConcurrentQueue<Action>());
-            ActionQueue.TryAdd(UpdateType.FixedUpdate, new ConcurrentQueue<Action>());
-            ActionQueue.TryAdd(UpdateType.LateUpdate, new ConcurrentQueue<Action>());
-            //set the max update seconds
-            MaxUpdateSeconds[UpdateType.Update] = maxUpdateSeconds;
-            MaxUpdateSeconds[UpdateType.FixedUpdate] = maxFixedUpdateSeconds;
-            MaxUpdateSeconds[UpdateType.LateUpdate] = maxLateUpdateSeconds;
-            //set the max invokes
-            MaxInvokes[UpdateType.Update] = maxInvokesPerUpdate;
-            MaxInvokes[UpdateType.FixedUpdate] = maxInvokesPerFixedUpdate;
-            MaxInvokes[UpdateType.LateUpdate] = maxInvokesPerLateUpdate;
-            //set the skipped updates
-            UpdatesToSkip[UpdateType.Update] = skippedUpdates;
-            UpdatesToSkip[UpdateType.FixedUpdate] = skippedFixedUpdates;
-            UpdatesToSkip[UpdateType.LateUpdate] = skippedLateUpdates;
-            //set the max queue size
-            MaxQueueSize = maxQueueSize;
-            //set the instance
-            MainThread = Thread.CurrentThread;
-            _instance = this;
-        }
+        private void OnEnable() => Initialize();
 
         private void Update() => Process(UpdateType.Update);
 
@@ -165,7 +156,7 @@ namespace Amilious.Core.Threading {
         /// <param name="updateType">The update loop that the action should be executed on.</param>
         /// <seealso cref="Invoke"/>
         public static void InvokeAsync(Action action, UpdateType updateType = UpdateType.Update) {
-            if(!_instance){Debug.LogError(AmiliousCore.NO_EXECUTOR); return; }
+            if(!InstanceOrCreate){Debug.LogError(AmiliousCore.NO_EXECUTOR); return; }
             if(IsMainThread) action();
             else ActionQueue[updateType].Enqueue(action);
         }
@@ -179,13 +170,15 @@ namespace Amilious.Core.Threading {
         /// <param name="updateType">The update loop that the action should be executed on.</param>
         /// <seealso cref="InvokeAsync"/>
         public static void Invoke(Action action, UpdateType updateType = UpdateType.Update) {
-            if(!_instance){Debug.LogError(AmiliousCore.NO_EXECUTOR); return; }
+            if(!InstanceOrCreate){Debug.LogError(AmiliousCore.NO_EXECUTOR); return; }
             var hasRun = false;
             InvokeAsync(() => { action(); hasRun = true; },updateType);
             while(!hasRun) Thread.Sleep(INVOKE_SLEEP_TIME);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
+        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// This method is used to execute queue tasks.
@@ -195,8 +188,6 @@ namespace Amilious.Core.Threading {
             //return if the queue for the update type is empty
             if(ActionQueue[updateType].IsEmpty) return;
             //get the max update time
-            //before I used a timer and I am not sure which way is the best
-            //TODO:test different timing methods
             var maxTime = MaxUpdateSeconds[updateType]>0?
                 Time.realtimeSinceStartupAsDouble + MaxUpdateSeconds[updateType]:
                 double.MaxValue;
@@ -217,6 +208,41 @@ namespace Amilious.Core.Threading {
                 if(ActionQueue[updateType].TryDequeue(out var action)){ action();}
             }
         }
+
+        /// <summary>
+        /// This method is used to initialize the executor.
+        /// </summary>
+        private void Initialize() {
+            if(Instance && Instance != this) {
+                DestroyImmediate(this);
+                return;
+            }
+            if(Instance == this&&_initialized) return; //the executor is already set up.
+            _initialized = true;
+            //make sure that the queue is set up
+            ActionQueue.TryAdd(UpdateType.Update, new ConcurrentQueue<Action>());
+            ActionQueue.TryAdd(UpdateType.FixedUpdate, new ConcurrentQueue<Action>());
+            ActionQueue.TryAdd(UpdateType.LateUpdate, new ConcurrentQueue<Action>());
+            //set the max update seconds
+            MaxUpdateSeconds[UpdateType.Update] = maxUpdateSeconds;
+            MaxUpdateSeconds[UpdateType.FixedUpdate] = maxFixedUpdateSeconds;
+            MaxUpdateSeconds[UpdateType.LateUpdate] = maxLateUpdateSeconds;
+            //set the max invokes
+            MaxInvokes[UpdateType.Update] = maxInvokesPerUpdate;
+            MaxInvokes[UpdateType.FixedUpdate] = maxInvokesPerFixedUpdate;
+            MaxInvokes[UpdateType.LateUpdate] = maxInvokesPerLateUpdate;
+            //set the skipped updates
+            UpdatesToSkip[UpdateType.Update] = skippedUpdates;
+            UpdatesToSkip[UpdateType.FixedUpdate] = skippedFixedUpdates;
+            UpdatesToSkip[UpdateType.LateUpdate] = skippedLateUpdates;
+            //set the max queue size
+            MaxQueueSize = maxQueueSize;
+            //set the instance
+            MainThread = Thread.CurrentThread;
+            Instance = this;
+        }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }
