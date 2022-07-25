@@ -1,5 +1,6 @@
-using Amilious.FishNetRpg.Modifiers;
-namespace Amilious.FishNetRpg.Statistics {
+using Amilious.FishNetRpg.Statistics;
+
+namespace Amilious.FishNetRpg.Modifiers {
     
     /// <summary>
     /// This interface is used to modify stats.

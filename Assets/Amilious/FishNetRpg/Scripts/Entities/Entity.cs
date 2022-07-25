@@ -14,12 +14,20 @@ namespace Amilious.FishNetRpg.Entities {
             }
         }
 
-        public bool HasSystem<T>() where T : ISystemManager => _managers.ContainsKey(typeof(T));
+        public bool HasManager<T>() where T : ISystemManager => _managers.ContainsKey(typeof(T));
 
-        public T GetSystem<T>() where T : ISystemManager {
+        public T GetManager<T>() where T : ISystemManager {
             var type = typeof(T);
             if(_managers.TryGetValue(type,out var manager)) return (T) manager;
             throw new MissingMemberException(string.Format(FishNetRpg.MISSING_SYSTEM_MANAGER, name, type.Name));
+        }
+
+        public bool TryGetManager<T>(out T manager) where T : ISystemManager {
+            var type = typeof(T);
+            manager = default;
+            if(!_managers.TryGetValue(type, out var value)) return false;
+            manager = (T) value;
+            return true;
         }
         
     }

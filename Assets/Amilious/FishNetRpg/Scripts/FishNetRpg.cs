@@ -18,6 +18,11 @@ namespace Amilious.FishNetRpg {
         public const string COMPONENT_MENU_ROOT = "Amilious/FishNetRpg/";
 
         /// <summary>
+        /// This value is the root path of the requirements asset menu.
+        /// </summary>
+        public const string REQUIREMENT_MENU_ROOT = ASSET_MENU_ROOT + "Requirements (FishNetRpg)/";
+
+        /// <summary>
         /// This value is the root path of the stats asset menu.
         /// </summary>
         public const string STATS_MENU_ROOT = ASSET_MENU_ROOT + "Stats (FishNetRpg)/";

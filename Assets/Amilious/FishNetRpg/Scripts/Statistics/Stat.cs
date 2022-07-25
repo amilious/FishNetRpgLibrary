@@ -34,7 +34,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// This property is used to get the stat's stat controller for the given entity.
         /// </summary>
         /// <param name="entity">The entity that you want to get the stat controller for.</param>
-        public StatController this[Entity entity] => entity.GetSystem<StatManager>()[this];
+        public StatController this[Entity entity] => entity.GetManager<StatManager>()[this];
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         

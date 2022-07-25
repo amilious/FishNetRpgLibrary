@@ -1,8 +1,9 @@
+using Amilious.Core;
 using UnityEngine;
 
 namespace Amilious.FishNetRpg.Resource {
     
-    public class Resource : ScriptableObject {
+    public class Resource : AmiliousScriptableObject {
         
     }
     

@@ -1,7 +1,7 @@
+using Amilious.FishNetRpg.Statistics;
 using UnityEngine;
-using Amilious.FishNetRpg.Modifiers;
 
-namespace Amilious.FishNetRpg.Statistics {
+namespace Amilious.FishNetRpg.Modifiers {
     
     /// <summary>
     /// This class is used to modify values in the stat's system.
