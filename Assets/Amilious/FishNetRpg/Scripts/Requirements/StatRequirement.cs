@@ -5,7 +5,7 @@ using Amilious.FishNetRpg.Statistics;
 
 namespace Amilious.FishNetRpg.Requirements {
     
-    [CreateAssetMenu(fileName = "NewStatRequirement", menuName = FishNetRpg.STATS_MENU_ROOT+"Stat")]
+    [CreateAssetMenu(fileName = "NewStatRequirement", menuName = FishNetRpg.REQUIREMENT_MENU_ROOT+"Stat")]
     public class StatRequirement : AbstractRequirement {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////

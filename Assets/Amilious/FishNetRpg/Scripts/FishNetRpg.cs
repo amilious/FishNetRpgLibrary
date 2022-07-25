@@ -36,6 +36,11 @@ namespace Amilious.FishNetRpg {
         /// This value is the root path of the level and xp asset menu.
         /// </summary>
         public const string XP_MENU_ROOT = ASSET_MENU_ROOT + "Experience (FishNetRpg)/";
+        
+        /// <summary>
+        /// This value is the root path of the inventory asset menu.
+        /// </summary>
+        public const string INVENTORY_MENU_ROOT = ASSET_MENU_ROOT + "Inventory (FishNetRpg)/";
 
         /// <summary>
         /// This value is the root component menu for managers.
