@@ -136,6 +136,7 @@ namespace Amilious.FishNetRpg.Statistics {
         /// This method is used to clear all of the stat's modifiers.  This method can only be called on the server.
         /// </summary>
         public void ClearAllModifiers() {
+            if(!IsServer()) return;
             _modifierSources.Clear();
             CalculateValue();
         }
@@ -145,8 +146,41 @@ namespace Amilious.FishNetRpg.Statistics {
         /// </summary>
         /// <param name="modifierSource"></param>
         public void RemoveModifier(ModifierSource<IStatModifier> modifierSource) {
+            if(!IsServer()) return;
             _modifierSources.Remove(modifierSource);
             CalculateValue();
+        }
+
+        /// <summary>
+        /// This method is used to remove a modifier form the stat.
+        /// </summary>
+        /// <param name="source">The source of the modifier.</param>
+        /// <param name="modifier">The modifier.</param>
+        /// <returns>True if the modifier existed and was removed, otherwise false.</returns>
+        public bool RemoveModifier(Object source, IStatModifier modifier) {
+            if(!IsServer()) return false;
+            var modifierSource = _modifierSources.First(x =>
+                x.HasSource(source) && x.Modifier == modifier);
+            if(modifier == null) return false;
+            if(!_modifierSources.Remove(modifierSource)) return false;
+            CalculateValue();
+            return true;
+        }
+
+        /// <summary>
+        /// This method is used to remove a modifier form the stat.
+        /// </summary>
+        /// <param name="sourceId">The source of the modifier.</param>
+        /// <param name="modifier">The modifier.</param>
+        /// <returns>True if the modifier existed and was removed, otherwise false.</returns>
+        public bool RemoveModifier(int sourceId, IStatModifier modifier) {
+            if(!IsServer()) return false;
+            var modifierSource = _modifierSources.First(x =>
+                x.HasSource(sourceId) && x.Modifier == modifier);
+            if(modifier == null) return false;
+            if(!_modifierSources.Remove(modifierSource)) return false;
+            CalculateValue();
+            return true;
         }
         
         #endregion

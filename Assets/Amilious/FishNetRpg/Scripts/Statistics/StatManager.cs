@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using FishNet.Object;
 using System.Collections.Generic;
+using System.Linq;
 using Object = UnityEngine.Object;
 using Amilious.FishNetRpg.Entities;
 using FishNet.Object.Synchronizing;
@@ -119,10 +120,7 @@ namespace Amilious.FishNetRpg.Statistics {
             }
         }
         
-        /// <summary>
-        /// This property is used to get or return a cached reference to the <see cref="Entity"/> to whom this
-        /// manager belongs to.
-        /// </summary>
+        /// <inheritdoc />
         public Entity Entity {
             get {
                 //get a reference to the entity if it does not exist.
@@ -180,47 +178,34 @@ namespace Amilious.FishNetRpg.Statistics {
             return true;
         }
         
-        /// <summary>
-        /// This method is used to add a modifier to a stat.  This method should only be
-        /// called by the server.
-        /// </summary>
-        /// <param name="source">The source that is applying the modifier.</param>
-        /// <param name="modifier">The modifier that you want to apply.</param>
-        /// <returns>True if able to apply the modifier, otherwise false.</returns>
+        /// <inheritdoc />
         [Server]
-        public bool ApplyModifier(Object source, IStatModifier modifier) {
+        public bool ApplyModifier(Object source, IModifier modifier) {
             //make sure that the manager is initialized
             Initialize();
-            if(!_statInfo.TryGetValue(modifier.StatName, out var stat)) {
-                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,modifier.StatName);
+            if(modifier is not IStatModifier statModifier) return false;
+            if(!_statInfo.TryGetValue(statModifier.StatName, out var stat)) {
+                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,statModifier.StatName);
                 return false;
             }
-            stat.AddModifier(new ModifierSource<IStatModifier>(modifier,source));
+            stat.AddModifier(new ModifierSource<IStatModifier>(statModifier,source));
             return true;
         }
         
-        /// <summary>
-        /// This method is used to add a modifier to a stat.  This method should only be
-        /// called by the server.
-        /// </summary>
-        /// <param name="sourceId">The source that is applying the modifier.</param>
-        /// <param name="modifier">The modifier that you want to apply.</param>
-        /// <returns>True if able to apply the modifier, otherwise false.</returns>
+        /// <inheritdoc />
         [Server]
-        public bool ApplyModifier(int sourceId, IStatModifier modifier) {
+        public bool ApplyModifier(int sourceId, IModifier modifier) {
             Initialize();
-            if(!_statInfo.TryGetValue(modifier.StatName, out var stat)) {
-                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,modifier.StatName);
+            if(modifier is not IStatModifier statModifier) return false;
+            if(!_statInfo.TryGetValue(statModifier.StatName, out var stat)) {
+                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,statModifier.StatName);
                 return false;
             }
-            stat.AddModifier(new ModifierSource<IStatModifier>(modifier,sourceId));
+            stat.AddModifier(new ModifierSource<IStatModifier>(statModifier,sourceId));
             return true;
         }
 
-        /// <summary>
-        /// This method is used to remove all the modifiers that were assigned by the given source.
-        /// </summary>
-        /// <param name="source">The source.</param>
+        /// <inheritdoc />
         [Server]
         public void RemoveModifiersFromSource(Object source) {
             Initialize();
@@ -228,15 +213,30 @@ namespace Amilious.FishNetRpg.Statistics {
                 stat.RemoveModifierFromSource(source);
         }
 
-        /// <summary>
-        /// This method is used to remove all modifiers of the given type.
-        /// </summary>
-        /// <param name="sourceId">The source of the modifiers that you want to remove.</param>
+        /// <inheritdoc />
         [Server]
         public void RemoveModifiersFromSource(int sourceId) {
             Initialize();
             foreach(var stat in _statInfo.Values) 
                 stat.RemoveModifierFromSource(sourceId);
+        }
+
+        /// <inheritdoc />
+        [Server]
+        public bool RemoveModifier(Object source, IModifier modifier) {
+            Initialize();
+            if(modifier is not IStatModifier statModifier) return false;
+            if(this[statModifier.Stat] == null) return false;
+            return this[statModifier.Stat].RemoveModifier(source,statModifier);
+        }
+
+        /// <inheritdoc />
+        [Server]
+        public bool RemoveModifier(int sourceId, IModifier modifier) {
+            Initialize();
+            if(modifier is not IStatModifier statModifier) return false;
+            if(this[statModifier.Stat] == null) return false;
+            return this[statModifier.Stat].RemoveModifier(sourceId,statModifier);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,6 +250,7 @@ namespace Amilious.FishNetRpg.Statistics {
             if(Initialized) return;
             Initialized = true;
             foreach(var stat in stats) InitializeStat(stat);
+            Entity.RegisterManager(this); //this is just to make sure
             OnStatManagerInitialized?.Invoke(Entity,this);
         }
 

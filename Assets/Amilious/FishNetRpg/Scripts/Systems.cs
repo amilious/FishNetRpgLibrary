@@ -1,3 +1,8 @@
+using System;
+using Amilious.FishNetRpg.Experience;
+using Amilious.FishNetRpg.Resource;
+using Amilious.FishNetRpg.Statistics;
+
 namespace Amilious.FishNetRpg {
 
     /// <summary>
@@ -19,6 +24,23 @@ namespace Amilious.FishNetRpg {
         /// This value represents the resources system.
         /// </summary>
         ResourceSystem
+    }
+    
+    public static class SystemsExtension {
+
+        private static readonly Type Stats = typeof(StatManager);
+        private static readonly Type Level = typeof(LevelManager);
+        private static readonly Type Resource = typeof(ResourceManager);
+        
+        public static Type GetSystemType(this Systems system) {
+            return system switch {
+                Systems.StatsSystem => Stats,
+                Systems.LevelSystem => Level,
+                Systems.ResourceSystem => Resource,
+                _ => throw new ArgumentOutOfRangeException(nameof(system), system, null)
+            };
+        }
+        
     }
     
 }
