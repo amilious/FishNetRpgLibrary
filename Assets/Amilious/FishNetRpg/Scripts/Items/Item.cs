@@ -126,6 +126,34 @@ namespace Amilious.FishNetRpg.Items {
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
+        #region Static Fields //////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This dictionary is used to cache items by their guid.
+        /// </summary>
+        public static Dictionary<string, Item> ItemCache;
+
+        /// <summary>
+        /// This method is used to get an instance of an item by it's guid.
+        /// </summary>
+        /// <param name="guid">The items guid.</param>
+        /// <returns>The item with the given guid or null if the item was not found.</returns>
+        public static Item GetItemFromGuid(string guid) {
+            if(ItemCache == null) {
+                ItemCache = new Dictionary<string, Item>();
+                var items = Resources.LoadAll<Item>("");
+                foreach(var item in items) {
+                    if(!ItemCache.TryAdd(item.AssetGuid, item)) {
+                        Debug.LogErrorFormat("Multiple items have been found with the id \"{0}\".",item.AssetGuid);
+                    }
+                }
+            }
+            if(string.IsNullOrWhiteSpace(guid)) return null;
+            return ItemCache.TryGetValue(guid, out var value) ? value : null;
+        }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }
