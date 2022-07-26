@@ -17,9 +17,9 @@ namespace Amilious.FishNetRpg.Items {
         
         [Header("Item Settings")]
         [SerializeField, Tooltip("The display name for the item.")] 
-        private string displayName;
-        [SerializeField, Tooltip("The description for the item.")] 
-        private string description;
+        private string displayName = "New Item";
+        [SerializeField, Tooltip("The description for the item."), TextArea] 
+        private string description = "No Description!";
         [SerializeField, Tooltip("The inventory icon for the item.")] 
         private Sprite icon;
         [SerializeField, Tooltip("The max stack size for the item.")] 
@@ -130,27 +130,27 @@ namespace Amilious.FishNetRpg.Items {
         #region Static Fields //////////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
-        /// This dictionary is used to cache items by their guid.
+        /// This dictionary is used to cache items by their id.
         /// </summary>
-        public static Dictionary<string, Item> ItemCache;
+        public static Dictionary<long, Item> ItemCache;
 
         /// <summary>
-        /// This method is used to get an instance of an item by it's guid.
+        /// This method is used to get an instance of an item by it's id.
         /// </summary>
-        /// <param name="guid">The items guid.</param>
-        /// <returns>The item with the given guid or null if the item was not found.</returns>
-        public static Item GetItemFromGuid(string guid) {
+        /// <param name="id">The items id.</param>
+        /// <returns>The item with the given id or null if the item was not found.</returns>
+        public static Item GetItemFromId(long id) {
             if(ItemCache == null) {
-                ItemCache = new Dictionary<string, Item>();
+                ItemCache = new Dictionary<long, Item>();
                 var items = Resources.LoadAll<Item>("");
                 foreach(var item in items) {
-                    if(!ItemCache.TryAdd(item.AssetGuid, item)) {
-                        Debug.LogErrorFormat("Multiple items have been found with the id \"{0}\".",item.AssetGuid);
+                    if(!ItemCache.TryAdd(item.Id, item)) {
+                        Debug.LogErrorFormat("Multiple items have been found with the id \"{0}\".",item.Id);
                     }
                 }
             }
-            if(string.IsNullOrWhiteSpace(guid)) return null;
-            return ItemCache.TryGetValue(guid, out var value) ? value : null;
+            if(id==0) return null;
+            return ItemCache.TryGetValue(id, out var value) ? value : null;
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

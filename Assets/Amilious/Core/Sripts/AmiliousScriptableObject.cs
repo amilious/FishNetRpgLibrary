@@ -1,4 +1,7 @@
+using System;
 using UnityEngine;
+using Amilious.Core.Extensions;
+using System.Collections.Generic;
 
 namespace Amilious.Core {
     
@@ -10,29 +13,70 @@ namespace Amilious.Core {
         /// <summary>
         /// This serialized field is used to store the assets guid.
         /// </summary>
-        [SerializeField, HideInInspector] private string guid;
-
-        /// <summary>
-        /// This serialized field is used to store the assets local file id.
-        /// </summary>
-        [SerializeField, HideInInspector] private long fileId;
+        [SerializeField, HideInInspector] private long id = 0;
 
         /// <summary>
         /// This property contains the assets guid from the asset database.
         /// </summary>
-        public string AssetGuid => guid;
-
-        /// <summary>
-        /// This property contains the assets local file id from the asset database.
-        /// </summary>
-        public long AssetFileId => fileId;
+        public long Id => id;
         
         /// <inheritdoc />
         public void OnBeforeSerialize() {
             #if UNITY_EDITOR
-            UnityEditor.AssetDatabase.TryGetGUIDAndLocalFileIdentifier(GetInstanceID(), out guid, out fileId);
+            if(id==0) { GenerateId(); }
             #endif
         }
+
+        #if UNITY_EDITOR
+        
+        [ContextMenu("Regenerate Id")]
+        private long GenerateId() {
+            var oldId = id;
+            id = GetNewId();
+            var path = UnityEditor.AssetDatabase.GetAssetPath(this)??name;
+            if(string.IsNullOrWhiteSpace(path)) path = GetType().SplitCamelCase();
+            if(oldId==0) Debug.LogFormat("#########\tGenerating Amilious Scriptable Object Id\t#########\n<color=#8888ff>Generated id for:</color>\t\t<color=#ff88ff><b>{0}</b></color>\n<color=#8888ff>Id:</color>\t\t\t<color=#88ff88>{1}</color>", path,id);
+            else Debug.LogFormat("#########\tGenerating Amilious Scriptable Object Id\t#########\n<color=#8888ff>Regenerated id for:</color>\t<color=#ff88ff><b>{0}</b></color>\n<color=#8888ff>New Id:</color>\t\t\t<color=#88ff88>{1}</color>\n<color=#8888ff>Old Id:</color>\t\t\t<color=#ff8888>{2}</color>", path,id,oldId);
+            return id;
+        }
+
+        private static void Initialize() {
+            if(_cachedIds != null) return;
+            _cachedIds = new List<long>();
+            foreach(var path in UnityEditor.AssetDatabase.GetAllAssetPaths()) {
+                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<AmiliousScriptableObject>(path);
+                if(asset==null) continue;
+                _cachedIds.Add(asset.Id);
+            }
+        }
+        
+        private static List<long> _cachedIds;
+
+        private static long GetNewId() {
+            Initialize();
+            var id = DateTime.UtcNow.ToFileTime();
+            while(_cachedIds.Contains(id)) id++;
+            _cachedIds.Add(id);
+            return id;
+        }
+
+        [UnityEditor.MenuItem("Amilious/Amilious Scriptable Objects/Fix Duplicate Ids")]
+        private static void FixDuplicateIds() {
+            _cachedIds ??= new List<long>();
+            _cachedIds.Clear();
+            var fixedIds = 0;
+            foreach(var path in UnityEditor.AssetDatabase.GetAllAssetPaths()) {
+                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<AmiliousScriptableObject>(path);
+                if(asset==null) continue;
+                if(_cachedIds.Contains(asset.id)) { asset.GenerateId();
+                    fixedIds++;
+                }
+                _cachedIds.Add(asset.Id);
+            }
+            Debug.LogFormat("#########\tFixed Amilious Scriptable Object Ids #########\n<color=#88ff88>Unique Objects:</color>\t\t<color=#ff88ff><b>{0}</b></color>\t<color=#8888ff>Fixed Ids:</color>\t<color=#ff8888>{1}</color>", _cachedIds.Count,fixedIds);
+        }
+        
+        #endif
 
         /// <inheritdoc />
         public void OnAfterDeserialize() { }

@@ -33,10 +33,10 @@ namespace Amilious.Inspector.Editor.Editors {
              _youtubeLogo ??= Resources.Load<Texture>("Icons/youtube");
             _assetStoreLogo ??=  EditorGUIUtility.IconContent("AssetStore Icon").image;
             _websiteIcon ??=  EditorGUIUtility.IconContent("BuildSettings.Web").image;
-            _discord ??= new GUIContent("Discord", _discordLogo, "Click to go to the Amilious Console on the discord server.");
-            _website ??= new GUIContent("Website", _websiteIcon, "Click to go to the Amilious Console on the amilious website.");
-            _assetStore ??= new GUIContent("Asset Store", _assetStoreLogo, "Click to go to the Amilious Console on the unity asset store.");
-            _youtube ??= new GUIContent("Youtube", _youtubeLogo, "Click to go to the Amilious Console on youtube.");
+            _discord ??= new GUIContent("Discord", _discordLogo, "Click to go to the discord server.");
+            _website ??= new GUIContent("Website", _websiteIcon, "Click to go to the Amilious website.");
+            _assetStore ??= new GUIContent("Asset Store", _assetStoreLogo, "Click to go to the unity asset store.");
+            _youtube ??= new GUIContent("Youtube", _youtubeLogo, "Click to go to youtube.");
         }
 
         public override void OnInspectorGUI() {

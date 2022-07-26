@@ -147,7 +147,8 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="guid">The guid of the asset that is being deleted.</param>
         public static void AssetBeingDeleted(string guid) {
             if(ProviderScriptableObject == null) return;
-            if(ProviderScriptableObject.AssetGuid != guid) return;
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(ProviderScriptableObject, out var currentGuid, out long _);
+            if(currentGuid != guid) return;
             //the currently loaded asset is being deleted.
             if(Instance == null) return;
             Instance._functionNodeInspectorView.Reset();
@@ -162,7 +163,8 @@ namespace Amilious.FunctionGraph.Editor {
         /// <param name="newName">The new name of the asset.</param>
         public static void AssetBeingRenamed(string guid, string newName) {
             if(ProviderScriptableObject == null) return;
-            if(ProviderScriptableObject.AssetGuid != guid) return;
+            AssetDatabase.TryGetGUIDAndLocalFileIdentifier(ProviderScriptableObject, out var currentGuid, out long _);
+            if(currentGuid != guid) return;
             if(Instance!=null)Instance.ResetTitles(newName);
         }
         
