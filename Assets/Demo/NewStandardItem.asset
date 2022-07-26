@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a240e1c9ddd49f5a0da21fbfcbfa1f9, type: 3}
   m_Name: NewStandardItem
   m_EditorClassIdentifier: 
-  guid: 00000000000000000000000000000000
-  fileId: 11400000
-  displayName: 
-  description: 
+  id: 133033488560741247
+  displayName: New Item
+  description: No Description!
   icon: {fileID: 0}
   maxStack: 1
   pickup: {fileID: 0}
