@@ -9,7 +9,7 @@ using Amilious.FishNetRpg.Requirements;
 namespace Amilious.FishNetRpg.Items {
     
     [CreateAssetMenu(fileName = "NewEquippableItem", 
-        menuName = FishNetRpg.INVENTORY_MENU_ROOT+"Equippable Item", order = 1)]
+        menuName = FishNetRpg.ITEM_MENU_ROOT+"Equippable Item", order = 21)]
     public class EquippableItem : Item, IRequirementProvider {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////

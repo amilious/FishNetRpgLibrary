@@ -1,31 +1,38 @@
+using System;
 using UnityEngine;
 using System.Linq;
 using Amilious.Core;
 using System.Collections.Generic;
+using Amilious.Core.Extensions;
 using Amilious.FishNetRpg.Pickups;
 using Amilious.FishNetRpg.Entities;
 using Amilious.FishNetRpg.Modifiers;
 using Amilious.FishNetRpg.Requirements;
+using Amilious.Inspector.Attributes;
+using UnityEditor;
 
 namespace Amilious.FishNetRpg.Items {
     
     [CreateAssetMenu(fileName = "NewStandardItem", 
-        menuName = FishNetRpg.INVENTORY_MENU_ROOT+"Standard Item", order = 0)]
+        menuName = FishNetRpg.ITEM_MENU_ROOT+"Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject {
+
+        private const string DEFAULT_DESCRIPTION = "No description!";
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////
         
-        [Header("Item Settings")]
         [SerializeField, Tooltip("The display name for the item.")] 
-        private string displayName = "New Item";
+        private string displayName;
         [SerializeField, Tooltip("The description for the item."), TextArea] 
-        private string description = "No Description!";
-        [SerializeField, Tooltip("The inventory icon for the item.")] 
+        private string description = DEFAULT_DESCRIPTION;
+        [SerializeField, Tooltip("The inventory icon for the item.")]
         private Sprite icon;
         [SerializeField, Tooltip("The max stack size for the item.")] 
         private int maxStack = 1;
         [SerializeField, Tooltip("The pickup for the item.")] 
         private Pickup pickup;
+        [SerializeField, Tooltip("The item's rarity.")] 
+        private ItemRarity rarity;
         [SerializeField, Tooltip("Requirements for picking up the item.")]
         private List<AbstractRequirement> pickupRequirements = new();
         [SerializeField, Tooltip("Modifiers that are applied to an entity's when the item is in its inventory.")] 
@@ -54,12 +61,16 @@ namespace Amilious.FishNetRpg.Items {
         /// This property contains the item's inventory icon.
         /// </summary>
         public Sprite Icon => icon;
+
+        public ItemRarity Rarity => rarity;
         
         /// <summary>
         /// This property contains the max stack size for this item.
         /// </summary>
         public int MaxStackSize => Mathf.Max(1, maxStack);
-        
+
+        public override bool NeedsToBeLoadableById => true;
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Modifier Methods ///////////////////////////////////////////////////////////////////////////////////////
@@ -130,30 +141,30 @@ namespace Amilious.FishNetRpg.Items {
         #region Static Fields //////////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
-        /// This dictionary is used to cache items by their id.
-        /// </summary>
-        public static Dictionary<long, Item> ItemCache;
-
-        /// <summary>
         /// This method is used to get an instance of an item by it's id.
         /// </summary>
         /// <param name="id">The items id.</param>
         /// <returns>The item with the given id or null if the item was not found.</returns>
-        public static Item GetItemFromId(long id) {
-            if(ItemCache == null) {
-                ItemCache = new Dictionary<long, Item>();
-                var items = Resources.LoadAll<Item>("");
-                foreach(var item in items) {
-                    if(!ItemCache.TryAdd(item.Id, item)) {
-                        Debug.LogErrorFormat("Multiple items have been found with the id \"{0}\".",item.Id);
-                    }
-                }
-            }
-            if(id==0) return null;
-            return ItemCache.TryGetValue(id, out var value) ? value : null;
+        public static Item FromId(long id) {
+            return ItemLoader.LoadFromId(id);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
+        protected override void BeforeSerialize() {
+            if(string.IsNullOrWhiteSpace(displayName)) displayName = name.SplitCamelCase();
+            if(string.IsNullOrWhiteSpace(description)) description = DEFAULT_DESCRIPTION;
+        }
+
+        public void OnEnable() {
+            if(!IsInResourceFolder&&!string.IsNullOrWhiteSpace(ResourcePath)) 
+                Debug.LogErrorFormat("Item \"{0}\" is not in a Resources/ folder!", ResourcePath);
+        }
+
+        public void Awake() => OnEnable();
+
+        public void OnValidate() {
+            OnEnable();
+        }
     }
 }

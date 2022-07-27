@@ -12,45 +12,49 @@ namespace Amilious.FishNetRpg {
         /// </summary>
         public const string ASSET_MENU_ROOT = "Amilious/";
 
+        public const string PROJECT_NAME = "FishNetRpg";
+
         /// <summary>
         /// This value is the root path for the component menu.
         /// </summary>
-        public const string COMPONENT_MENU_ROOT = "Amilious/FishNetRpg/";
+        public const string COMPONENT_MENU_ROOT = "Amilious/"+PROJECT_NAME+"/";
 
         /// <summary>
         /// This value is the root path of the requirements asset menu.
         /// </summary>
-        public const string REQUIREMENT_MENU_ROOT = ASSET_MENU_ROOT + "Requirements (FishNetRpg)/";
+        public const string REQUIREMENT_MENU_ROOT = ASSET_MENU_ROOT + "Requirements ("+PROJECT_NAME+")/";
 
         /// <summary>
         /// This value is the root path of the stats asset menu.
         /// </summary>
-        public const string STATS_MENU_ROOT = ASSET_MENU_ROOT + "Stats (FishNetRpg)/";
+        public const string STATS_MENU_ROOT = ASSET_MENU_ROOT + "Stats ("+PROJECT_NAME+")/";
 
         /// <summary>
         /// This value is the root path of the resource asset menu.
         /// </summary>
-        public const string MODIFIERS_MENU_ROOT = ASSET_MENU_ROOT + "Modifiers (FishNetRpg)/";
+        public const string MODIFIERS_MENU_ROOT = ASSET_MENU_ROOT + "Modifiers ("+PROJECT_NAME+")/";
         
         /// <summary>
         /// This value is the root path of the resource asset menu.
         /// </summary>
-        public const string QUEST_MENU_ROOT = ASSET_MENU_ROOT + "Quests (FishNetRpg)/";
+        public const string QUEST_MENU_ROOT = ASSET_MENU_ROOT + "Quests ("+PROJECT_NAME+")/";
 
         /// <summary>
         /// This value is the root path of the resource asset menu.
         /// </summary>
-        public const string RESOURCES_MENU_ROOT = ASSET_MENU_ROOT + "Resources (FishNetRpg)/";
+        public const string RESOURCES_MENU_ROOT = ASSET_MENU_ROOT + "Resources ("+PROJECT_NAME+")/";
 
         /// <summary>
         /// This value is the root path of the level and xp asset menu.
         /// </summary>
-        public const string XP_MENU_ROOT = ASSET_MENU_ROOT + "Experience (FishNetRpg)/";
+        public const string XP_MENU_ROOT = ASSET_MENU_ROOT + "Experience ("+PROJECT_NAME+")/";
         
         /// <summary>
         /// This value is the root path of the inventory asset menu.
         /// </summary>
-        public const string INVENTORY_MENU_ROOT = ASSET_MENU_ROOT + "Inventory (FishNetRpg)/";
+        public const string INVENTORY_MENU_ROOT = ASSET_MENU_ROOT + "Inventory ("+PROJECT_NAME+")/";
+
+        public const string ITEM_MENU_ROOT = ASSET_MENU_ROOT + "Items ("+PROJECT_NAME+")/";
 
         /// <summary>
         /// This value is the root component menu for managers.

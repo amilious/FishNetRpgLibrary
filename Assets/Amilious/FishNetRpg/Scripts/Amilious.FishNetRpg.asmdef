@@ -4,7 +4,8 @@
     "references": [
         "FishNet.Runtime",
         "Amilious.FunctionGraph",
-        "Amilious.Core"
+        "Amilious.Core",
+        "Amilious.Inspector"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

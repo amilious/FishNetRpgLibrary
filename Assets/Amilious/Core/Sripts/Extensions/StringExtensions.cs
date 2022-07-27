@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace Amilious.Core.Extensions {
     
@@ -8,8 +10,10 @@ namespace Amilious.Core.Extensions {
     /// </summary>
     public static class StringExtensions {
 
-        private static readonly ConcurrentQueue<StringBuilder> StringBuilders = new();
+        private static readonly Queue<StringBuilder> StringBuilders = new(MAX_STRING_BUILDERS);
         private const int MAX_STRING_BUILDERS = 20;
+        public const string APPEND_C_FORMAT = "<color=#{0}>{1}</color>";
+        public const string PADDING_FORMAT = "{0}{1} {2}";
 
         /// <summary>
         /// This method is used to rent out a string builder.
@@ -46,6 +50,31 @@ namespace Amilious.Core.Extensions {
                 }
                 return sb.ToString();
             }finally{ ReturnStringBuilder(sb); }
+        }
+
+        public static string SetColor(this string text, string color) {
+            color = color.TrimStart(' ', '#');
+            return string.Format(APPEND_C_FORMAT, color, text);
+        }
+
+        public static string SetColor(this string text, Color color) {
+            return string.Format(APPEND_C_FORMAT, color.HtmlRGBA(), text);
+        }
+
+        public static string PadText(this string text, char character, int length, int startLength = 0) {
+            var builder = RentStringBuilder();
+            try {
+                if(startLength > 0) {
+                    builder.Append(character, startLength);
+                    builder.Append(' ');
+                }
+                builder.Append(text.ToUpperInvariant());
+                if(builder.Length + 1 >= length) return builder.ToString();
+                builder.Append(' ');
+                builder.Append(character, length - builder.Length);
+                return builder.ToString();
+            }
+            finally { ReturnStringBuilder(builder); }
         }
         
     }

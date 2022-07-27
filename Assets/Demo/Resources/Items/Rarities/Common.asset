@@ -9,14 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a240e1c9ddd49f5a0da21fbfcbfa1f9, type: 3}
-  m_Name: NewStandardItem
+  m_Script: {fileID: 11500000, guid: d4d5f431640340f7991296ea4ee89b70, type: 3}
+  m_Name: Common
   m_EditorClassIdentifier: 
-  id: 133033488560741247
-  displayName: New Item
-  description: No Description!
-  icon: {fileID: 0}
-  maxStack: 1
-  pickup: {fileID: 0}
-  pickupRequirements: []
-  inventoryModifiers: []
+  id: 133033979411239734
+  resourcePath: Items/Rarities/Common
+  isInResourceFolder: 1
+  rarityName: Common
+  rarityValue: 0
+  rarityColor: {r: 1, g: 1, b: 1, a: 1}

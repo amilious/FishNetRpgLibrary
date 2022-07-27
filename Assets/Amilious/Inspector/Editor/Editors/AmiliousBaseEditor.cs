@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ namespace Amilious.Inspector.Editor.Editors {
         private GUIContent _discord;
         private GUIContent _youtube;
         private bool _initialized;
+
+        private List<string> dontDraw = new List<string>();
         
         private void OnEnable() {
             _style = new GUIStyle { fixedHeight = 12, alignment = TextAnchor.MiddleLeft,
@@ -40,6 +43,7 @@ namespace Amilious.Inspector.Editor.Editors {
         }
 
         public override void OnInspectorGUI() {
+            dontDraw.Clear();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             //buttons
@@ -50,14 +54,16 @@ namespace Amilious.Inspector.Editor.Editors {
             if(Youtube!=null)if(GUILayout.Toggle(false,_youtube,_style, options)){ Application.OpenURL(Youtube);}
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
-            
             serializedObject.Update();
             EditorGUI.BeginChangeCheck();
             BeforeDefault();
-            DrawPropertiesExcluding(serializedObject,"m_Script");
+            dontDraw.Add("m_Script");
+            DrawPropertiesExcluding(serializedObject,dontDraw.ToArray());
             AfterDefault();
             if (EditorGUI.EndChangeCheck()) serializedObject.ApplyModifiedProperties();
         }
+
+        protected void DontDraw(params string[] name) => dontDraw.AddRange(name);
         
         protected virtual void BeforeDefault(){}
         protected virtual void AfterDefault() {}
