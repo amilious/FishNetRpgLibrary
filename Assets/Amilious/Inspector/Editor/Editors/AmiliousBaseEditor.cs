@@ -60,7 +60,7 @@ namespace Amilious.Inspector.Editor.Editors {
             dontDraw.Add("m_Script");
             DrawPropertiesExcluding(serializedObject,dontDraw.ToArray());
             AfterDefault();
-            if (EditorGUI.EndChangeCheck()) serializedObject.ApplyModifiedProperties();
+            if (EditorGUI.EndChangeCheck()){ serializedObject.ApplyModifiedProperties();}
         }
 
         protected void DontDraw(params string[] name) => dontDraw.AddRange(name);

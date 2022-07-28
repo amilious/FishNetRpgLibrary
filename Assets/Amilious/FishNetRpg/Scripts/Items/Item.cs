@@ -36,7 +36,7 @@ namespace Amilious.FishNetRpg.Items {
         [SerializeField, Tooltip("Requirements for picking up the item.")]
         private List<AbstractRequirement> pickupRequirements = new();
         [SerializeField, Tooltip("Modifiers that are applied to an entity's when the item is in its inventory.")] 
-        private List<Modifier> inventoryModifiers = new();
+        private List<Modifier> inventoryAppliedModifiers = new();
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -80,8 +80,8 @@ namespace Amilious.FishNetRpg.Items {
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
         public void ApplyInventoryModifiers(Entity entity) {
-            if(inventoryModifiers.Count == 0) return;
-            entity.ApplyModifiers(this,inventoryModifiers);
+            if(inventoryAppliedModifiers.Count == 0) return;
+            entity.ApplyModifiers(this,inventoryAppliedModifiers);
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace Amilious.FishNetRpg.Items {
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
         public void RemoveInventoryModifiers(Entity entity) {
-            if(inventoryModifiers.Count == 0) return;
-            entity.RemoveModifiers(this,inventoryModifiers);
+            if(inventoryAppliedModifiers.Count == 0) return;
+            entity.RemoveModifiers(this,inventoryAppliedModifiers);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

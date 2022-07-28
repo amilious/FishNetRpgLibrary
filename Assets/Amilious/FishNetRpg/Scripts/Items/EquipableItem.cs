@@ -8,19 +8,18 @@ using Amilious.FishNetRpg.Requirements;
 
 namespace Amilious.FishNetRpg.Items {
     
-    [CreateAssetMenu(fileName = "NewEquippableItem", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"Equippable Item", order = 21)]
-    public class EquippableItem : Item, IRequirementProvider {
+    [CreateAssetMenu(fileName = "NewEquipableItem", 
+        menuName = FishNetRpg.ITEM_MENU_ROOT+"Equipable Item", order = 21)]
+    public class EquipableItem : Item, IRequirementProvider {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////
         
-        [Header("Equipment Settings")]
         [SerializeField, Tooltip("The places that this item can be equipped.")] 
-        private List<EquipmentSlotType> allowedLocations = new();
+        private List<EquipmentSlotType> allowedEquipmentSlots = new();
         [SerializeField,Tooltip("Requirements that must be satisfied to equip this item.")] 
         private List<AbstractRequirement> equipRequirements = new();
         [SerializeField,Tooltip("Modifiers that will be applied when this item is equipped.")] 
-        private List<Modifier> equippedModifiers = new();
+        private List<Modifier> equipAppliedModifiers = new();
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,8 +30,8 @@ namespace Amilious.FishNetRpg.Items {
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
         public void ApplyEquippedModifiers(Entity entity) {
-            if(equippedModifiers.Count == 0) return;
-            entity.ApplyModifiers(this,equippedModifiers);
+            if(equipAppliedModifiers.Count == 0) return;
+            entity.ApplyModifiers(this,equipAppliedModifiers);
         }
 
         /// <summary>
@@ -40,8 +39,8 @@ namespace Amilious.FishNetRpg.Items {
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be removed from.</param>
         public void RemoveEquippedModifiers(Entity entity) {
-            if(equippedModifiers.Count == 0) return;
-            entity.RemoveModifiers(this,equippedModifiers);
+            if(equipAppliedModifiers.Count == 0) return;
+            entity.RemoveModifiers(this,equipAppliedModifiers);
         }
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

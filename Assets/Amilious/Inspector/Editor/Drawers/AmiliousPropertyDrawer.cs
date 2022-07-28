@@ -45,7 +45,7 @@ namespace Amilious.Inspector.Editor.Drawers {
             
             //call after draw
             foreach(var modifier in Modifiers.Values) modifier.AfterOnGUI(property,_hideDraw);
-            
+
         }
 
         public sealed override float GetPropertyHeight(SerializedProperty property, GUIContent label) {

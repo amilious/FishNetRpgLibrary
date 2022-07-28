@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: NewSword
   m_EditorClassIdentifier: 
   id: 133033894457404558
-  resourcePath: 
-  isInResourceFolder: 0
+  resourcePath: Items/NewSword
+  isInResourceFolder: 1
   displayName: New Item
   description: No Description!
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 072f7f7756510e2438412473d2990ada, type: 3}
   maxStack: 1
   pickup: {fileID: 0}
+  rarity: {fileID: 0}
   pickupRequirements: []
-  inventoryModifiers: []
-  allowedLocations: []
+  inventoryAppliedModifiers: []
+  allowedEquipmentSlots: []
   equipRequirements: []
-  equippedModifiers: []
+  equipAppliedModifiers: []

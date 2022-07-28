@@ -17,9 +17,9 @@ MonoBehaviour:
   isInResourceFolder: 1
   displayName: Cool Item3
   description: No Description!
-  icon: {fileID: 21300000, guid: bfd721fbed303d04ba25295fc8dd88de, type: 3}
+  icon: {fileID: 21300000, guid: 81934fcea490a024986ea739b8e9bfa2, type: 3}
   maxStack: 5
   pickup: {fileID: 0}
   rarity: {fileID: 11400000, guid: b413fdc597a271843ba0fd443e4580a9, type: 2}
   pickupRequirements: []
-  inventoryModifiers: []
+  inventoryAppliedModifiers: []

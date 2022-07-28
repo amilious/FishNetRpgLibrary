@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Amilious.FishNetRpg.Items;
 using Amilious.Inspector.Editor.Editors;
@@ -18,6 +20,8 @@ namespace Amilious.FishNetRpg.Editor {
         private SerializedProperty _maxStack;
         private SerializedProperty _pickup;
         private SerializedProperty _rarity;
+        private SerializedProperty _pickupRequirements;
+        private SerializedProperty _inventoryAppliedModifiers;
 
 
         public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height) {
@@ -65,13 +69,27 @@ namespace Amilious.FishNetRpg.Editor {
             }
         }
 
+        public Dictionary<string, List<SerializedProperty>> tabs = new Dictionary<string, List<SerializedProperty>>();
+        
+        public void AddToTab(string tab, SerializedProperty property) {
+            tabs.TryAdd(tab, new List<SerializedProperty>());
+            tabs[tab].Add(property);
+            DontDraw(property.name);
+        }
+
         protected override void BeforeDefault() {
             base.BeforeDefault();
+            tabs.Clear();
             //get properties
-            _displayName ??= serializedObject.FindProperty("displayName");
-            _maxStack ??= serializedObject.FindProperty("maxStack");
-            _pickup ??= serializedObject.FindProperty("pickup");
-            _rarity ??= serializedObject.FindProperty("rarity");
+            if(_displayName == null) {
+                _displayName = serializedObject.FindProperty("displayName");
+                _maxStack = serializedObject.FindProperty("maxStack");
+                _pickup = serializedObject.FindProperty("pickup");
+                _rarity = serializedObject.FindProperty("rarity");
+                _pickupRequirements = serializedObject.FindProperty("pickupRequirements");
+                _inventoryAppliedModifiers = serializedObject.FindProperty("inventoryAppliedModifiers");
+            }
+
             //draw properties
             DontDraw("displayName", "icon", "maxStack", "pickup", "rarity");
             EditorGUILayout.BeginHorizontal();
@@ -90,11 +108,33 @@ namespace Amilious.FishNetRpg.Editor {
                     GUILayout.Width(EditorGUIUtility.labelWidth));
                 EditorGUILayout.PropertyField(_rarity,GUIContent.none);
                 EditorGUILayout.EndHorizontal();
-                
             }
             EditorGUIUtility.labelWidth += 35;
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
+            AddTabs();
         }
+
+        public virtual void AddTabs() {
+            AddToTab("Item",_pickupRequirements);
+            AddToTab("Item",_inventoryAppliedModifiers);
+        }
+
+        protected override void AfterDefault() {
+            //draw tabs
+            var prefName = target.GetType().Name;
+            var visibleTab = Mathf.Min(EditorPrefs.GetInt(prefName),tabs.Count-1);
+            var tabNames = tabs.Keys.ToArray();
+            EditorGUILayout.Separator();
+            EditorGUI.BeginChangeCheck();
+            EditorPrefs.SetInt(prefName, GUILayout.Toolbar(visibleTab, tabNames, new GUIStyle(EditorStyles.miniButtonMid){fontSize = 10, fontStyle = FontStyle.Bold}));
+            if(EditorGUI.EndChangeCheck()) GUI.FocusControl(null);
+            EditorGUI.indentLevel = 1;
+            foreach(var property in tabs[tabNames[visibleTab]]) {
+                EditorGUILayout.PropertyField(property);
+            }
+            EditorGUI.indentLevel = 0;
+        }
+        
     }
 }
