@@ -9,8 +9,8 @@ using Amilious.FishNetRpg.Requirements;
 namespace Amilious.FishNetRpg.Items {
     
     [CreateAssetMenu(fileName = "NewEquipableItem", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"Equipable Item", order = 21)]
-    public class EquipableItem : Item, IRequirementProvider {
+        menuName = FishNetRpg.ITEM_MENU_ROOT+"New Equipable Item", order = 21)]
+    public class EquipableItem : Item {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////
         
@@ -23,13 +23,19 @@ namespace Amilious.FishNetRpg.Items {
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+
+        public IReadOnlyList<EquipmentSlotType> AllowedEquipmentSlots => allowedEquipmentSlots;
+
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         #region Equip Modifier Methods /////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
         /// This method is used to apply the equipped modifiers.
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
-        public void ApplyEquippedModifiers(Entity entity) {
+        public void ApplyEquipModifiers(Entity entity) {
             if(equipAppliedModifiers.Count == 0) return;
             entity.ApplyModifiers(this,equipAppliedModifiers);
         }
@@ -38,7 +44,7 @@ namespace Amilious.FishNetRpg.Items {
         /// This method is used to remove the equipped modifiers.
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be removed from.</param>
-        public void RemoveEquippedModifiers(Entity entity) {
+        public void RemoveEquipModifiers(Entity entity) {
             if(equipAppliedModifiers.Count == 0) return;
             entity.RemoveModifiers(this,equipAppliedModifiers);
         }
@@ -47,8 +53,8 @@ namespace Amilious.FishNetRpg.Items {
         
         #region Requirement Methods ////////////////////////////////////////////////////////////////////////////////////
         
-        /// <inheritdoc />
-        public bool MeetsAllRequirements(Entity entity) {
+        
+        public bool MeetsEquipRequirements(Entity entity) {
             return equipRequirements.Count == 0 || 
                    equipRequirements.All(x => x.MeetsRequirement(entity));
         }

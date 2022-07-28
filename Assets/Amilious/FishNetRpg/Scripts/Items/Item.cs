@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Linq;
 using Amilious.Core;
@@ -8,13 +7,11 @@ using Amilious.FishNetRpg.Pickups;
 using Amilious.FishNetRpg.Entities;
 using Amilious.FishNetRpg.Modifiers;
 using Amilious.FishNetRpg.Requirements;
-using Amilious.Inspector.Attributes;
-using UnityEditor;
 
 namespace Amilious.FishNetRpg.Items {
     
     [CreateAssetMenu(fileName = "NewStandardItem", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"Standard Item", order = 20)]
+        menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject {
 
         private const string DEFAULT_DESCRIPTION = "No description!";
@@ -28,11 +25,16 @@ namespace Amilious.FishNetRpg.Items {
         [SerializeField, Tooltip("The inventory icon for the item.")]
         private Sprite icon;
         [SerializeField, Tooltip("The max stack size for the item.")] 
-        private int maxStack = 1;
+        private int maxStackSize = 1;
         [SerializeField, Tooltip("The pickup for the item.")] 
         private Pickup pickup;
         [SerializeField, Tooltip("The item's rarity.")] 
         private ItemRarity rarity;
+        [SerializeField, Tooltip("The item's weight.")]
+        private float weight = 0f;
+        [SerializeField]
+        [Tooltip("If true this item can be traded to another player, otherwise the item can't be traded.")]
+        private bool canBeTraded = true;
         [SerializeField, Tooltip("Requirements for picking up the item.")]
         private List<AbstractRequirement> pickupRequirements = new();
         [SerializeField, Tooltip("Modifiers that are applied to an entity's when the item is in its inventory.")] 
@@ -45,30 +47,44 @@ namespace Amilious.FishNetRpg.Items {
         /// <summary>
         /// This property is true if the item is stackable.
         /// </summary>
-        public bool IsStackable => maxStack > 1;
+        public virtual bool IsStackable => maxStackSize > 1;
         
         /// <summary>
         /// This property contains the item's display name.
         /// </summary>
-        public string DisplayName => displayName;
+        public virtual string DisplayName => displayName;
         
         /// <summary>
         /// This property contains the item's description.
         /// </summary>
-        public string Description => description;
-        
+        public virtual string Description => description;
+
         /// <summary>
         /// This property contains the item's inventory icon.
         /// </summary>
-        public Sprite Icon => icon;
+        public virtual Sprite Icon => icon;
 
-        public ItemRarity Rarity => rarity;
+        /// <summary>
+        /// This property contains the item's weight.
+        /// </summary>
+        public virtual float Weight => weight;
+
+        /// <summary>
+        /// This property contains the item's rarity.
+        /// </summary>
+        public virtual ItemRarity Rarity => rarity;
         
         /// <summary>
         /// This property contains the max stack size for this item.
         /// </summary>
-        public int MaxStackSize => Mathf.Max(1, maxStack);
+        public virtual int MaxStackSize => Mathf.Max(1, maxStackSize);
 
+        /// <summary>
+        /// If this property is true this item can be traded to another player, otherwise the item can't be traded.
+        /// </summary>
+        public virtual bool CanBeTraded => canBeTraded;
+
+        /// <inheritdoc />
         public override bool NeedsToBeLoadableById => true;
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +95,7 @@ namespace Amilious.FishNetRpg.Items {
         /// This method is used to apply the modifiers that are applied when the item is in an inventory.
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
-        public void ApplyInventoryModifiers(Entity entity) {
+        public virtual void ApplyInventoryModifiers(Entity entity) {
             if(inventoryAppliedModifiers.Count == 0) return;
             entity.ApplyModifiers(this,inventoryAppliedModifiers);
         }
@@ -88,12 +104,22 @@ namespace Amilious.FishNetRpg.Items {
         /// This method is used to remove modifiers that are applied when the item is in an inventory.
         /// </summary>
         /// <param name="entity">The entity that the modifiers should be added to.</param>
-        public void RemoveInventoryModifiers(Entity entity) {
+        public virtual void RemoveInventoryModifiers(Entity entity) {
             if(inventoryAppliedModifiers.Count == 0) return;
             entity.RemoveModifiers(this,inventoryAppliedModifiers);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Event Calls ////////////////////////////////////////////////////////////////////////////////////////////
+                  
+        public virtual void OnPickupItem(Entity entity) { }
+
+        public virtual void OnDropItem(Entity entity) { }
+        
+        public virtual void OnDestroyItem(Entity entity){}
+
+        #endregion
         
         #region Public Requirement Methods /////////////////////////////////////////////////////////////////////////////
 
@@ -102,7 +128,7 @@ namespace Amilious.FishNetRpg.Items {
         /// </summary>
         /// <param name="entity">The entity that you want to check.</param>
         /// <returns>True if the entity meets the requirements to pickup this item.</returns>
-        public bool MeetsPickupRequirements(Entity entity) {
+        public virtual bool MeetsPickupRequirements(Entity entity) {
             return pickupRequirements.Count == 0 || 
                    pickupRequirements.All(x => x.MeetsRequirement(entity));
         }
@@ -110,15 +136,16 @@ namespace Amilious.FishNetRpg.Items {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Pickup Spawning Methods ////////////////////////////////////////////////////////////////////////////////
-        
+
         /// <summary>
         /// This method is used to spawn a pickup for this item.
         /// </summary>
         /// <param name="transform">The transform for this item.</param>
         /// <param name="quantity">The quantity of this item.</param>
+        /// <param name="metadata">The item's metadata.</param>
         /// <returns>The spawned pickup.</returns>
-        public Pickup SpawnPickup(Transform transform, int quantity) {
-            return SpawnPickup(transform.position, transform.rotation, quantity, transform);
+        public virtual Pickup SpawnPickup(Transform transform, int quantity, Metadata metadata = null) {
+            return SpawnPickup(transform.position, transform.rotation, quantity, metadata, transform);
         }
 
         /// <summary>
@@ -127,12 +154,14 @@ namespace Amilious.FishNetRpg.Items {
         /// <param name="position">The position of the pickup.</param>
         /// <param name="rotation">The rotation of the pickup.</param>
         /// <param name="quantity">The item quantity.</param>
+        /// <param name="metadata">The item's metadata</param>
         /// <param name="parent">A parent transform for the spawned pickup.</param>
         /// <returns>The spawned pickup.</returns>
-        public Pickup SpawnPickup(Vector3 position, Quaternion rotation, int quantity, Transform parent = null) {
+        public virtual Pickup SpawnPickup(Vector3 position, Quaternion rotation, int quantity, 
+            Metadata metadata = null, Transform parent = null) {
             if(pickup == null) return null;
             var spawnedPickup = Instantiate(pickup,position,rotation,parent);
-            spawnedPickup.Setup(this,quantity);
+            spawnedPickup.Setup(this,quantity,metadata);
             return spawnedPickup;
         }
         
@@ -151,20 +180,28 @@ namespace Amilious.FishNetRpg.Items {
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        
+        #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
+                                  
         protected override void BeforeSerialize() {
             if(string.IsNullOrWhiteSpace(displayName)) displayName = name.SplitCamelCase();
             if(string.IsNullOrWhiteSpace(description)) description = DEFAULT_DESCRIPTION;
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public void OnEnable() {
+        #region Unity Methods //////////////////////////////////////////////////////////////////////////////////////////
+        
+        private void OnEnable() {
             if(!IsInResourceFolder&&!string.IsNullOrWhiteSpace(ResourcePath)) 
                 Debug.LogErrorFormat("Item \"{0}\" is not in a Resources/ folder!", ResourcePath);
         }
 
-        public void Awake() => OnEnable();
+        private void Awake() => OnEnable();
 
-        public void OnValidate() {
-            OnEnable();
-        }
+        private void OnValidate() => OnEnable();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
     }
 }

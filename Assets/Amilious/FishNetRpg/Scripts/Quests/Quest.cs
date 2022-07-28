@@ -8,7 +8,7 @@ using Amilious.FishNetRpg.Requirements;
 namespace Amilious.FishNetRpg.Quests {
     
     [CreateAssetMenu(fileName = "NewQuest", menuName = FishNetRpg.QUEST_MENU_ROOT+"Quest")]
-    public class Quest : AmiliousScriptableObject, IRequirementProvider {
+    public class Quest : AmiliousScriptableObject {
 
         [SerializeField] private string questName;
         [SerializeField] private List<AbstractRequirement> requirements = new ();

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,13 +17,16 @@ namespace Amilious.Inspector.Editor.Editors {
         private static Texture _assetStoreLogo;
         private static Texture _websiteIcon;
         private GUIStyle _style;
+        private GUIStyle _tabButtonStyle;
         private GUIContent _assetStore;
         private GUIContent _website;
         private GUIContent _discord;
         private GUIContent _youtube;
         private bool _initialized;
-
-        private List<string> dontDraw = new List<string>();
+        
+        private readonly Dictionary<string, List<SerializedProperty>> _tabs = new Dictionary<string, List<SerializedProperty>>();
+        
+        private readonly List<string> _dontDraw = new List<string>();
         
         private void OnEnable() {
             _style = new GUIStyle { fixedHeight = 12, alignment = TextAnchor.MiddleLeft,
@@ -32,6 +36,7 @@ namespace Amilious.Inspector.Editor.Editors {
                 margin = new RectOffset(0, 0, 0, 0),
                 normal = { textColor = Color.white }
             };
+            _tabButtonStyle ??= new GUIStyle(EditorStyles.miniButtonMid) { fontSize = 10, fontStyle = FontStyle.Bold };
             _discordLogo ??= Resources.Load<Texture>("Icons/discord");
              _youtubeLogo ??= Resources.Load<Texture>("Icons/youtube");
             _assetStoreLogo ??=  EditorGUIUtility.IconContent("AssetStore Icon").image;
@@ -43,7 +48,8 @@ namespace Amilious.Inspector.Editor.Editors {
         }
 
         public override void OnInspectorGUI() {
-            dontDraw.Clear();
+            _dontDraw.Clear();
+            _tabs.Clear();
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
             //buttons
@@ -57,16 +63,46 @@ namespace Amilious.Inspector.Editor.Editors {
             serializedObject.Update();
             EditorGUI.BeginChangeCheck();
             BeforeDefault();
-            dontDraw.Add("m_Script");
-            DrawPropertiesExcluding(serializedObject,dontDraw.ToArray());
+            _dontDraw.Add("m_Script");
+            DrawPropertiesExcluding(serializedObject,_dontDraw.ToArray());
+            DrawTabs();
             AfterDefault();
             if (EditorGUI.EndChangeCheck()){ serializedObject.ApplyModifiedProperties();}
         }
 
-        protected void DontDraw(params string[] name) => dontDraw.AddRange(name);
+        protected void SkipDraw(params string[] propertyName) => _dontDraw.AddRange(propertyName);
+
+        protected void SkipDraw(params SerializedProperty[] property) =>
+            SkipDraw(property.Select(x => x.name).ToArray());
         
         protected virtual void BeforeDefault(){}
         protected virtual void AfterDefault() {}
+
+        private void DrawTabs() {
+            if(_tabs.Count == 0) return;
+            //draw tabs
+            var prefName = target.GetType().Name;
+            var visibleTab = Mathf.Min(EditorPrefs.GetInt(prefName),_tabs.Count-1);
+            var tabNames = _tabs.Keys.ToArray();
+            EditorGUILayout.Separator();
+            if(_tabs.Count > 1) {
+                EditorGUI.BeginChangeCheck();
+                EditorPrefs.SetInt(prefName, GUILayout.Toolbar(visibleTab, tabNames, _tabButtonStyle));
+                if(EditorGUI.EndChangeCheck()) GUI.FocusControl(null);
+            }
+            else EditorGUILayout.LabelField(tabNames[visibleTab], EditorStyles.largeLabel);
+            EditorGUI.indentLevel = 1;
+            foreach(var property in _tabs[tabNames[visibleTab]]) {
+                EditorGUILayout.PropertyField(property);
+            }
+            EditorGUI.indentLevel = 0;
+        }
+
+        public void AddToTab(string tab, SerializedProperty property) {
+            _tabs.TryAdd(tab, new List<SerializedProperty>());
+            _tabs[tab].Add(property);
+            SkipDraw(property);
+        }
 
     }
 }
