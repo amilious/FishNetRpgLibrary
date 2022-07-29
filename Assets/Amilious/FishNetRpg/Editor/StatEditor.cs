@@ -5,7 +5,7 @@ using Amilious.Core.Editor.Editors;
 namespace Amilious.FishNetRpg.Editor {
     
     [CustomEditor(typeof(Stat))]
-    public class StatEditor : AmiliousBaseEditor {
+    public class StatEditor : AmiliousEditor {
         
     }
 }

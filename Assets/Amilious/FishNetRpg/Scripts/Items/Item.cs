@@ -2,7 +2,9 @@ using UnityEngine;
 using System.Linq;
 using Amilious.Core;
 using System.Collections.Generic;
+using Amilious.Core.Attributes;
 using Amilious.Core.Extensions;
+using Amilious.FishNetRpg.Attributes;
 using Amilious.FishNetRpg.Pickups;
 using Amilious.FishNetRpg.Entities;
 using Amilious.FishNetRpg.Modifiers;
@@ -10,6 +12,8 @@ using Amilious.FishNetRpg.Requirements;
 
 namespace Amilious.FishNetRpg.Items {
     
+    [EditorLink("Youtube","Icons/youtube","https://www.youtube.com", "Youtube")]
+    [ItemEditorBadge("ItemBadges/ItemBadge64")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject {
@@ -30,14 +34,15 @@ namespace Amilious.FishNetRpg.Items {
         private Pickup pickup;
         [SerializeField, Tooltip("The item's rarity.")] 
         private ItemRarity rarity;
-        [SerializeField, Tooltip("The item's weight.")]
+        [SerializeField, AmiliousTab("Item"), Tooltip("The item's weight.")]
         private float weight = 0f;
-        [SerializeField]
+        [SerializeField,AmiliousTab("Item")]
         [Tooltip("If true this item can be traded to another player, otherwise the item can't be traded.")]
         private bool canBeTraded = true;
-        [SerializeField, Tooltip("Requirements for picking up the item.")]
+        [SerializeField, AmiliousTab("Item"), Tooltip("Requirements for picking up the item.")]
         private List<AbstractRequirement> pickupRequirements = new();
-        [SerializeField, Tooltip("Modifiers that are applied to an entity's when the item is in its inventory.")] 
+        [SerializeField, AmiliousTab("Item")]
+        [Tooltip("Modifiers that are applied to an entity's when the item is in its inventory.")] 
         private List<Modifier> inventoryAppliedModifiers = new();
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@ using UnityEngine;
 using FishNet.Object;
 using System.Collections.Generic;
 using System.Linq;
+using Amilious.Core;
 using Object = UnityEngine.Object;
 using Amilious.FishNetRpg.Entities;
 using FishNet.Object.Synchronizing;

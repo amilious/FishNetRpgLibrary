@@ -6,7 +6,7 @@ using Amilious.FishNetRpg.Statistics.BaseProviders;
 namespace Amilious.FishNetRpg.Editor {
     
     [CustomEditor(typeof(StatBaseValueProvider), true)]
-    public class StatBaseValueProviderEditor : AmiliousBaseEditor{
+    public class StatValueProviderEditor : AmiliousEditor{
         protected override void AfterDefault() {
             if(target is StatFunctionBaseProvider functionProvider) {
                 if(GUILayout.Button("Open In Editor")) AssetDatabase.OpenAsset(target);

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Amilious.Core.Editor.Editors {
     
     [CustomEditor(typeof(AmiliousScriptableObject),true, isFallback = true)]
-    public class AmiliousScriptableObjectEditor : AmiliousBaseEditor {
+    public class AmiliousScriptableObjectEditor : AmiliousEditor {
         
         private static GUIStyle _boxStyle;
         private static GUIStyle BoxStyle => _boxStyle ?? 

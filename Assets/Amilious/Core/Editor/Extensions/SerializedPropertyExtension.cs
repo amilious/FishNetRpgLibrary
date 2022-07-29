@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Amilious.Core.Editor.Extensions {
     
@@ -14,31 +15,20 @@ namespace Amilious.Core.Editor.Extensions {
         /// <param name="attributeType">The attribute type that you are looking for or null for all attributes.</param>
         /// <param name="inherit">If inherited attributes should be used.</param>
         /// <returns>An array of the attributes meeting the passed conditions.</returns>
-        public static Attribute[] GetAttributes(this SerializedProperty property, Type attributeType = null, 
+        public static IEnumerable<Attribute> GetAttributes(this SerializedProperty property, Type attributeType = null, 
             bool inherit = true) {
             if(property == null) return Array.Empty<Attribute>();
             var type = property.serializedObject.targetObject.GetType();
-            FieldInfo fieldInfo = null;
-            PropertyInfo propertyInfo = null;
-            foreach (var name in property.propertyPath.Split('.')) {
-                fieldInfo = type.GetField(name, (BindingFlags)(-1));
-                if (fieldInfo == null) {
-                    propertyInfo = type.GetProperty(name, (BindingFlags)(-1));
-                    if (propertyInfo == null) { return null; }
-                    type = propertyInfo.PropertyType;
-                } else { type = fieldInfo.FieldType; }
+            MemberInfo memberInfo = null;
+            while(type != null && memberInfo == null) {
+                memberInfo = type.GetField(property.name, (BindingFlags)(-1)) as MemberInfo ?? 
+                             type.GetProperty(property.name, (BindingFlags)(-1));
+                type = type.BaseType;
             }
-            Attribute[] attributes;
-            if (fieldInfo != null) {
-                attributes = attributeType!=null ? 
-                    fieldInfo.GetCustomAttributes(attributeType, inherit).Cast<Attribute>().ToArray() : 
-                    fieldInfo.GetCustomAttributes(inherit).Cast<Attribute>().ToArray();
-            } else if (propertyInfo != null) {
-                attributes = attributeType!=null ? 
-                    propertyInfo.GetCustomAttributes(attributeType, inherit).Cast<Attribute>().ToArray() : 
-                    propertyInfo.GetCustomAttributes(inherit).Cast<Attribute>().ToArray();
-            } else { return null; }
-            return attributes;
+            if(memberInfo==null) return Array.Empty<Attribute>();
+            return attributeType!=null ? 
+                memberInfo.GetCustomAttributes(attributeType, inherit).Cast<Attribute>() : 
+                memberInfo.GetCustomAttributes(inherit).Cast<Attribute>();
         }
 
     }

@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Amilious.FunctionGraph.Editor {
     [CustomEditor(typeof(FunctionNode),true)]
-    public class FunctionNodeEditor : AmiliousBaseEditor {
+    public class FunctionNodeEditor : AmiliousEditor {
 
         private string _description;
 

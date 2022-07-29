@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: NewActionItem
   m_EditorClassIdentifier: 
   id: 133034893611139116
-  resourcePath: 
-  isInResourceFolder: 0
+  resourcePath: Items/NewActionItem
+  isInResourceFolder: 1
   displayName: New Action Item
   description: No description!
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 655e3e12b915c6447a39ae8cefa62cec, type: 3}
   maxStackSize: 1
   pickup: {fileID: 0}
   rarity: {fileID: 0}

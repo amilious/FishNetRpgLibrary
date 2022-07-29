@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using Amilious.Core.Attributes;
+using Amilious.FishNetRpg.Attributes;
 using Amilious.FishNetRpg.Entities;
 using Amilious.FishNetRpg.Equipment;
 using Amilious.FishNetRpg.Modifiers;
@@ -8,17 +10,18 @@ using Amilious.FishNetRpg.Requirements;
 
 namespace Amilious.FishNetRpg.Items {
     
+    [ItemEditorBadge("ItemBadges/EquipmentBadge64")]
     [CreateAssetMenu(fileName = "NewEquipableItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Equipable Item", order = 21)]
     public class EquipableItem : Item {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////
         
-        [SerializeField, Tooltip("The places that this item can be equipped.")] 
+        [SerializeField, AmiliousTab("Equipable"), Tooltip("The places that this item can be equipped.")] 
         private List<EquipmentSlotType> allowedEquipmentSlots = new();
-        [SerializeField,Tooltip("Requirements that must be satisfied to equip this item.")] 
+        [SerializeField, AmiliousTab("Equipable"),Tooltip("Requirements that must be satisfied to equip this item.")] 
         private List<AbstractRequirement> equipRequirements = new();
-        [SerializeField,Tooltip("Modifiers that will be applied when this item is equipped.")] 
+        [SerializeField, AmiliousTab("Equipable"),Tooltip("Modifiers that will be applied when this item is equipped.")] 
         private List<Modifier> equipAppliedModifiers = new();
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
