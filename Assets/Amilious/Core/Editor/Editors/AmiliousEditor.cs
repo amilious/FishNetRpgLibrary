@@ -22,10 +22,15 @@ namespace Amilious.Core.Editor.Editors {
 
         private const string UNITY_ASSET_STORE_ICON = "AssetStore Icon";
         private const string WEBSITE_ICON = "BuildSettings.Web";
-        
+
+        private void OnValidate() { _initialized = false; }
+
         private void InitializeAmiliousEditor() {
             if(_initialized) return;
             _initialized = true;
+            _dontDraw.Clear();
+            _tabs.Clear();
+            _links.Clear();
             _style = new GUIStyle { fixedHeight = 12, alignment = TextAnchor.MiddleLeft,
                 fontSize = 10, fontStyle = FontStyle.Bold,
                 //_style.fixedWidth = 85;
@@ -35,8 +40,9 @@ namespace Amilious.Core.Editor.Editors {
             };
             //hide the script
             _dontDraw.Add("m_Script");
-            _tabButtonStyle ??= new GUIStyle(EditorStyles.miniButtonMid) 
-                { fontSize = 10, fontStyle = FontStyle.Bold };
+            _tabButtonStyle ??= new GUIStyle(EditorStyles.miniButtonMid) {
+                fontSize = 10, fontStyle = FontStyle.Bold,
+            };
             //check link attributes
             var linkAttributes = target.GetType().
                 GetCustomAttributes(typeof(EditorLinkAttribute), true).Cast<EditorLinkAttribute>();
@@ -142,17 +148,32 @@ namespace Amilious.Core.Editor.Editors {
             var visibleTab = Mathf.Min(EditorPrefs.GetInt(prefName),_tabs.Count-1);
             var tabNames = _tabs.Keys.ToArray();
             EditorGUILayout.Separator();
-            if(_tabs.Count > 1) {
-                EditorGUI.BeginChangeCheck();
-                EditorPrefs.SetInt(prefName, GUILayout.Toolbar(visibleTab, tabNames, _tabButtonStyle));
-                if(EditorGUI.EndChangeCheck()) GUI.FocusControl(null);
-            }
-            else EditorGUILayout.LabelField(tabNames[visibleTab], EditorStyles.largeLabel);
+            var boxStyle = new GUIStyle(EditorStyles.helpBox);
+            
+            
+            EditorGUILayout.BeginVertical(boxStyle);
+            EditorGUILayout.LabelField("Additional Settings");
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(-5f);
+            
+            EditorGUILayout.BeginHorizontal(new GUIStyle(GUIStyle.none){padding = new RectOffset(2,0,0,0)});
+            EditorGUI.BeginChangeCheck();
+            EditorPrefs.SetInt(prefName, GUILayout.Toolbar(visibleTab, tabNames, _tabButtonStyle));
+            if(EditorGUI.EndChangeCheck()) GUI.FocusControl(null);
+            EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Space(-5f);
+            EditorGUILayout.BeginVertical(boxStyle);
             EditorGUI.indentLevel = 1;
+            EditorGUILayout.BeginVertical(); 
+            EditorGUILayout.Separator();
             foreach(var property in _tabs[tabNames[visibleTab]]) {
                 EditorGUILayout.PropertyField(property.Property);
             } 
+            EditorGUILayout.Separator();
+            EditorGUILayout.EndVertical();
             EditorGUI.indentLevel = 0;
+            EditorGUILayout.EndVertical();
         }
 
         protected void AddToTab(string tab, SerializedProperty property, int priority = 0) {
