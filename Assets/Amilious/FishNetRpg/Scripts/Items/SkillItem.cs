@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Items {
     
-    [ItemEditorBadge("ItemBadges/SkillBadge64")]
+    [ItemEditorBadge("ItemBadges/SkillBadge")]
     [CreateAssetMenu(fileName = "NewSkill", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Skill", order = 21)]
     public class SkillItem : ActionItem {

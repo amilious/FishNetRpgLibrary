@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Amilious.FishNetRpg.Items {
     
-    [ItemEditorBadge("ItemBadges/WeaponBadge64")]
+    [ItemEditorBadge("ItemBadges/WeaponBadge")]
     [CreateAssetMenu(fileName = "NewWeapon", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Weapon", order = 21)]
     public class Weapon : EquipableItem {

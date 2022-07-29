@@ -12,8 +12,9 @@ using Amilious.FishNetRpg.Requirements;
 
 namespace Amilious.FishNetRpg.Items {
     
-    [EditorLink("Youtube","Icons/youtube","https://www.youtube.com", "Youtube")]
-    [ItemEditorBadge("ItemBadges/ItemBadge64")]
+    [EditorLink("Github","Icons/github","https://github.com/amilious/FishNetRpgLibrary", " github")]
+    [EditorLink("Jira", "Icons/jira", "https://fishnet-rpg-library.atlassian.net/jira/software/c/projects/FRL/boards/1", " jira")]
+    [ItemEditorBadge("ItemBadges/ItemBadge")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject {
