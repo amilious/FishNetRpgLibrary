@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Amilious.Core.Attributes;
+using Amilious.Core.Editor.Extensions;
+using Amilious.Core.Editor.Modifiers;
 using UnityEditor;
 using UnityEngine;
-using System.Reflection;
-using System.Collections.Generic;
-using Amilious.Inspector.Attributes;
-using Amilious.Inspector.Editor.Modifiers;
 
-namespace Amilious.Inspector.Editor.Drawers {
+namespace Amilious.Core.Editor.Drawers {
     public abstract class AmiliousPropertyDrawer : PropertyDrawer {
 
         #region Static Variables ///////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +32,7 @@ namespace Amilious.Inspector.Editor.Drawers {
         
         private bool _initialized;
         private bool _hideDraw;
-        public readonly Dictionary<AmiliousModifierAttribute, AmiliousPropertyModifier> Modifiers = new ();
+        public readonly Dictionary<AmiliousModifierAttribute, AmiliousPropertyModifier> Modifiers = new (); 
 
         public sealed override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
             //initialize the property if not yet done.
@@ -116,7 +117,7 @@ namespace Amilious.Inspector.Editor.Drawers {
                 //build the modifiers dictionary
                 foreach(var drawer in customDrawers) {
                     var cd = drawer.GetCustomAttribute<CustomPropertyDrawer>();
-                    if(!cd.TryGetDrawerForType(out var type)) 
+                    if(!cd.TryGetDrawersPropertyType(out var type)) 
                         Debug.Log("Unable to get the type of the property drawer!");
                     else {
                         if(!type.IsSubclassOf(typeof(AmiliousModifierAttribute))) continue;
@@ -130,7 +131,7 @@ namespace Amilious.Inspector.Editor.Drawers {
                     typeof(AmiliousPropertyDrawer))&& t.IsDefined(typeof(CustomPropertyDrawer),false)).ToList();
                 foreach(var drawer in amiliousDrawers) {
                     var cd = drawer.GetCustomAttribute<CustomPropertyDrawer>();
-                    cd.TryGetDrawerForType(out var type);
+                    cd.TryGetDrawersPropertyType(out var type);
                     if(!AllAmiliousDrawers.ContainsKey(type.Name)) AllAmiliousDrawers.Add(type.Name,drawer);
                 }
             }

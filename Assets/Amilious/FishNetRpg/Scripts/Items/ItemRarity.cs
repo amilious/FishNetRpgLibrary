@@ -1,6 +1,6 @@
 using Amilious.Core;
+using Amilious.Core.Attributes;
 using Amilious.Core.Extensions;
-using Amilious.Inspector.Attributes;
 using UnityEngine;
 
 namespace Amilious.FishNetRpg.Items {

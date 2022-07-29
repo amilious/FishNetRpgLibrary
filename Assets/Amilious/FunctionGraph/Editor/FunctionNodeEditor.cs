@@ -1,6 +1,5 @@
-using Amilious.Inspector.Editor.Editors;
+using Amilious.Core.Editor.Editors;
 using UnityEditor;
-using UnityEngine;
 
 namespace Amilious.FunctionGraph.Editor {
     [CustomEditor(typeof(FunctionNode),true)]

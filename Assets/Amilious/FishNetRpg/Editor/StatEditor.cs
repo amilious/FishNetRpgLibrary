@@ -1,6 +1,6 @@
 using UnityEditor;
 using Amilious.FishNetRpg.Statistics;
-using Amilious.Inspector.Editor.Editors;
+using Amilious.Core.Editor.Editors;
 
 namespace Amilious.FishNetRpg.Editor {
     

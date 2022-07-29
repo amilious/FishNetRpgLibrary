@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Amilious.Core.Attributes;
 using Amilious.FunctionGraph.Attributes;
-using Amilious.Inspector.Attributes;
 
 namespace Amilious.FunctionGraph.Nodes.Source {
     

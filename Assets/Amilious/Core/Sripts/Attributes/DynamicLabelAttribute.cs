@@ -1,4 +1,4 @@
-namespace Amilious.Inspector.Attributes {
+namespace Amilious.Core.Attributes {
     
     public class DynamicLabelAttribute : AmiliousModifierAttribute {
 

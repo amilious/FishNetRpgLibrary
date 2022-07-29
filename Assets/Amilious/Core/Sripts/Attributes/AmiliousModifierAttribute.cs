@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Amilious.Inspector.Attributes {
+namespace Amilious.Core.Attributes {
     public class AmiliousModifierAttribute : PropertyAttribute { }
     
 }

@@ -1,8 +1,8 @@
-using Amilious.Inspector.Attributes;
+using Amilious.Core.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Amilious.Inspector.Editor.Modifiers {
+namespace Amilious.Core.Editor.Modifiers {
     
     [CustomPropertyDrawer(typeof(DynamicLabelAttribute))]
     public class DynamicLabelModifier : AmiliousPropertyModifier {

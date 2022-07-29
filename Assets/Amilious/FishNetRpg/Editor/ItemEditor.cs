@@ -2,10 +2,10 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using System.Reflection;
+using Amilious.Core.Editor.Editors;
 using Amilious.Core.Extensions;
 using Amilious.FishNetRpg.Items;
 using Object = UnityEngine.Object;
-using Amilious.Inspector.Editor.Editors;
 
 namespace Amilious.FishNetRpg.Editor {
     

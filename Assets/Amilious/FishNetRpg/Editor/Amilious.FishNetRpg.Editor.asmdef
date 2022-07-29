@@ -3,8 +3,8 @@
     "rootNamespace": "Amilious.FishNetRpg.Editor",
     "references": [
         "Amilious.FishNetRpg",
-        "Amilious.Inspector.Editor",
-        "Amilious.Core"
+        "Amilious.Core",
+        "Amilious.Core.Editor"
     ],
     "includePlatforms": [
         "Editor"

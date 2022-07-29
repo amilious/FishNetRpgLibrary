@@ -1,9 +1,8 @@
 using System.Text;
 using UnityEditor;
 using UnityEngine;
-using Amilious.Core;
 
-namespace Amilious.Inspector.Editor.Editors {
+namespace Amilious.Core.Editor.Editors {
     
     [CustomEditor(typeof(AmiliousScriptableObject),true, isFallback = true)]
     public class AmiliousScriptableObjectEditor : AmiliousBaseEditor {

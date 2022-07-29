@@ -2,8 +2,7 @@
     "name": "Amilious.FunctionGraph",
     "rootNamespace": "Amilious.FunctionGraph",
     "references": [
-        "Amilious.Core",
-        "Amilious.Inspector"
+        "Amilious.Core"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,10 +1,9 @@
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using Amilious.Core.Attributes;
 using Amilious.Core.Extensions;
-using Amilious.Inspector.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace Amilious.Inspector.Editor.Drawers {
+namespace Amilious.Core.Editor.Drawers {
     [CustomPropertyDrawer(typeof(AmiliousColorAttribute))]
     public class AmiliousColorDrawer : AmiliousPropertyDrawer {
         protected override void AmiliousOnGUI(Rect position, SerializedProperty property, GUIContent label) {

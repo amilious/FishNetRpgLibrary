@@ -1,14 +1,13 @@
+using Amilious.Core.Attributes;
 using UnityEditor;
-using Amilious.Inspector.Attributes;
 
-namespace Amilious.Inspector.Editor.Modifiers {
+namespace Amilious.Core.Editor.Modifiers {
     
-    [CustomPropertyDrawer(typeof(ShowIfAttribute))]
-    public class ShowIfModifier : AmiliousPropertyModifier {
+    [CustomPropertyDrawer(typeof(HideIfAttribute))]
+    public class HideIfModifier : AmiliousPropertyModifier {
         
-        
-        public bool Show(SerializedProperty property) {
-            var castedAttribute = (ShowIfAttribute)attribute;
+        public bool Hide(SerializedProperty property) {
+            var castedAttribute = (HideIfAttribute)attribute;
             var hiderProperty = property.serializedObject.FindProperty(castedAttribute.PropertyName);
             if(hiderProperty != null) {
                 return hiderProperty.propertyType switch {
@@ -55,15 +54,8 @@ namespace Amilious.Inspector.Editor.Modifiers {
             }
             return false;
         }
-        
-        public override bool CanCacheInspectorGUI(SerializedProperty property) {
-            return false;
-        }
 
-        public override bool ShouldCancelDraw(SerializedProperty property) {
-            var cancel = !Show(property);
-            return cancel;
-        }
+        public override bool ShouldCancelDraw(SerializedProperty property) =>Hide(property);
         
     }
 }

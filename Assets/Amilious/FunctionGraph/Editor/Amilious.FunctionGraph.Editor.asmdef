@@ -4,7 +4,7 @@
     "references": [
         "Amilious.FunctionGraph",
         "Amilious.Core",
-        "Amilious.Inspector.Editor"
+        "Amilious.Core.Editor"
     ],
     "includePlatforms": [
         "Editor"

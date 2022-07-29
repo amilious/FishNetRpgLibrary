@@ -1,10 +1,10 @@
 using System;
+using System.Reflection;
+using Amilious.Core.Editor.Drawers;
 using UnityEditor;
 using UnityEngine;
-using System.Reflection;
-using Amilious.Inspector.Editor.Drawers;
 
-namespace Amilious.Inspector.Editor.Modifiers {
+namespace Amilious.Core.Editor.Modifiers {
     public abstract class AmiliousPropertyModifier : PropertyDrawer {
 
         private bool _hide;

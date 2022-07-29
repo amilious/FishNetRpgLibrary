@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace Amilious.Inspector.Editor.Editors {
+namespace Amilious.Core.Editor.Editors {
     
     public abstract class AmiliousBaseEditor : UnityEditor.Editor {
 

@@ -1,10 +1,12 @@
 {
-    "name": "Amilious.Inspector",
-    "rootNamespace": "Amilious.Inspector",
+    "name": "Amilious.Core.Editor",
+    "rootNamespace": "Amilious.Core.Editor",
     "references": [
         "Amilious.Core"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
