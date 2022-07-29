@@ -1,3 +1,5 @@
+using Amilious.Core.Extensions;
+
 namespace Amilious.Core {
     
     public static class AmiliousCore {
@@ -14,6 +16,10 @@ namespace Amilious.Core {
 
         public const string INVALID_PENDING = "Cannot process a future that isn't in the Pending state.";
 
+        public static string MakeTitle(string title) {
+            return title.PadText('#', 60, 10).SetColor("ffff88");
+        }
+        
     }
     
 }

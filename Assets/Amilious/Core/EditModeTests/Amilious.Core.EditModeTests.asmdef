@@ -1,9 +1,9 @@
 {
-    "name": "Amilious.Core.Tests.EditMode",
-    "rootNamespace": "Amilious.Core.Tests.EditMode",
+    "name": "Amilious.Core.EditModeTests",
+    "rootNamespace": "Amilious.Core.EditModeTests",
     "references": [
-        "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner",
         "Amilious.Core"
     ],
     "includePlatforms": [
@@ -12,10 +12,8 @@
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
-    "autoReferenced": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
     ],

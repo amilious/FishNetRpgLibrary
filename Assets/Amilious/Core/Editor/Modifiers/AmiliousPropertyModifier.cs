@@ -37,7 +37,6 @@ namespace Amilious.Core.Editor.Modifiers {
             if(_initialized) return;
             _initialized = true;
             _range = fieldInfo.GetCustomAttribute<RangeAttribute>();
-            AmiliousPropertyDrawer.StaticInitialize();
             if(Drawer != null || !AmiliousPropertyDrawer.AllAmiliousDrawers.TryGetValue(property.type, out var drawerType)) return;
             CalledBeforeDrawer = true;
             _drawer = (AmiliousPropertyDrawer)Activator.CreateInstance(drawerType);

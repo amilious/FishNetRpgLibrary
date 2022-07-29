@@ -1,15 +1,22 @@
-using Amilious.Core.Attributes;
-using Amilious.Core.Extensions;
 using UnityEditor;
 using UnityEngine;
+using Amilious.Core.Extensions;
 
 namespace Amilious.Core.Editor.Drawers {
-    [CustomPropertyDrawer(typeof(AmiliousColorAttribute))]
+    
+    /// <summary>
+    /// This drawer is used instead of the default color drawer.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(Color))]
+    [CustomPropertyDrawer(typeof(AmiliousColorDrawer))]
     public class AmiliousColorDrawer : AmiliousPropertyDrawer {
+        
+        #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc />
         protected override void AmiliousOnGUI(Rect position, SerializedProperty property, GUIContent label) {
             var oldColor = property.colorValue;
             var oldHex = '#'+oldColor.HtmlRGBA();
-            var newColor = oldColor;
             var newHex = oldHex;
             EditorGUI.BeginProperty(position, label, property);
             EditorGUI.LabelField(position, label);
@@ -24,7 +31,7 @@ namespace Amilious.Core.Editor.Drawers {
                 width -= 87;
             }
             position.width = 30+width;
-            newColor = EditorGUI.ColorField(position,oldColor);
+            var newColor = EditorGUI.ColorField(position,oldColor);
             if(!newHex.StartsWith('#')) newHex = '#' + newHex;
             if(newColor != oldColor) property.colorValue = newColor;
             else if(newHex != oldHex && ColorUtility.TryParseHtmlString(newHex, out newColor)){
@@ -32,5 +39,8 @@ namespace Amilious.Core.Editor.Drawers {
             }
             EditorGUI.EndProperty();
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

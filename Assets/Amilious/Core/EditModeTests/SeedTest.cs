@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Amilious.Core.Tests.EditMode {
+namespace Amilious.Core.EditModeTests {
     
     public class SeedTest {
 

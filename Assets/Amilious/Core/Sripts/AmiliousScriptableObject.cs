@@ -58,13 +58,9 @@ namespace Amilious.Core {
             id = GetNewId();
             var path = UnityEditor.AssetDatabase.GetAssetPath(this)??name;
             if(string.IsNullOrWhiteSpace(path)) path = GetType().SplitCamelCase();
-            if(oldId==0) Debug.LogFormat("{0}\n<color=#8888ff>Generated id for:</color>\t\t<color=#ff88ff><b>{1}</b></color>\n<color=#8888ff>Id:</color>\t\t\t<color=#88ff88>{2}</color>",MakeTitle("Generating Amilious Scriptable Object Id"), path,id);
-            else Debug.LogFormat("{0}\n<color=#8888ff>Regenerated id for:</color>\t<color=#ff88ff><b>{1}</b></color>\n<color=#8888ff>New Id:</color>\t\t\t<color=#88ff88>{2}</color>\n<color=#8888ff>Old Id:</color>\t\t\t<color=#ff8888>{3}</color>", MakeTitle("Generating Amilious Scriptable Object Id"), path,id,oldId);
+            if(oldId==0) Debug.LogFormat("{0}\n<color=#8888ff>Generated id for:</color>\t\t<color=#ff88ff><b>{1}</b></color>\n<color=#8888ff>Id:</color>\t\t\t<color=#88ff88>{2}</color>",AmiliousCore.MakeTitle("Generating Amilious Scriptable Object Id"), path,id);
+            else Debug.LogFormat("{0}\n<color=#8888ff>Regenerated id for:</color>\t<color=#ff88ff><b>{1}</b></color>\n<color=#8888ff>New Id:</color>\t\t\t<color=#88ff88>{2}</color>\n<color=#8888ff>Old Id:</color>\t\t\t<color=#ff8888>{3}</color>", AmiliousCore.MakeTitle("Generating Amilious Scriptable Object Id"), path,id,oldId);
             return id;
-        }
-
-        private static string MakeTitle(string title) {
-            return title.PadText('#', 60, 10).SetColor("ffff88");
         }
 
         private static void Initialize() {
@@ -100,7 +96,7 @@ namespace Amilious.Core {
                 }
                 _cachedIds.Add(asset.Id);
             }
-            Debug.LogFormat("{0}\n<color=#88ff88>Unique Objects:</color>\t\t<color=#ff88ff><b>{1}</b></color>\t<color=#8888ff>Fixed Ids:</color>\t<color=#ff8888>{2}</color>",MakeTitle("Fixed Amilious Scriptable Object Ids"), _cachedIds.Count,fixedIds);
+            Debug.LogFormat("{0}\n<color=#88ff88>Unique Objects:</color>\t\t<color=#ff88ff><b>{1}</b></color>\t<color=#8888ff>Fixed Ids:</color>\t<color=#ff8888>{2}</color>",AmiliousCore.MakeTitle("Fixed Amilious Scriptable Object Ids"), _cachedIds.Count,fixedIds);
         }
         
         #endif
