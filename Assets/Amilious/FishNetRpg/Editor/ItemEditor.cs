@@ -25,7 +25,7 @@ namespace Amilious.FishNetRpg.Editor {
         private SerializedProperty _inventoryAppliedModifiers;
         private SerializedProperty _weight;
         private SerializedProperty _canBeTraded;
-        protected Texture2D _iconBadge;
+        protected Texture2D _iconBadge; 
 
         public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height) {
             Initialize();

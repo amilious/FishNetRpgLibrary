@@ -193,14 +193,16 @@ namespace Amilious.Core.Editor.Drawers {
                 var amiliousDrawers = assembly.GetTypes().Where(t=>t.IsSubclassOf(
                     typeof(AmiliousPropertyDrawer))&& t.IsDefined(typeof(CustomPropertyDrawer),false)).ToList();
                 foreach(var drawer in amiliousDrawers) {
-                    var cd = drawer.GetCustomAttribute<CustomPropertyDrawer>();
-                    cd.TryGetDrawersPropertyType(out var type);
-                    if(!AllAmiliousDrawers.ContainsKey(type.Name)) AllAmiliousDrawers.Add(type.Name,drawer);
+                    var cds = drawer.GetCustomAttributes<CustomPropertyDrawer>();
+                    foreach(var cd in cds){
+                        cd.TryGetDrawersPropertyType(out var type);
+                        if(!AllAmiliousDrawers.ContainsKey(type.Name)) AllAmiliousDrawers.Add(type.Name, drawer);
+                    }
                 }
             }
 
         }
-
+        
         /// <summary>
         /// This is a static constructor that will initialize the static data the first time this class is referenced.
         /// </summary>
