@@ -2,13 +2,16 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 using System.Reflection;
 using Amilious.Core.Attributes;
+using System.Collections.Generic;
 using Amilious.Core.Editor.Extensions;
 
 namespace Amilious.Core.Editor.Editors {
     
+    /// <summary>
+    /// This is the base class for the amilious editor.
+    /// </summary>
     public class AmiliousEditor : UnityEditor.Editor {
         
         #region Constants //////////////////////////////////////////////////////////////////////////////////////////////

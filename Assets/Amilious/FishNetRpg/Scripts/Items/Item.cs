@@ -14,7 +14,7 @@ namespace Amilious.FishNetRpg.Items {
     
     [EditorLink("Github","Icons/github","https://github.com/amilious/FishNetRpgLibrary", " github")]
     [EditorLink("Jira", "Icons/jira", "https://fishnet-rpg-library.atlassian.net/jira/software/c/projects/FRL/boards/1", " jira")]
-    [ItemEditorBadge("ItemBadges/ItemBadge")]
+    [ItemEditorBadge("Icons/ItemBadges/ItemBadge")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject {

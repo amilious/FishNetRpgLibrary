@@ -10,7 +10,7 @@ using Amilious.FishNetRpg.Requirements;
 
 namespace Amilious.FishNetRpg.Items {
     
-    [ItemEditorBadge("ItemBadges/EquipmentBadge")]
+    [ItemEditorBadge("Icons/ItemBadges/EquipmentBadge")]
     [CreateAssetMenu(fileName = "NewEquipableItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Equipable Item", order = 21)]
     public class EquipableItem : Item {

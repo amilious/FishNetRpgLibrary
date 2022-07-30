@@ -11,10 +11,16 @@ namespace Amilious.Core.Editor {
     /// </summary>
     public static class DefineManager {
 
+        #region Private Static Fields //////////////////////////////////////////////////////////////////////////////////
+        
         private static readonly string[] DefineSymbols = { "AMILIOUS_CORE" };
         
         private static readonly StringBuilder StringBuilder = new StringBuilder();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
         /// This method is used to make sure that the given define symbols are present.
         /// </summary>
@@ -59,13 +65,17 @@ namespace Amilious.Core.Editor {
             Debug.Log(AmiliousCore.MakeTitle($"Removed {name} Define Symbols"));
         }
 
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
         /// This method is used to add the amilious core defines.
         /// </summary>
         [InitializeOnLoadMethod]
-        private static void AddCoreDefineSymbols() {
-            AddDefinesIfNotPresent("Amilious Core", DefineSymbols);
-        }
+        private static void AddCoreDefineSymbols() => AddDefinesIfNotPresent("Amilious Core", DefineSymbols);
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }

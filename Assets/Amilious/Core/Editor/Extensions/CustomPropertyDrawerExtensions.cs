@@ -1,8 +1,12 @@
 using System;
-using System.Reflection;
 using UnityEditor;
+using System.Reflection;
 
 namespace Amilious.Core.Editor.Extensions {
+    
+    /// <summary>
+    /// This class is used to add extension methods to the <see cref="CustomPropertyDrawer"/> class.
+    /// </summary>
     public static class CustomPropertyDrawerExtensions {
         
         /// <summary>

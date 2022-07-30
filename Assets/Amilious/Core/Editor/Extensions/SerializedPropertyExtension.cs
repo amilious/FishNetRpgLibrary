@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Amilious.Core.Editor.Extensions {
     
+    /// <summary>
+    /// This class is used to add methods to the <see cref="SerializedProperty"/> class.
+    /// </summary>
     public static class SerializedPropertyExtension {
 
         /// <summary>
