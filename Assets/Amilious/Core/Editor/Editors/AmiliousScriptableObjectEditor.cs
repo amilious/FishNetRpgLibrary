@@ -13,7 +13,7 @@ namespace Amilious.Core.Editor.Editors {
 
         private readonly StringBuilder _sb = new ();
         
-        protected override void BeforeDefault() {
+        protected override void BeforeDefaultDraw() {
             if(target is not AmiliousScriptableObject item) return;
             _sb.Clear();
             _sb.Append("Amilious Scriptable Object: ");

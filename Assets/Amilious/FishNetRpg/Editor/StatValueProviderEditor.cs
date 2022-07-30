@@ -7,7 +7,7 @@ namespace Amilious.FishNetRpg.Editor {
     
     [CustomEditor(typeof(StatBaseValueProvider), true)]
     public class StatValueProviderEditor : AmiliousEditor{
-        protected override void AfterDefault() {
+        protected override void AfterDefaultDraw() {
             if(target is StatFunctionBaseProvider functionProvider) {
                 if(GUILayout.Button("Open In Editor")) AssetDatabase.OpenAsset(target);
             }

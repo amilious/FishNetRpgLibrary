@@ -15,7 +15,7 @@ namespace Amilious.FunctionGraph.Editor {
             }
         }
         
-        protected override void BeforeDefault() {
+        protected override void BeforeDefaultDraw() {
             EditorGUILayout.HelpBox(Description, MessageType.None);
             EditorGUILayout.Space(10);
         }

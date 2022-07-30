@@ -83,8 +83,8 @@ namespace Amilious.FishNetRpg.Editor {
         }
 
         /// <inheritdoc />
-        protected override void BeforeDefault() {
-            base.BeforeDefault();
+        protected override void BeforeDefaultDraw() {
+            base.BeforeDefaultDraw();
             //draw properties
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.ObjectField(_icon, typeof(Sprite), GUIContent.none,GUILayout.Height(80), GUILayout.Width(80));
