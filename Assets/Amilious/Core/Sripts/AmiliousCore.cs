@@ -38,7 +38,19 @@ namespace Amilious.Core {
         public static string MakeTitle(string title) {
             return title.PadText('#', 60, 10).SetColor("ffff88");
         }
+
+        #region Menu Buttons ///////////////////////////////////////////////////////////////////////////////////////////
+        #if UNITY_EDITOR
         
+        [UnityEditor.MenuItem("Amilious/Amilious Scriptable Objects/Fix Duplicate Ids", false,0)]
+        public static void FixDuplicateIds() => AmiliousScriptableObject.FixDuplicateIds();
+        
+        [UnityEditor.MenuItem("Amilious/Amilious Scriptable Objects/Regenerate Ids", false,1)]
+        public static void RegenerateIds() => AmiliousScriptableObject.RegenerateIds();
+        
+        #endif
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
     
 }

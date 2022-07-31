@@ -52,7 +52,6 @@ namespace Amilious.Core.Attributes {
         /// <typeparam name="T">The type of the value that you want to validate.</typeparam>
         /// <returns>True if the value is valid otherwise false.</returns>
         public bool Validate<T>(T value) {
-            Debug.Log("reached 2");
             if(SetValue) return Value is T casted && casted.Equals(value);
             if(value is bool boolValue) return boolValue;
             if(default(T) == null) return value != null;
@@ -65,7 +64,6 @@ namespace Amilious.Core.Attributes {
         /// <param name="value">The value that you want to validate.</param>
         /// <returns>True if the value is valid otherwise false.</returns>
         public bool Validate(object value) {
-            Debug.Log("reached");
             if(SetValue) return value.Equals(Value);
             if(value is bool boolValue) return boolValue;
             return value != null;
@@ -78,7 +76,6 @@ namespace Amilious.Core.Attributes {
         /// <param name="flag">The flag value.</param>
         /// <returns>True if the enum value is valid, otherwise false.</returns>
         public bool ValidateEnumValue(int index, int flag) {
-            Debug.LogFormat("index: {0}, flag: {1}",index,flag);
             if(!Value.GetType().IsEnum) return false;
             var casted = (int)Value;
             return casted == index || casted == flag;

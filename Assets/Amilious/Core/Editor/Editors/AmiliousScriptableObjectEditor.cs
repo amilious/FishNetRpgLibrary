@@ -57,8 +57,12 @@ namespace Amilious.Core.Editor.Editors {
                 _sb.Append(" folder or a subfolder within a <color=#88FFFF>Resource/</color>");
                 _sb.Append(" folder so that it can be loaded at runtime!</color>");
             }
-            else _sb.Append("Resource Path: <color=#8888ff>").Append(item.ResourcePath).Append("</color>");
-            GUILayout.Box(_sb.ToString(),BoxStyle);
+            else if(item.NeedsToBeLoadableById)
+                _sb.Append("Resource Path: <color=#8888ff>").Append(item.ResourcePath).Append("</color>");
+            else _sb.Append("<color=#FF8888>This object is configured to be loadable by id!</color>");
+            if(item.NeedsToBeLoadableById) GUILayout.Box(_sb.ToString(),BoxStyle);
+            else GUILayout.Box(new GUIContent(_sb.ToString(),
+                $"Override {nameof(item.NeedsToBeLoadableById)} if you need this item to be loadable by id."), BoxStyle);
             GUILayout.Space(5);
         }
         

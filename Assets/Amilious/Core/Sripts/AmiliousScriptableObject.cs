@@ -16,52 +16,105 @@
 
 using System;
 using UnityEngine;
+using System.Linq;
 using Amilious.Core.Extensions;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Amilious.Core {
     
     /// <summary>
-    /// This is a <see cref="ScriptableObject"/> that stores it's own guid.
+    /// This is a <see cref="ScriptableObject"/> that has a unique id.
     /// </summary>
     public abstract class AmiliousScriptableObject : ScriptableObject, ISerializationCallbackReceiver {
 
+        #region Hidden Serialized Fields ///////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
-        /// This serialized field is used to store the assets guid.
+        /// This serialized field is used to store the assets unique id.
         /// </summary>
         [SerializeField, HideInInspector] private long id = 0;
 
+        /// <summary>
+        /// This serialized field is used to store the assets resource path.
+        /// </summary>
         [SerializeField, HideInInspector] private string resourcePath;
 
+        /// <summary>
+        /// This serialized field is used to store if the asset is in a resource folder.
+        /// </summary>
         [SerializeField, HideInInspector] private bool isInResourceFolder;
 
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        
+        private static List<long> _cachedIds;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
         /// This property contains the assets guid from the asset database.
         /// </summary>
         public long Id => id;
 
+        /// <summary>
+        /// This property contains the resource path of this asset.
+        /// </summary>
         public string ResourcePath => resourcePath;
 
+        /// <summary>
+        /// This property is true if the resource is in a resources folder, otherwise false.
+        /// </summary>
         public bool IsInResourceFolder => isInResourceFolder;
 
+        /// <summary>
+        /// This property is true if the asset needs to be loadable by its id.
+        /// </summary>
         public virtual bool NeedsToBeLoadableById => false;
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Interface Methods //////////////////////////////////////////////////////////////////////////////////////
+        
         /// <inheritdoc />
-        void  ISerializationCallbackReceiver.OnBeforeSerialize() {
+        void ISerializationCallbackReceiver.OnBeforeSerialize() {
             #if UNITY_EDITOR
             if(id==0) { GenerateId(); }
             var pathParts = UnityEditor.AssetDatabase.GetAssetPath(this).Split("Resources/");
-            var isResource = pathParts.Length>1;    
-            var path = pathParts.Last().Replace(".asset",string.Empty);
-            if(resourcePath == null || resourcePath != path) {
-                resourcePath = path;
-                isInResourceFolder = isResource;
+            var isResource = pathParts.Length>1;
+            if(NeedsToBeLoadableById) {
+                var path = pathParts.Last().Replace(".asset", string.Empty);
+                if(resourcePath == null || resourcePath != path) {
+                    resourcePath = path;
+                    isInResourceFolder = isResource;
+                }
             }
             #endif
             BeforeSerialize();
         }
+        
+        /// <inheritdoc />
+        void ISerializationCallbackReceiver.OnAfterDeserialize() { AfterDeserialize(); }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Protected Override Methods /////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is called after deserialization.
+        /// </summary>
+        protected virtual void AfterDeserialize(){}
+        
+        /// <summary>
+        /// This method is called before serialization.
+        /// </summary>
+        protected virtual void BeforeSerialize(){}
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Editor Only Methods ////////////////////////////////////////////////////////////////////////////////////
         #if UNITY_EDITOR
         
         /// <summary>
@@ -79,6 +132,9 @@ namespace Amilious.Core {
             return id;
         }
 
+        /// <summary>
+        /// This method is used to initialize the static data.
+        /// </summary>
         private static void Initialize() {
             if(_cachedIds != null) return;
             _cachedIds = new List<long>();
@@ -89,8 +145,10 @@ namespace Amilious.Core {
             }
         }
         
-        private static List<long> _cachedIds;
-        
+        /// <summary>
+        /// This method is used to get the
+        /// </summary>
+        /// <returns></returns>
         private static long GetNewId() {
             Initialize();
             var id = DateTime.UtcNow.ToFileTime();
@@ -98,9 +156,11 @@ namespace Amilious.Core {
             _cachedIds.Add(id);
             return id;
         }
-
-        [UnityEditor.MenuItem("Amilious/Amilious Scriptable Objects/Fix Duplicate Ids")]
-        private static void FixDuplicateIds() {
+        
+        /// <summary>
+        /// This method is used to fix duplicate ids.
+        /// </summary>
+        internal static void FixDuplicateIds() {
             _cachedIds ??= new List<long>();
             _cachedIds.Clear();
             var fixedIds = 0;
@@ -115,13 +175,23 @@ namespace Amilious.Core {
             Debug.LogFormat("{0}\n<color=#88ff88>Unique Objects:</color>\t\t<color=#ff88ff><b>{1}</b></color>\t<color=#8888ff>Fixed Ids:</color>\t<color=#ff8888>{2}</color>",AmiliousCore.MakeTitle("Fixed Amilious Scriptable Object Ids"), _cachedIds.Count,fixedIds);
         }
         
-        #endif
-
-        /// <inheritdoc />
-        void ISerializationCallbackReceiver.OnAfterDeserialize() { AfterDeserialize(); }
+        internal static void RegenerateIds() {
+            if(!UnityEditor.EditorUtility.DisplayDialog("Regenerate Amilious Scriptable Object Ids?",
+                   "Are you sure that you want to regenerate all of the ids?  This could break a published game if " +
+                   "you are saving and loading items by id!", "Yes, I am crazy!", "No, it is too risky!")) return;
+            _cachedIds ??= new List<long>();
+            _cachedIds.Clear();
+            foreach(var path in UnityEditor.AssetDatabase.GetAllAssetPaths()) {
+                var asset = UnityEditor.AssetDatabase.LoadAssetAtPath<AmiliousScriptableObject>(path);
+                if(asset==null) continue; 
+                asset.GenerateId();
+                _cachedIds.Add(asset.Id);
+            }
+            Debug.LogFormat("{0}\n<color=#88ff88>Regenerated Ids:</color>\t\t<color=#88FF88><b>{1}</b></color>",AmiliousCore.MakeTitle("Regenerated Amilious Scriptable Object Ids"), _cachedIds.Count);
+        }
         
-        protected virtual void AfterDeserialize(){}
-        protected virtual void BeforeSerialize(){}
+        #endif
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }
