@@ -14,8 +14,6 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-using UnityEngine;
-
 namespace Amilious.Core.Attributes {
     
     /// <summary>
