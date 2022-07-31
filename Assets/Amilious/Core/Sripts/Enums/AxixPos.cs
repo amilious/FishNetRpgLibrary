@@ -14,12 +14,11 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace Amilious.Core.Threading {
+namespace Amilious.Core.Enums {
     
     /// <summary>
-    /// Defines the signature for callbacks used by the future.
+    /// This enum is used to represent a position on an axis.
     /// </summary>
-    /// <param name="future">The future.</param>
-    public delegate void FutureCallback<T>(IFuture<T> future);
+    public enum AxisPos {Min, Zero, Max}
     
 }

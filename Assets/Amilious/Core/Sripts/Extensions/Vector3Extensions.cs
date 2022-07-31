@@ -1,13 +1,38 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                    //
+//    _____            .__ .__   .__                             _________  __              .___.__                   //
+//   /  _  \    _____  |__||  |  |__|  ____   __ __  ______     /   _____/_/  |_  __ __   __| _/|__|  ____   ______   //
+//  /  /_\  \  /     \ |  ||  |  |  | /  _ \ |  |  \/  ___/     \_____  \ \   __\|  |  \ / __ | |  | /  _ \ /  ___/   //
+// /    |    \|  Y Y  \|  ||  |__|  |(  <_> )|  |  /\___ \      /        \ |  |  |  |  // /_/ | |  |(  <_> )\___ \    //
+// \____|__  /|__|_|  /|__||____/|__| \____/ |____//____  >    /_______  / |__|  |____/ \____ | |__| \____//____  >   //
+//         \/       \/                                  \/             \/                    \/                 \/    //
+//                                                                                                                    //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  Website:        http://www.amilious,comUnity          Asset Store: https://assetstore.unity.com/publishers/62511  //
+//  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious since 2022                              //                    
+//  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
+//  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 using UnityEngine;
+using Amilious.Core.Enums;
+using Amilious.Core.Serializables;
 
 namespace Amilious.Core.Extensions {
     
     /// <summary>
-    /// This class is used to add extension methods to a Vector3.
+    /// This class is used to add methods to the <see cref="Vector3"/> struct.
     /// </summary>
     public static class Vector3Extensions {
         
-        public enum AxisPos {Min, Zero, Max}
+        /// <summary>
+        /// This method is used to convert a Vector2 into a SerializableVector2.
+        /// </summary>
+        /// <param name="vector3">The Vector2 that you want to convert.</param>
+        /// <returns>A Serializable version of the given Vector3.</returns>
+        public static SerializableVector3 ToSerializable(this Vector3 vector3) {
+            return new SerializableVector3(vector3);
+        }
 
         /// <summary>
         /// This method is used to remove scaling from a <see cref="Vector3"/>.

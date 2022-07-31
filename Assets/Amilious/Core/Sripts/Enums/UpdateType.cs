@@ -14,12 +14,14 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace Amilious.Core.Threading {
+using System;
+
+namespace Amilious.Core.Enums {
     
     /// <summary>
-    /// Defines the signature for callbacks used by the future.
+    /// This enum is used to represent an update loop.
     /// </summary>
-    /// <param name="future">The future.</param>
-    public delegate void FutureCallback<T>(IFuture<T> future);
+    [Serializable]
+    public enum UpdateType { Update, FixedUpdate, LateUpdate }
     
 }

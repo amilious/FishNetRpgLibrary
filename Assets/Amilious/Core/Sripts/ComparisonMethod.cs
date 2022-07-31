@@ -14,69 +14,60 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+using System;
+using Amilious.Core.Attributes;
 using UnityEngine;
+using Amilious.Core.Enums;
 
-namespace Amilious.Core.Serializables {
+namespace Amilious.Core {
+
+    public interface IComparisonMethod {
+        Type GetNumberType { get; }
+    }
     
     /// <summary>
-    /// This class is used to serialize a Vector3's values.
+    /// This struct is used to represent a comparison.
     /// </summary>
-    [System.Serializable]
-    public class SerializableVector3 {
+    /// <typeparam name="T">The type of the comparison.</typeparam>
+    [Serializable]
+    public class ComparisonMethod<T> : IComparisonMethod where T : IComparable<T>, IConvertible, IEquatable<T>, IFormattable {
+
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
         
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This field is used to hold the vector3's x value.
-        /// </summary>
-        private readonly float _x;
-        
-        /// <summary>
-        /// This field is used to hold the vector3's y value.
-        /// </summary>
-        private readonly float _y;
-        
-        /// <summary>
-        /// This field is used to hold the vector3'sz value.
-        /// </summary>
-        private readonly float _z;
+        [SerializeField, DynamicLabel(""), Tooltip("The comparison type.")] 
+        private ComparisonType compareType = ComparisonType.GreaterThanOrEqual;
+        [ShowIf(nameof(compareType),ComparisonType.ApproximatelyEqual)]
+        [SerializeField, Tooltip("The acceptable difference between two values for the approximate comparison type.")] 
+        private T approximateDelta;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This property is used to get a Vector3 form this SerializedVector3.
-        /// </summary>
-        public Vector3 Vector3 => new Vector3(_x, _y, _z);
 
+        /// <summary>
+        /// This method is used to get the type of number that the compare is for.
+        /// </summary>
+        public Type GetNumberType => typeof(T);
+
+        /// <summary>
+        /// This property is used to get the comparison type.
+        /// </summary>
+        public ComparisonType ComparisonType => compareType;
+        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        #region Constructors ///////////////////////////////////////////////////////////////////////////////////////////
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
-        /// This constructor is used to create a SerializableVector3 from
-        /// the given Vector3.
+        /// This method is used to compare two values.
         /// </summary>
-        /// <param name="vector3">The Vector3 that you want to make serializable.</param>
-        public SerializableVector3(Vector3 vector3) {
-            _x = vector3.x;
-            _y = vector3.y;
-            _z = vector3.z;
-        }
+        /// <param name="valueA">The first value.</param>
+        /// <param name="valueB">The second value.</param>
+        /// <returns>The result of the comparison.</returns>
+        public bool Compare(T valueA, T valueB) =>
+            compareType.Compare(valueA, valueB, approximateDelta);
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        #region Operator Methods ///////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This operator is used to auto cast a serializable Vector3 to a Vector3.
-        /// </summary>
-        /// <param name="sVector3">The serializable Vector3.</param>
-        /// <returns>A Vector3.</returns>
-        public static explicit operator Vector3(SerializableVector3 sVector3) => sVector3.Vector3;
-
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
     }
 }

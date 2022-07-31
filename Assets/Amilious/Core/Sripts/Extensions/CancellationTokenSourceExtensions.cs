@@ -14,12 +14,20 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-namespace Amilious.Core.Threading {
+using System.Threading;
+using Amilious.Core.Threading;
+
+namespace Amilious.Core.Extensions {
     
     /// <summary>
-    /// Defines the signature for callbacks used by the future.
+    /// This class is used to add methods to the <see cref="CancellationTokenSource"/> class.
     /// </summary>
-    /// <param name="future">The future.</param>
-    public delegate void FutureCallback<T>(IFuture<T> future);
-    
+    public static class CancellationTokenSourceExtensions {
+
+        /// <inheritdoc cref="CancellationTokenPool.ReturnToken"/>
+        public static void ReturnToPool(this CancellationTokenSource token) {
+            CancellationTokenPool.ReturnToken(token);
+        }
+        
+    }
 }

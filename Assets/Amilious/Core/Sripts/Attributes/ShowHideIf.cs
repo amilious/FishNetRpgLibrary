@@ -16,66 +16,74 @@
 
 using UnityEngine;
 
-namespace Amilious.Core.Serializables {
+namespace Amilious.Core.Attributes {
     
     /// <summary>
-    /// This class is used to serialize a Vector3's values.
+    /// This is the base class for the <see cref="ShowIfAttribute"/> and the <see cref="HideIfAttribute"/>
     /// </summary>
-    [System.Serializable]
-    public class SerializableVector3 {
+    public abstract class ShowHideIf : AmiliousModifierAttribute {
         
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This field is used to hold the vector3's x value.
-        /// </summary>
-        private readonly float _x;
-        
-        /// <summary>
-        /// This field is used to hold the vector3's y value.
-        /// </summary>
-        private readonly float _y;
-        
-        /// <summary>
-        /// This field is used to hold the vector3'sz value.
-        /// </summary>
-        private readonly float _z;
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
-        /// This property is used to get a Vector3 form this SerializedVector3.
+        /// The property to use as the condition.
         /// </summary>
-        public Vector3 Vector3 => new Vector3(_x, _y, _z);
+        public string PropertyName { get; protected set; }
 
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Constructors ///////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// If this value is true the comparison value was provided, otherwise it was not.
+        /// </summary>
+        protected bool SetValue { get; set; }
         
         /// <summary>
-        /// This constructor is used to create a SerializableVector3 from
-        /// the given Vector3.
+        /// This property contains the value that you want to compare to.
         /// </summary>
-        /// <param name="vector3">The Vector3 that you want to make serializable.</param>
-        public SerializableVector3(Vector3 vector3) {
-            _x = vector3.x;
-            _y = vector3.y;
-            _z = vector3.z;
+        protected object Value { get; set; }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to validate a value.
+        /// </summary>
+        /// <param name="value">The value that you want to validate.</param>
+        /// <typeparam name="T">The type of the value that you want to validate.</typeparam>
+        /// <returns>True if the value is valid otherwise false.</returns>
+        public bool Validate<T>(T value) {
+            Debug.Log("reached 2");
+            if(SetValue) return Value is T casted && casted.Equals(value);
+            if(value is bool boolValue) return boolValue;
+            if(default(T) == null) return value != null;
+            return false;
+        }
+
+        /// <summary>
+        /// This method is used to validate a value.
+        /// </summary>
+        /// <param name="value">The value that you want to validate.</param>
+        /// <returns>True if the value is valid otherwise false.</returns>
+        public bool Validate(object value) {
+            Debug.Log("reached");
+            if(SetValue) return value.Equals(Value);
+            if(value is bool boolValue) return boolValue;
+            return value != null;
+        }
+
+        /// <summary>
+        /// This method is used to validate an enum value.
+        /// </summary>
+        /// <param name="index">The enum index.</param>
+        /// <param name="flag">The flag value.</param>
+        /// <returns>True if the enum value is valid, otherwise false.</returns>
+        public bool ValidateEnumValue(int index, int flag) {
+            Debug.LogFormat("index: {0}, flag: {1}",index,flag);
+            if(!Value.GetType().IsEnum) return false;
+            var casted = (int)Value;
+            return casted == index || casted == flag;
         }
         
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        #region Operator Methods ///////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This operator is used to auto cast a serializable Vector3 to a Vector3.
-        /// </summary>
-        /// <param name="sVector3">The serializable Vector3.</param>
-        /// <returns>A Vector3.</returns>
-        public static explicit operator Vector3(SerializableVector3 sVector3) => sVector3.Vector3;
-
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }

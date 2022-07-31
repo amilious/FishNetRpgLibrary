@@ -1,3 +1,4 @@
+using Amilious.Core;
 using UnityEngine;
 using Amilious.Core.Enums;
 using Amilious.FishNetRpg.Entities;
@@ -13,7 +14,7 @@ namespace Amilious.FishNetRpg.Requirements {
         [SerializeField, Tooltip("The stat for the requirement.")] 
         private Stat stat;
         [SerializeField, Tooltip("The comparison type for the requirement")] 
-        private ComparisonType comparisonType = ComparisonType.GreaterThanOrEqual;
+        private ComparisonMethod<int> comparisonMethod = new ComparisonMethod<int>();
         [SerializeField, Tooltip("The value to compare the stat with.")] 
         private int compareValue = 0;
 
@@ -29,7 +30,7 @@ namespace Amilious.FishNetRpg.Requirements {
         /// <summary>
         /// This property contains the comparision type for the stat requirement.
         /// </summary>
-        public ComparisonType ComparisonType => comparisonType;
+        public ComparisonType ComparisonType => comparisonMethod.ComparisonType;
 
         /// <summary>
         /// This property contains the comparision value for the requirement.
@@ -43,7 +44,7 @@ namespace Amilious.FishNetRpg.Requirements {
         /// <inheritdoc />
         public override bool MeetsRequirement(Entity entity) {
             return entity.TryGetManager(out StatManager manager) && 
-                   comparisonType.Compare(manager[stat].Value, compareValue);
+                   comparisonMethod.Compare(manager[stat].Value, compareValue);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
