@@ -14,54 +14,23 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System.Linq;
-using System.Collections.Generic;
-using Amilious.FunctionGraph.Attributes;
+using Amilious.Core.Editor;
+using UnityEditor;
 
-namespace Amilious.FunctionGraph.Nodes.LogicNodes {
+namespace Amilious.FunctionGraph.Editor {
     
-    /// <summary>
-    /// This node is used to check if all the values are the same.
-    /// </summary>
-    [FunctionNode("This node is used to check if all the values are the same.")]
-    public class XNor : LogicNodes {
+    public static class AmiliousFunctionGraphEditor {
         
-        #region Non-Serialized Fields //////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This last calculation id.
-        /// </summary>
-        private CalculationId _lastId;
-        
-        /// <summary>
-        /// The last cached value.
-        /// </summary>
-        private bool _lastValue;
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Protected & Private Methods ////////////////////////////////////////////////////////////////////////////
-        
-        /// <inheritdoc />
-        protected override void SetUpPorts(List<IPortInfo> inputPorts, List<IPortInfo> outputPorts) {
-            inputPorts.Add(new PortInfo<bool>("values",true));
-            outputPorts.Add(new PortInfo<bool>("result", GetResult));
-        }
+        private static readonly string[] DefineSymbols = { "AMILIOUS_FUNCTION_GRAPH" };
 
         /// <summary>
-        /// This method is used to calculate the value.
+        /// This method is used to add the amilious core defines.
         /// </summary>
-        /// <param name="id">The calculation id.</param>
-        /// <returns>The calculated value.</returns>
-        private bool GetResult(CalculationId id) {
-            if(_lastId == id) return _lastValue;
-            _lastId = id;
-            TryGetPortValues<bool>(0, id, out var values);
-            if(values == null || values.Count == 0) return _lastValue = true;
-            return _lastValue = values.All(x => x) || values.All(x => !x);
+        [InitializeOnLoadMethod]
+        private static void AddDefines() {
+            DefineManager.AddDefinesIfNotPresent("Amilious Function Graph", DefineSymbols);
         }
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
+    
 }

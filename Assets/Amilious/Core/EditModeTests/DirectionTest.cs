@@ -8,7 +8,7 @@
 //         \/       \/                                  \/             \/                    \/                 \/    //
 //                                                                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  Website:        http://www.amilious,comUnity          Asset Store: https://assetstore.unity.com/publishers/62511  //
+//  Website:        http://www.amilious,com         Unity Asset Store: https://assetstore.unity.com/publishers/62511  //
 //  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious since 2022                              //                    
 //  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
@@ -18,7 +18,6 @@ using NUnit.Framework;
 using UnityEngine;
 
 namespace Amilious.Core.EditModeTests {
-    
     
     public class DirectionTest {
         

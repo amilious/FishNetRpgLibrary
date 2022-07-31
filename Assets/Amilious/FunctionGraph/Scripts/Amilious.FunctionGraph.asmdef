@@ -10,7 +10,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "AMILIOUS_CORE"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
