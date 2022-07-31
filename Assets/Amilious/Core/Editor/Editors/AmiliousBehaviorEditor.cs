@@ -14,38 +14,13 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System;
+using UnityEditor;
 
-namespace Amilious.Core.Extensions {
+namespace Amilious.Core.Editor.Editors {
     
     /// <summary>
-    /// This class is used to add methods to the <see cref="Type"/> class.
+    /// This class is used as the default editor for an <see cref="AmiliousBehavior"/>.
     /// </summary>
-    public static class TypeExtensions {
-        
-        /// <summary>
-        /// This method is used to split a types name using camel case.
-        /// </summary>
-        /// <param name="type">The type you want to get a name for.</param>
-        /// <returns>The name of the type split based on camel case.</returns>
-        public static string SplitCamelCase(this Type type) => type.Name.SplitCamelCase();
-
-        /// <summary>
-        /// This method is used to see if a type implements another type.
-        /// </summary>
-        /// <param name="type">The type that you want to check if it implements <typeparamref name="T"/>.</param>
-        /// <typeparam name="T">The type that you want to check if is inherited from.</typeparam>
-        /// <returns>True if <paramref name="type"/> inherits <typeparamref name="T"/>.</returns>
-        public static bool Implements<T>(this Type type) => typeof(T).IsAssignableFrom(type);
-
-        /// <summary>
-        /// This method is used to see if a type implements another type.
-        /// </summary>
-        /// <param name="type">The type that you want to check if it implements <paramref name="implements"/>.</param>
-        /// <param name="implements">The type that you want to check if is inherited from.</param>
-        /// <returns>True if <paramref name="type"/> inherits <paramref name="implements"/>.</returns>
-        public static bool Implements(this Type type, Type implements) => implements.IsAssignableFrom(type);
-        
-    }
-    
+    [CustomEditor(typeof(AmiliousBehavior), true, isFallback = true)]
+    public class AmiliousBehaviorEditor : AmiliousEditor { }
 }

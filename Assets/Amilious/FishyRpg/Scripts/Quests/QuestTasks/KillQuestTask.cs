@@ -13,78 +13,64 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System;
 using UnityEngine;
-using FishNet.Object;
+using Amilious.Core.Attributes;
 using Amilious.FishyRpg.Entities;
-using Amilious.FishyRpg.Modifiers;
-using Object = UnityEngine.Object;
 
-namespace Amilious.FishyRpg.Resource {
+namespace Amilious.FishyRpg.Quests.QuestTasks {
     
-    [RequireComponent(typeof(Entity),typeof(ModifierManager))]
-    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Resource Manager")]
-    public class ResourceManager : NetworkBehaviour, ISystemManager {
+    /// <summary>
+    /// This class is used as a kill task for a quest.
+    /// </summary>
+    public class KillQuestTask : QuestTask {
 
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        #region Constants //////////////////////////////////////////////////////////////////////////////////////////////
         
-        private Entity _entity;
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <inheritdoc />
-        public Systems System => Systems.ResourceSystem;
-        
-        /// <inheritdoc />
-        public Type SystemType => GetType();
-        
-        /// <inheritdoc />
-        public Entity Entity {
-            get {
-                //get a reference to the entity if it does not exist.
-                _entity ??= GetComponent<Entity>();
-                return _entity; //return the entities reference.
-            }
-        }
+        private const string KILLED = "killed";
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
+
+        [SerializeField, Tooltip("If true you can use an entity group instead of an entity type.")] 
+        private bool useEntityGroup;
+        [SerializeField, Tooltip("If true party members kill's will be counted for the quest.")] 
+        private bool countPartyKills = true;
+        [SerializeField, ShowIf(nameof(useEntityGroup))]
+        private EntityGroup entityGroup;
+        [SerializeField, HideIf(nameof(useEntityGroup))]
+        private EntityType entityType;
+        [SerializeField] private int entitiesToKill;
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
-        public bool ApplyModifier(Object source, IModifier modifier) {
-            if(modifier.System != System) return false;
-            throw new NotImplementedException();
+        public override int TotalActions => useEntityGroup ? entityGroup == null ? 0 : entitiesToKill :
+            entityType == null ? 0 : entitiesToKill;
+
+        /// <inheritdoc />
+        protected override void OnDeath(Entity died, Entity killer, Quest quest, QuestManager questManager, string baseKey) {
+            if(killer != questManager.Player &&
+               (!countPartyKills || !questManager.Player.Party.Contains(killer, true))) return;
+            questManager.SetQuestData(baseKey + KILLED, GetCompletedActions(questManager, baseKey) + 1);
+            questManager.QuestUpdated(quest);
+        }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc />
+        protected override void ClearProgress(QuestManager manager, string baseKey) {
+            manager.ClearQuestData(baseKey+KILLED);
         }
 
         /// <inheritdoc />
-        public bool ApplyModifier(int sourceId, IModifier modifier) {
-            if(modifier.System != System) return false;
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public bool RemoveModifier(Object source, IModifier modifier) {
-            if(modifier.System != System) return false;
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public bool RemoveModifier(int sourceId, IModifier modifier) {
-            if(modifier.System != System) return false;
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public void RemoveModifiersFromSource(Object source) {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc />
-        public void RemoveModifiersFromSource(int sourceId) {
-            throw new NotImplementedException();
+        protected override int GetCompletedActions(QuestManager manager, string baseKey) {
+            manager.TryGetQuestData<int>(baseKey + KILLED, out var kills);
+            return kills;
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

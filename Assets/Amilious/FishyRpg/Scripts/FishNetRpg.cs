@@ -103,7 +103,5 @@ namespace Amilious.FishyRpg {
 
         #endregion
 
-
     }
-    
 }

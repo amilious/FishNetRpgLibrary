@@ -13,30 +13,57 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System.Collections.Generic;
+using UnityEngine;
 using Amilious.Core;
 using Amilious.FunctionGraph;
-using UnityEngine;
+using System.Collections.Generic;
 
 namespace Amilious.FishyRpg.Statistics.BaseProviders {
 
+    /// <summary>
+    /// This class uses <see cref="IFunctionProvider"/> to use a function graph as a <see cref="StatBaseValueProvider"/>.
+    /// </summary>
     [CreateAssetMenu(fileName = "NewFunctionBaseProvider",
         menuName = FishNetRpg.STATS_MENU_ROOT + "Function Base Value Provider", order = 47)]
     public class StatFunctionBaseProvider : StatBaseValueProvider, IFunctionProvider {
 
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
+        
         [HideInInspector, SerializeField] private FunctionBaseProviderResult resultNode;
         [HideInInspector, SerializeField] private FunctionBaseProviderSource sourceNode;
         [HideInInspector, SerializeField] private List<FunctionNode> nodes = new List<FunctionNode>();
         [HideInInspector, SerializeField] private FunctionGraphData graphData;
 
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc />
         FunctionGraphData IFunctionProvider.GetGraphData() => graphData;
+        
+        /// <inheritdoc />
         void IFunctionProvider.SetGraphData(FunctionGraphData data) => graphData = data;
+        
+        /// <inheritdoc />
         bool IFunctionProvider.Initialized { get; set; }
+        
+        /// <inheritdoc />
         public FunctionNode GetInputNode => sourceNode;
+        
+        /// <inheritdoc />
         public FunctionNode GetResultNode => resultNode;
+        
+        /// <inheritdoc />
         public List<FunctionNode> GetNodes() => nodes;
+        
+        /// <inheritdoc />
         public AmiliousScriptableObject FunctionProvider => this;
 
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc />
         public List<FunctionNode> InitializeInputAndOutputs() {
             //do no initialize if already done
             if(sourceNode && resultNode) return new List<FunctionNode>();
@@ -57,6 +84,7 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
             return nodeList;
         }
 
+        /// <inheritdoc />
         public void AfterInitialization(IFunctionProvider provider) {
             var con = new Connection(resultNode, 0, sourceNode, 0);
             provider.AddConnection(con);
@@ -82,6 +110,8 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
             sourceNode.SetValue(level);
             return Mathf.RoundToInt(resultNode.GetResult1(calculationId));
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
-
 }

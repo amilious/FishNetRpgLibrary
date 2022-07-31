@@ -14,42 +14,37 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using UnityEngine;
-using Amilious.FishyRpg.Party;
+using System.Linq;
 using Amilious.FishyRpg.Quests;
+using Amilious.FishyRpg.Entities;
+using System.Collections.Generic;
 
-namespace Amilious.FishyRpg.Entities {
+namespace Amilious.FishyRpg.Requirements {
     
     /// <summary>
-    /// This class is used to represent a player.
+    /// This class is used as a quest requirement.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
+    [CreateAssetMenu(fileName = "NewQuestRequirement", menuName = FishNetRpg.REQUIREMENT_MENU_ROOT+"Quest")]
+    public class QuestRequirement : AbstractRequirement{
 
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
         
-        /// <summary>
-        /// This field is used to cache the questManager.
-        /// </summary>
-        private QuestManager _questManager;
-        
+        [SerializeField, Tooltip("The quests related to this requirement.")] 
+        private List<Quest> quests = new List<Quest>();
+        [SerializeField, Tooltip("The acceptable statuses of the quests.")] 
+        private QuestStatus questStatus = QuestStatus.Completed;
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This property contains the player's quest manager.
-        /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
-        /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
-        /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
+        public override bool MeetsRequirement(Entity entity) {
+            if(entity == null || entity is not Player player) return false;
+            return quests.All(quest => questStatus.HasFlag(player.QuestManager[quest]));
+        }
+        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

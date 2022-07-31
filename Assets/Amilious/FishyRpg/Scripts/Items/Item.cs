@@ -32,7 +32,7 @@ namespace Amilious.FishyRpg.Items {
     [ItemEditorBadge("Icons/ItemBadges/ItemBadge")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
         menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
-    public class Item : AmiliousScriptableObject {
+    public class Item : AmiliousScriptableObject<Item> {
 
         private const string DEFAULT_DESCRIPTION = "No description!";
 
@@ -187,21 +187,7 @@ namespace Amilious.FishyRpg.Items {
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-                   
-        #region Static Fields //////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This method is used to get an instance of an item by it's id.
-        /// </summary>
-        /// <param name="id">The items id.</param>
-        /// <returns>The item with the given id or null if the item was not found.</returns>
-        public static Item FromId(long id) {
-            return ItemLoader.LoadFromId(id);
-        }
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
                                   
         protected override void BeforeSerialize() {

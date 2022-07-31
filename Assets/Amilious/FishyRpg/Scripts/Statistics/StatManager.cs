@@ -14,13 +14,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using System;
+using UnityEngine;
+using FishNet.Object;
 using System.Collections.Generic;
 using Amilious.FishyRpg.Entities;
-using Amilious.FishyRpg.Modifiers;
-using FishNet.Object;
-using FishNet.Object.Synchronizing;
-using UnityEngine;
 using Object = UnityEngine.Object;
+using Amilious.FishyRpg.Modifiers;
+using FishNet.Object.Synchronizing;
 
 namespace Amilious.FishyRpg.Statistics {
     

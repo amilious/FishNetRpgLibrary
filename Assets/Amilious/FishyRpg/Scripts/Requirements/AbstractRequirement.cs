@@ -17,7 +17,14 @@ using Amilious.Core;
 using Amilious.FishyRpg.Entities;
 
 namespace Amilious.FishyRpg.Requirements {
+    
+    /// <summary>
+    /// This is the base requirement class that all requirements should be inherited from.
+    /// </summary>
     public abstract class AbstractRequirement : AmiliousScriptableObject, IRequirement {
+        
+        /// <inheritdoc />
         public abstract bool MeetsRequirement(Entity entity);
+        
     }
 }

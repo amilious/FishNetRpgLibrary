@@ -17,14 +17,23 @@ using UnityEngine;
 
 namespace Amilious.FishyRpg.Statistics.BaseProviders {
     
+    /// <summary>
+    /// This class uses a curve to supply the values for a <see cref="StatBaseValueProvider"/>.
+    /// </summary>
     [CreateAssetMenu(fileName = "NewCurveBaseProvider",
         menuName = FishNetRpg.STATS_MENU_ROOT + "Curve Base Value Provider", order = 46)]
     public class StatCurveBaseProvider : StatBaseValueProvider {
 
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
+        
         [SerializeField]private int cap;
         [SerializeField]private int minimum;
         [SerializeField]private AnimationCurve curve = GenerateDefault();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Public Override Methods ////////////////////////////////////////////////////////////////////////////////
+        
         /// <inheritdoc />
         public override int GetMinimum(int level) => minimum;
 
@@ -34,7 +43,15 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
         /// <inheritdoc />
         public override int BaseValue(int level) => Mathf.RoundToInt(curve.Evaluate(level));
         
-        public static AnimationCurve GenerateDefault() {
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to create a default curve.
+        /// </summary>
+        /// <returns>The default curve.</returns>
+        private static AnimationCurve GenerateDefault() {
             var ac = new AnimationCurve();
             ac.AddKey(new Keyframe(0, 100));
             ac.AddKey(new Keyframe(100, 100000));
@@ -42,5 +59,8 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
             ac.preWrapMode = WrapMode.ClampForever;
             return ac;
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

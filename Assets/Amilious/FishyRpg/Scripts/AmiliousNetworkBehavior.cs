@@ -11,24 +11,15 @@
 //  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious, Textos since 2022                      //                    
 //  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/          
 
-using Amilious.FishyRpg.Entities;
+using FishNet.Object;
 
-namespace Amilious.FishyRpg.Requirements {
+namespace Amilious.FishyRpg {
     
     /// <summary>
-    /// This interface is used for requirements.
+    /// This class is used as a base <see cref="NetworkBehaviour"/> that will use the Amilious Editor.
     /// </summary>
-    public interface IRequirement {
-
-        /// <summary>
-        /// This method is used to check if the requirement is met.
-        /// </summary>
-        /// <param name="entity">The entity that you want to check the requirement against.</param>
-        /// <returns>True if the given entity meets the requirement.</returns>
-        public bool MeetsRequirement(Entity entity);
-
-    }
+    public class AmiliousNetworkBehavior : NetworkBehaviour { }
     
 }

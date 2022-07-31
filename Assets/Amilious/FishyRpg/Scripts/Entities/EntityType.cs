@@ -13,43 +13,13 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using UnityEngine;
-using Amilious.FishyRpg.Party;
-using Amilious.FishyRpg.Quests;
+using Amilious.Core;
 
 namespace Amilious.FishyRpg.Entities {
-    
+
     /// <summary>
-    /// This class is used to represent a player.
+    /// This class is used to create a standard entity type.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
-
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This field is used to cache the questManager.
-        /// </summary>
-        private QuestManager _questManager;
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This property contains the player's quest manager.
-        /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
-        
-        /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
-        /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
-        /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-    }
+    public class EntityType : AmiliousScriptableObject { }
+    
 }

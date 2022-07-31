@@ -13,43 +13,35 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using UnityEngine;
-using Amilious.FishyRpg.Party;
-using Amilious.FishyRpg.Quests;
+using Amilious.FishyRpg.Entities;
 
-namespace Amilious.FishyRpg.Entities {
+namespace Amilious.FishyRpg.Party {
     
     /// <summary>
-    /// This class is used to represent a player.
+    /// This is an interface used for a party system.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
+    public interface IParty {
 
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This field is used to cache the questManager.
-        /// </summary>
-        private QuestManager _questManager;
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This property contains the player's quest manager.
-        /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
         
-        /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
         /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
+        /// This property contains the size of the party.
         /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
+        public int Size { get; }
+        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Methods ////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to check if an entity belongs to your party.
+        /// </summary>
+        /// <param name="entity">The entity that you want to check.</param>
+        /// <param name="includeFollowers">If true this method will also count the followers of party members.</param>
+        /// <returns>True if the entity is in your party.</returns>
+        public bool Contains(Entity entity, bool includeFollowers = true);
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

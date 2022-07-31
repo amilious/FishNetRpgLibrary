@@ -14,23 +14,64 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using System;
+using UnityEngine;
+using Amilious.Core.Attributes;
 using System.Collections.Generic;
 using Amilious.FishyRpg.Modifiers;
-using FishNet.Object;
 
 namespace Amilious.FishyRpg.Entities {
     
     /// <summary>
     /// This class is used as the base class for game entities.
     /// </summary>
-    public class Entity : NetworkBehaviour {
+    public abstract class Entity : AmiliousNetworkBehavior {
 
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
+        
+        [SerializeField, AmiliousTab("Entity"), Tooltip("The type of the entity.")] 
+        private EntityType entityType;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
         #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
         /// This dictionary is used to cache the managers.
         /// </summary>
         private readonly Dictionary<Type, ISystemManager> _managers = new();
+
+        /// <summary>
+        /// This value is used to store if the entity is alive or dead.
+        /// </summary>
+        private bool _alive = true;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Delegates //////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This delegate is used for the <see cref="Entity.OnEntityDied"/> event.
+        /// </summary>
+        public delegate void OnEntityDiedDelegate(Entity killed, Entity killer, string deathMessage);
+
+        /// <summary>
+        /// This delegate is used for the <see cref="Entity.OnEntityRevived"/> event.
+        /// </summary>
+        public delegate void OnEntityRevivedDelegate(Entity revived, Entity reviver, string reviveMessage);
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Events /////////////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This event is triggered when an entity dies.
+        /// </summary>
+        public static OnEntityDiedDelegate OnEntityDied;
+        
+        /// <summary>
+        /// This event is triggered when an entity is revived.
+        /// </summary>
+        public static OnEntityRevivedDelegate OnEntityRevived;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -40,6 +81,26 @@ namespace Amilious.FishyRpg.Entities {
         /// This property is true if the entity has been initialized, otherwise false.
         /// </summary>
         public bool Initialized { get; private set; }
+
+        /// <summary>
+        /// This property contains the entity's entity type.
+        /// </summary>
+        public virtual EntityType EntityType => entityType;
+
+        /// <summary>
+        /// This property is used to check if the entity 
+        /// </summary>
+        public abstract bool IsLivableEntity { get; }
+
+        /// <summary>
+        /// This property is true if the player is a liveable entity and is alive.
+        /// </summary>
+        public bool IsAlive => !IsLivableEntity && _alive;
+
+        /// <summary>
+        /// This property is false if the player is a liveable entity and is alive.
+        /// </summary>
+        public bool IsDead => !IsLivableEntity && !_alive;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -156,7 +217,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="source">The source of the modifier.</param>
         /// <param name="modifier">The modifier.</param>
-        [Server]
         public virtual void ApplyModifier(UnityEngine.Object source, IModifier modifier) {
             if(!TryGetManager(modifier, out var manager)) return;
             manager.ApplyModifier(source, modifier);
@@ -167,7 +227,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="sourceId">The source of the modifier.</param>
         /// <param name="modifier">The modifier.</param>
-        [Server]
         public virtual void ApplyModifier(int sourceId, IModifier modifier) {
             if(!TryGetManager(modifier, out var manager)) return;
             manager.ApplyModifier(sourceId, modifier);
@@ -178,7 +237,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="source">The source of the modifier.</param>
         /// <param name="modifier">The modifier that you want to remove from the entity.</param>
-        [Server]
         public virtual void RemoveModifier(UnityEngine.Object source, IModifier modifier) {
             if(!TryGetManager(modifier, out var manager)) return;
             manager.RemoveModifier(source, modifier);
@@ -189,7 +247,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="sourceId">The source of the modifier.</param>
         /// <param name="modifier">The modifier that you want to remove from the entity.</param>
-        [Server]
         public virtual void RemoveModifier(int sourceId, IModifier modifier) {
             if(!TryGetManager(modifier, out var manager)) return;
             manager.RemoveModifier(sourceId, modifier);
@@ -200,7 +257,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="source">The source of the modifiers.</param>
         /// <param name="modifiers">The modifiers that you want to add to the entity.</param>
-        [Server]
         public void ApplyModifiers(UnityEngine.Object source, IEnumerable<IModifier> modifiers) {
             foreach(var modifier in modifiers) ApplyModifier(source,modifier);
         }
@@ -210,7 +266,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="sourceId">The source of the modifiers.</param>
         /// <param name="modifiers">The modifiers that you want to add to the entity.</param>
-        [Server]
         public void ApplyModifiers(int sourceId, IEnumerable<IModifier> modifiers) {
             foreach(var modifier in modifiers) ApplyModifier(sourceId,modifier);
         }
@@ -220,7 +275,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="source">The source of the modifiers.</param>
         /// <param name="modifiers">The modifiers that you want to remove from the entity.</param>
-        [Server]
         public void RemoveModifiers(UnityEngine.Object source, IEnumerable<IModifier> modifiers) {
             foreach(var modifier in modifiers) RemoveModifier(source,modifier);
         }
@@ -230,7 +284,6 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         /// <param name="sourceId">The source of the modifiers.</param>
         /// <param name="modifiers">The modifiers that you want to remove from the entity.</param>
-        [Server]
         public void RemoveModifiers(int sourceId, IEnumerable<IModifier> modifiers) {
             foreach(var modifier in modifiers) RemoveModifier(sourceId,modifier);
         }
@@ -244,6 +297,26 @@ namespace Amilious.FishyRpg.Entities {
         /// </summary>
         private void Awake() => Initialize();
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Life Methods ///////////////////////////////////////////////////////////////////////////////////////////
+
+        public bool Kill(Entity entity = null, string deathMessage = "") {
+            if(!IsLivableEntity||!_alive) return false;
+            _alive = false;
+            OnEntityDied?.Invoke(this, entity,deathMessage);
+            OnDie();
+            return true;
+        }
+        
+        public bool Revive(Entity entity = null, string reviveMessage = "") {
+            if(!IsLivableEntity||_alive) return false;
+            _alive = true;
+            OnEntityRevived?.Invoke(this,entity, reviveMessage);
+            OnRevive();
+            return true;
+        }
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
@@ -259,7 +332,17 @@ namespace Amilious.FishyRpg.Entities {
                 _managers.Add(manager.SystemType,manager);
             }
         }
-        
+
+        /// <summary>
+        /// This method is called when the entity dies.
+        /// </summary>
+        protected virtual void OnDie() { }
+
+        /// <summary>
+        /// This method is called when the entity is revived
+        /// </summary>
+        protected virtual void OnRevive() { }
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }

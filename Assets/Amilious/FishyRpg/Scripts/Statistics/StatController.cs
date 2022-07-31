@@ -14,13 +14,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Amilious.FishyRpg.Modifiers;
 using FishNet;
-using FishNet.Object.Synchronizing;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
+using Amilious.FishyRpg.Modifiers;
 using Object = UnityEngine.Object;
+using FishNet.Object.Synchronizing;
 
 namespace Amilious.FishyRpg.Statistics {
     
@@ -43,17 +43,31 @@ namespace Amilious.FishyRpg.Statistics {
         
         #endregion
 
-        
         #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
         
+        /// <summary>
+        /// This property is true if the stat controller has been initialized.
+        /// </summary>
         public bool Initialized { get; private set; }
 
-        public StatManager StatSystemManager { get; }
+        /// <summary>
+        /// This property contains the stat manager for this stat controller. 
+        /// </summary>
+        public StatManager StatManager { get; }
         
+        /// <summary>
+        /// This property contains the stat that is associated with this stat controller.
+        /// </summary>
         public Stat Stat { get; }
         
+        /// <summary>
+        /// This property contains the name of the stat associated with this stat controller.
+        /// </summary>
         public string StatName { get; }
 
+        /// <summary>
+        /// This property is used to get the stat's level or set the level on the server.
+        /// </summary>
         public int Level {
             get => StatData.Level;
             set {
@@ -65,32 +79,63 @@ namespace Amilious.FishyRpg.Statistics {
             }
         }
 
+        /// <summary>
+        /// This property is used to get the stat's current max value.
+        /// </summary>
         public int Cap => Stat.BaseValueProvider.GetCap(Level);
 
+        /// <summary>
+        /// This property is used to get the stat's current minimum value.
+        /// </summary>
         public int Minimum => Stat.BaseValueProvider.GetMinimum(Level);
 
+        /// <summary>
+        /// This property is used to get the stat's current value.
+        /// </summary>
         public int Value => StatData.Value;
 
+        /// <summary>
+        /// This property is used to get the stat's current base value.
+        /// </summary>
         public int BaseValue => StatData.BaseValue;
 
+        /// <summary>
+        /// This property is used to get the stat's stat data.
+        /// </summary>
         protected StatData StatData => StatDataDictionary.TryGetValue(StatName, out var statData) ? statData : 
             new StatData(1,Stat.BaseValueProvider.BaseValue(1),Stat.BaseValueProvider.BaseValue(1));
 
+        /// <summary>
+        /// This property contains the dictionary containing the stat data.
+        /// </summary>
         protected SyncDictionary<string, StatData> StatDataDictionary { get; }
         
+        /// <summary>
+        /// This property contains the method that can trigger events on the stat manager.
+        /// </summary>
         protected Action<Stat, StatEventTrigger> EventTrigger { get; } 
         
+        /// <summary>
+        /// This property contains the method that can add a modifier to the duration modifiers.
+        /// </summary>
         protected Action<ModifierSource<IStatModifier>> WatchDurationModifer { get; }
         
-
         #endregion
-        
-        
+
         #region Constructors /////////////////////////////////////////////////////////////////////////////////////////// 
         
-        public StatController(StatManager systemManager, Stat stat, SyncDictionary<string, StatData> statData, 
+        /// <summary>
+        /// This constructor is used to create a new stat controller.
+        /// </summary>
+        /// <param name="manager">The stat manager that the stat controller belongs to.</param>
+        /// <param name="stat">The stat that this stat controller is for.</param>
+        /// <param name="statData">The dictionary containing the stat data.</param>
+        /// <param name="eventTrigger">The method used to trigger events on the stat manager.</param>
+        /// <param name="watchDurationModifer">The method that is used to add a modifier to the duration modifiers.
+        /// </param>
+        public StatController(StatManager manager, Stat stat, SyncDictionary<string, StatData> statData, 
             Action<Stat, StatEventTrigger> eventTrigger, Action<ModifierSource<IStatModifier>> watchDurationModifer) {
-            StatSystemManager = systemManager;
+            StatManager = manager;
             Stat = stat;
             StatName = stat.StatName;
             StatDataDictionary = statData;
@@ -101,8 +146,7 @@ namespace Amilious.FishyRpg.Statistics {
         }
 
         #endregion
-        
-        
+
         #region Modifier Methods ///////////////////////////////////////////////////////////////////////////////////////
         
         /// <summary>
@@ -199,8 +243,7 @@ namespace Amilious.FishyRpg.Statistics {
         }
         
         #endregion
-        
-        
+
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
@@ -265,12 +308,22 @@ namespace Amilious.FishyRpg.Statistics {
             return false;
         }
 
+        /// <summary>
+        /// This method is called when a stat has updated.
+        /// </summary>
+        /// <param name="op">The sync dictionary operation.</param>
+        /// <param name="key">The key that was updated.</param>
+        /// <param name="value">The new value.</param>
+        /// <param name="asServer">If the method is being called as the server.</param>
         private void StatDataChanged(SyncDictionaryOperation op, string key, StatData value, bool asServer) {
             if(InstanceFinder.IsHost && asServer) return; //do not duplicate events if running on host.
             Initialize();
             if(key==StatName) EventTrigger.Invoke(Stat, StatEventTrigger.Updated);
         }
 
+        /// <summary>
+        /// This method is used to initialize the stat controller.
+        /// </summary>
         protected void Initialize() {
             if(Initialized) return;
             if(!StatDataDictionary.ContainsKey(StatName)) return;
@@ -278,6 +331,9 @@ namespace Amilious.FishyRpg.Statistics {
             EventTrigger.Invoke(Stat, StatEventTrigger.Initialized);
         }
 
+        /// <summary>
+        /// This method is used to mark the dictionary key as dirty.
+        /// </summary>
         protected void Dirty() => StatDataDictionary.Dirty(StatName);
 
         #endregion

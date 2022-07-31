@@ -17,14 +17,23 @@ using UnityEngine;
 
 namespace Amilious.FishyRpg.Statistics.BaseProviders {
     
+    /// <summary>
+    /// This class is used to represent a non-changing <see cref="StatBaseValueProvider"/>.
+    /// </summary>
     [CreateAssetMenu(fileName = "NewStaticBaseProvider",
         menuName = FishNetRpg.STATS_MENU_ROOT + "Static Base Value Provider", order = 44)]
     public class StatStaticBaseProvider : StatBaseValueProvider {
         
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
+        
         [SerializeField] private int cap;
         [SerializeField] private int minimum;
         [SerializeField] private int baseValue = 100;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Public Override Methods ////////////////////////////////////////////////////////////////////////////////
+        
         /// <inheritdoc />
         public override int GetMinimum(int level) => minimum;
 
@@ -33,6 +42,8 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
 
         /// <inheritdoc />
         public override int BaseValue(int level) => baseValue;
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }

@@ -13,10 +13,10 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+using UnityEngine;
 using Amilious.Core;
 using Amilious.FishyRpg.Entities;
 using Amilious.FishyRpg.Statistics.BaseProviders;
-using UnityEngine;
 
 namespace Amilious.FishyRpg.Statistics {
     

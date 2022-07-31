@@ -24,6 +24,8 @@ namespace Amilious.FishyRpg {
     /// </summary>
     public interface ISystemManager {
         
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
         /// This property contains the system identifier.
         /// </summary>
@@ -39,7 +41,11 @@ namespace Amilious.FishyRpg {
         /// manager belongs to.
         /// </summary>
         public Entity Entity { get; }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
         /// <summary>
         /// This method is used to add a modifier.  This method should only be
         /// called by the server.
@@ -88,6 +94,7 @@ namespace Amilious.FishyRpg {
         /// <param name="sourceId">The source of the modifiers that you want to remove.</param>
         public void RemoveModifiersFromSource(int sourceId);
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
-    
 }

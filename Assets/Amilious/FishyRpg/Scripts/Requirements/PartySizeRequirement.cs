@@ -14,42 +14,36 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using UnityEngine;
-using Amilious.FishyRpg.Party;
-using Amilious.FishyRpg.Quests;
+using Amilious.Core;
+using Amilious.FishyRpg.Entities;
 
-namespace Amilious.FishyRpg.Entities {
+namespace Amilious.FishyRpg.Requirements {
     
     /// <summary>
-    /// This class is used to represent a player.
+    /// This requirement is used to make sure the player has a correct party size.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
+    [CreateAssetMenu(fileName = "NewPartySizeRequirement", menuName = FishNetRpg.REQUIREMENT_MENU_ROOT+"Party Size")]
+    public class PartySizeRequirement : AbstractRequirement {
 
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
         
-        /// <summary>
-        /// This field is used to cache the questManager.
-        /// </summary>
-        private QuestManager _questManager;
+        [SerializeField, Tooltip("The comparison type for the requirement")]  
+        private ComparisonMethod<int> comparisonMethod = new ComparisonMethod<int>();
+        [SerializeField, Min(1), Tooltip("The size of the party to use for the requirement")]
+        private int size = 1;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This property contains the player's quest manager.
-        /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
+                   
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
-        /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
-        /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
+        public override bool MeetsRequirement(Entity entity) {
+            if(entity == null || entity is not Player player) return false;
+            if(size == 1 && player.Party == null) return true;
+            return comparisonMethod.Compare(size, player.Party.Size);
+        }
+        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
 }

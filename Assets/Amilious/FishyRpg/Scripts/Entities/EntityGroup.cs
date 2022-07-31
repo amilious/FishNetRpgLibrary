@@ -14,42 +14,33 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using UnityEngine;
-using Amilious.FishyRpg.Party;
-using Amilious.FishyRpg.Quests;
+using Amilious.Core;
+using System.Collections.Generic;
 
 namespace Amilious.FishyRpg.Entities {
     
     /// <summary>
-    /// This class is used to represent a player.
+    /// This class is used to create a group of entity types.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
+    public class EntityGroup : AmiliousScriptableObject {
 
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
         
-        /// <summary>
-        /// This field is used to cache the questManager.
-        /// </summary>
-        private QuestManager _questManager;
+        [SerializeField, Tooltip("The entity types that belong to this group.")] 
+        private List<EntityType> entityTypes = new List<EntityType>();
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
         
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
-        /// This property contains the player's quest manager.
+        /// This method is used to check if an <see cref="EntityType"/> belongs to this entity group.
         /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
+        /// <param name="entityType">The entity type that you want to check the group for.</param>
+        /// <returns>True if the given entity type belongs to the group.</returns>
+        public bool ContainsEntityType(EntityType entityType) => entityTypes.Contains(entityType);
         
-        /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
-        /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
-        /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 }

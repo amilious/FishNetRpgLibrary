@@ -49,6 +49,7 @@ namespace Amilious.Core {
         #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
         
         private static List<long> _cachedIds;
+        private static string _cachedStringId;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -58,6 +59,11 @@ namespace Amilious.Core {
         /// This property contains the assets guid from the asset database.
         /// </summary>
         public long Id => id;
+
+        /// <summary>
+        /// This property is used to get and cache the id as a string.
+        /// </summary>
+        public string CachedIdString => _cachedStringId ??= id.ToString();
 
         /// <summary>
         /// This property contains the resource path of this asset.
@@ -154,6 +160,7 @@ namespace Amilious.Core {
             var id = DateTime.UtcNow.ToFileTime();
             while(_cachedIds.Contains(id)) id++;
             _cachedIds.Add(id);
+            _cachedStringId = null;
             return id;
         }
         
@@ -194,4 +201,16 @@ namespace Amilious.Core {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
+
+    /// <summary>
+    /// This is an <see cref="AmiliousScriptableObject"/> that contains a
+    /// <see cref="AmiliousScriptableObject{T}.LoadFromId"/> method.
+    /// </summary>
+    /// <typeparam name="T">The type of <see cref="AmiliousScriptableObject"/> to be loaded.</typeparam>
+    public abstract class AmiliousScriptableObject<T> : AmiliousScriptableObject where T : AmiliousScriptableObject {
+
+        public static T LoadFromId(long id) => AmiliousScriptableObjectLoader.LoadFromId<T>(id);
+
+    }
+    
 }

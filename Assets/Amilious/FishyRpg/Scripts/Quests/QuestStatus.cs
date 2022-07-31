@@ -13,43 +13,30 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using UnityEngine;
-using Amilious.FishyRpg.Party;
-using Amilious.FishyRpg.Quests;
+using System;
 
-namespace Amilious.FishyRpg.Entities {
-    
+namespace Amilious.FishyRpg.Quests {
+
     /// <summary>
-    /// This class is used to represent a player.
+    /// This enum is used to represent a quest's status.
     /// </summary>
-    [RequireComponent(typeof(QuestManager))]
-    public class Player : Entity {
-
-        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+    [Serializable, Flags]
+    public enum QuestStatus {
         
         /// <summary>
-        /// This field is used to cache the questManager.
+        /// The quest has not been started.
         /// </summary>
-        private QuestManager _questManager;
+        NotStarted = 1,
         
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
-        /// This property contains the player's quest manager.
+        /// The quest is active.
         /// </summary>
-        public QuestManager QuestManager => _questManager ??= GetComponent<QuestManager>();
+        Active = 2, 
         
-        /// <inheritdoc />
-        public override bool IsLivableEntity => true;
-
         /// <summary>
-        /// This property contains the player's party or null if the player is not part of a party.
+        /// The quest has been completed.
         /// </summary>
-        //TODO: Create Party System
-        public IParty Party => null;
-
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        Completed = 4
+        
     }
 }

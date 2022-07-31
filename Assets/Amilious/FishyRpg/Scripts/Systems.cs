@@ -14,8 +14,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using System;
-using Amilious.FishyRpg.Experience;
 using Amilious.FishyRpg.Resource;
+using Amilious.FishyRpg.Experience;
 using Amilious.FishyRpg.Statistics;
 
 namespace Amilious.FishyRpg {
@@ -41,12 +41,27 @@ namespace Amilious.FishyRpg {
         ResourceSystem
     }
     
+    /// <summary>
+    /// This class is used to add methods to the <see cref="Systems"/> enum.
+    /// </summary>
     public static class SystemsExtension {
 
+        #region Private Variables //////////////////////////////////////////////////////////////////////////////////////
+        
         private static readonly Type Stats = typeof(StatManager);
         private static readonly Type Level = typeof(LevelManager);
         private static readonly Type Resource = typeof(ResourceManager);
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This method is used to get the system type from <see cref="Systems"/>.
+        /// </summary>
+        /// <param name="system">The system that you want to get the type for.</param>
+        /// <returns>The manager type for the system.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if there is an unhandled system.</exception>
         public static Type GetSystemType(this Systems system) {
             return system switch {
                 Systems.StatsSystem => Stats,
@@ -56,6 +71,7 @@ namespace Amilious.FishyRpg {
             };
         }
         
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
     }
-    
 }
