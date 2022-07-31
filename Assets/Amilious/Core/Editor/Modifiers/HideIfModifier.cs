@@ -16,7 +16,7 @@
 
 using UnityEditor;
 using Amilious.Core.Attributes;
-using UnityEngine;
+using Amilious.Core.Editor.Extensions;
 
 namespace Amilious.Core.Editor.Modifiers {
     
@@ -45,7 +45,9 @@ namespace Amilious.Core.Editor.Modifiers {
         /// <returns>True if the property should be hidden, otherwise false.</returns>
         protected bool Hide(SerializedProperty property) {
             var castedAttribute = (HideIfAttribute)attribute;
-            var hiderProperty = property.serializedObject.FindProperty(castedAttribute.PropertyName);
+            var hiderProperty = property.FindSiblingProperty(castedAttribute.PropertyName);
+            hiderProperty ??= property.serializedObject.FindProperty(castedAttribute.PropertyName);
+            hiderProperty ??= property.FindPropertyRelative(castedAttribute.PropertyName);
             if(hiderProperty != null) {
                 return hiderProperty.propertyType switch {
                     SerializedPropertyType.Generic => false,

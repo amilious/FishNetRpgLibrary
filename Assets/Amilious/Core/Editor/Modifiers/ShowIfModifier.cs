@@ -16,7 +16,7 @@
 
 using UnityEditor;
 using Amilious.Core.Attributes;
-using UnityEngine;
+using Amilious.Core.Editor.Extensions;
 
 namespace Amilious.Core.Editor.Modifiers {
     
@@ -36,7 +36,7 @@ namespace Amilious.Core.Editor.Modifiers {
             var cancel = !Show(property);
             return cancel;
         }
-        
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
@@ -48,9 +48,10 @@ namespace Amilious.Core.Editor.Modifiers {
         /// <returns>True if the property should be shown, otherwise false.</returns>
         protected bool Show(SerializedProperty property) {
             var castedAttribute = (ShowIfAttribute)attribute;
-            var hiderProperty = property.serializedObject.FindProperty(castedAttribute.PropertyName);
+            var hiderProperty = property.FindSiblingProperty(castedAttribute.PropertyName);
+            hiderProperty ??= property.serializedObject.FindProperty(castedAttribute.PropertyName);
+            hiderProperty ??= property.FindPropertyRelative(castedAttribute.PropertyName);
             if(hiderProperty != null) {
-                Debug.Log(hiderProperty.propertyType.ToString());
                 return hiderProperty.propertyType switch {
                     SerializedPropertyType.Generic => false,
                     SerializedPropertyType.Integer => castedAttribute.Validate(hiderProperty.intValue),

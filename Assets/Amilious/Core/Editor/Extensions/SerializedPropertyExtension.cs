@@ -60,6 +60,27 @@ namespace Amilious.Core.Editor.Extensions {
         public static IEnumerable<T> GetAttributes<T>(this SerializedProperty property, bool inherit = true) where T : Attribute {
             return property.GetAttributes(typeof(T), inherit).Cast<T>();
         }
+
+        /// <summary>
+        /// This method is used to get the base path.
+        /// </summary>
+        /// <param name="property">The property that you want to get the base path for.</param>
+        /// <returns>string.Empty if there is not a base path, otherwise it returns the base path and the ending ".".</returns>
+        public static string GetBasePath(this SerializedProperty property) {
+            if(property == null) return string.Empty;
+            var parts = property.propertyPath.Split('.') ?? Array.Empty<string>();
+            return parts.Length <= 1 ? string.Empty : string.Join('.', parts.SkipLast(1))+".";
+        }
+
+        /// <summary>
+        /// This method is used to get a properties sibling property.
+        /// </summary>
+        /// <param name="property">The property that you want to get the sibling for.</param>
+        /// <param name="propertyName">The name of the sibling.</param>
+        /// <returns>The sibling property or null.</returns>
+        public static SerializedProperty FindSiblingProperty(this SerializedProperty property,string propertyName) {
+            return property?.serializedObject?.FindProperty(property.GetBasePath() + propertyName);
+        }
         
     }
 }
