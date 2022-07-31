@@ -1,0 +1,22 @@
+{
+    "name": "Amilious.FishyRpg",
+    "rootNamespace": "Amilious.FishyRpg",
+    "references": [
+        "FishNet.Runtime",
+        "Amilious.FunctionGraph",
+        "Amilious.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "AMILIOUS_CORE",
+        "AMILIOUS_FUNCTION_GRAPH",
+        "FISHNET"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

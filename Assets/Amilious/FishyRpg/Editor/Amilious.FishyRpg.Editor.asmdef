@@ -1,0 +1,23 @@
+{
+    "name": "Amilious.FishyRpg.Editor",
+    "rootNamespace": "Amilious.FishyRpg.Editor",
+    "references": [
+        "Amilious.Core",
+        "Amilious.Core.Editor",
+        "Amilious.FishyRpg"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "AMILIOUS_CORE",
+        "AMILIOUS_FUNCTION_GRAPH"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
