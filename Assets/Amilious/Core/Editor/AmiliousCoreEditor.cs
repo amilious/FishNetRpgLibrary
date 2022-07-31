@@ -14,36 +14,19 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System;
-using System.Collections.Generic;
+using UnityEditor;
+using Amilious.Core.Editor.Drawers;
 
-namespace Amilious.Core.Extensions {
-    
-    /// <summary>
-    /// This class is used to add methods to the <see cref="List{T}"/> class.
-    /// </summary>
-    public static class ListExtensions {
-
-        /// <summary>
-        /// This method is used to sort a list of paths/
-        /// </summary>
-        /// <param name="list">The list.</param>
-        public static void SortByPath(this List<string> list) {
-            list.Sort((a, b) => {
-                var aLevels = a.Split('/');
-                var bLevels = b.Split('/');
-                for(var i = 0; i < aLevels.Length; i++) {
-                    if(i >= bLevels.Length) return 1;
-                    var value = string.Compare(aLevels[i], bLevels[i], StringComparison.Ordinal);
-                    if(value == 0) continue;
-                    if(aLevels.Length != bLevels.Length && (i == aLevels.Length - 1 || i == bLevels.Length - 1))
-                        return aLevels.Length < bLevels.Length ? 1 : -1;
-                    return value;
-                }
-                return 0;
-            });
-        }
+namespace Amilious.Core.Editor {
+    public static class AmiliousCoreEditor {
+        
+        #region Menu Buttons ///////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <inheritdoc cref="AmiliousPropertyDrawer.ReInitialize"/>
+        [MenuItem("Amilious/Editor/Reinitialize Property Drawers", false, AmiliousCore.EDITOR_ID)]
+        private static void ReInitializePropertyDrawers() => AmiliousPropertyDrawer.ReInitialize();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
-    
 }

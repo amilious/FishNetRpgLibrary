@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                    //
 //    _____            .__ .__   .__                             _________  __              .___.__                   //
 //   /  _  \    _____  |__||  |  |__|  ____   __ __  ______     /   _____/_/  |_  __ __   __| _/|__|  ____   ______   //
@@ -12,7 +12,7 @@
 //  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious since 2022                              //                    
 //  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using System;
 using UnityEditor;
@@ -121,8 +121,7 @@ namespace Amilious.Core.Editor.Drawers {
         /// <summary>
         /// This method is used to reinitialize the property drawers.
         /// </summary>
-        [MenuItem("Amilious/Editor/Reinitialize Property Drawers")]
-        private static void ReInitialize() {
+        internal static void ReInitialize() {
             AllAmiliousDrawers.Clear();
             AllPropertyModifiers.Clear();
             _staticInitialized = false;
