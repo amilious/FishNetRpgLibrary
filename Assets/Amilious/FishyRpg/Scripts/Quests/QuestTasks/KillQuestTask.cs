@@ -13,20 +13,24 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+using System.Linq;
+using System.Text;
 using UnityEngine;
 using Amilious.Core.Attributes;
+using System.Collections.Generic;
 using Amilious.FishyRpg.Entities;
+using Amilious.FishyRpg.Requirements;
 
 namespace Amilious.FishyRpg.Quests.QuestTasks {
     
     /// <summary>
     /// This class is used as a kill task for a quest.
     /// </summary>
-    public class KillQuestTask : QuestTask {
+    public class KillQuestTask : QuestTask<Entity,Entity> {
 
         #region Constants //////////////////////////////////////////////////////////////////////////////////////////////
         
-        private const string KILLED = "killed";
+        private const string KILLS = "kills";
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
                    
@@ -36,41 +40,79 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         private bool useEntityGroup;
         [SerializeField, Tooltip("If true party members kill's will be counted for the quest.")] 
         private bool countPartyKills = true;
-        [SerializeField, ShowIf(nameof(useEntityGroup))]
+        [SerializeField, ShowIf(nameof(countPartyKills)), Tooltip("If true party followers kill's will be counted for the quest.")] 
+        private bool countFollowerKills = true;
+        [SerializeField, ShowIf(nameof(useEntityGroup)),Tooltip("The entity group that will count as kills.")]
         private EntityGroup entityGroup;
-        [SerializeField, HideIf(nameof(useEntityGroup))]
+        [SerializeField, HideIf(nameof(useEntityGroup)),Tooltip("The entity group that will count as kills.")]
         private EntityType entityType;
-        [SerializeField] private int entitiesToKill;
+        [SerializeField, Tooltip("The number of entities to kill.")] 
+        private int entitiesToKill;
+        [SerializeField, Tooltip("Requirements that the killed entities must meet to be counted.")]
+        private List<AbstractRequirement> killedRequirements = new();
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        #region Properties /////////////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
         public override int TotalActions => useEntityGroup ? entityGroup == null ? 0 : entitiesToKill :
             entityType == null ? 0 : entitiesToKill;
 
-        /// <inheritdoc />
-        protected override void OnDeath(Entity died, Entity killer, Quest quest, QuestManager questManager, string baseKey) {
-            if(killer != questManager.Player &&
-               (!countPartyKills || !questManager.Player.Party.Contains(killer, true))) return;
-            questManager.SetQuestData(baseKey + KILLED, GetCompletedActions(questManager, baseKey) + 1);
-            questManager.QuestUpdated(quest);
-        }
-        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
-        protected override void ClearProgress(QuestManager manager, string baseKey) {
-            manager.ClearQuestData(baseKey+KILLED);
+        protected override void ClearProgress(QuestManager manager, StringBuilder baseKey) {
+            manager.ClearData(baseKey.Append(KILLS));
         }
 
         /// <inheritdoc />
-        protected override int GetCompletedActions(QuestManager manager, string baseKey) {
-            manager.TryGetQuestData<int>(baseKey + KILLED, out var kills);
-            return kills;
+        protected override int GetCompletedActions(QuestManager manager, StringBuilder baseKey) {
+            return manager[baseKey.Append(KILLS)];
+        }
+        
+        /// <inheritdoc />
+        protected override void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, Entity died, Entity killer) {
+            if(!countPartyKills&&killer.ObjectId!=manager.Player.ObjectId) return;
+            if(countFollowerKills && !killer.IsPlayerOrParty(manager.Player, countFollowerKills)) return;
+            if(!killedRequirements.All(x => x.MeetsRequirement(died))) return;
+            manager[baseKey.Append(KILLS)]++;
+            manager.QuestUpdated(quest);
+        }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
+        
+        private void OnEnable() {
+            Entity.OnEntityDied += OnEntityDied;
+        }
+
+        private void OnDisable() {
+            Entity.OnEntityDied -= OnEntityDied;
+        }
+        
+        private void OnEntityDied(Entity killed, Entity killer, string _) {
+            if(ActiveManagers.Count == 0) return; 
+            //make sure that killed is not null
+            if(killed == null||killer==null) return;
+            //check to make sure that it is for a player that matters
+            var send = false;
+            foreach(var player in Players) {
+                if(player==null) continue;
+                if(countPartyKills) {
+                    if(!killer.IsPlayerOrParty(player, countFollowerKills)) continue;
+                    send = true;
+                    break;
+                }
+                if(killer.ObjectId != player.ObjectId) continue;
+                send = true;
+                break;
+            }
+            //update the quests.
+            if(send)SendData(this,killed,killer);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

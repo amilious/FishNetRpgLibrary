@@ -13,12 +13,12 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System;
 using UnityEngine;
-using System.Collections.Generic;
+using System.Text;
+using FishNet.Object;
 using Amilious.FishyRpg.Entities;
-using Amilious.FishyRpg.Extensions;
 using FishNet.Object.Synchronizing;
+using Amilious.FishyRpg.Quests.QuestTasks;
 
 namespace Amilious.FishyRpg.Quests {
     
@@ -32,7 +32,7 @@ namespace Amilious.FishyRpg.Quests {
         public static event QuestUpdateDelegate OnQuestCompleted;
         public static event QuestUpdateDelegate OnQuestAbandoned;
 
-        [SyncObject] private readonly SyncDictionary<string, object> _questData = new SyncDictionary<string, object>();
+        [SyncObject] private readonly SyncDictionary<string, int> _questData = new SyncDictionary<string, int>();
         [SyncObject] private readonly SyncList<Quest> _activeQuests = new SyncList<Quest>();
         [SyncObject] private readonly SyncList<Quest> _completedQuests = new SyncList<Quest>();
 
@@ -56,9 +56,53 @@ namespace Amilious.FishyRpg.Quests {
             }
         }
 
+        public int this[StringBuilder key] {
+            get {
+                _questData.TryGetValue(key.ToString(), out var value);
+                return value; //this will return 0 if the key is empty
+            }
+            [Server] set => _questData[key.ToString()] = value;
+        }
+
+        public int this[string key, int max, bool arrayCountMax = false] {
+            get {
+                _questData.TryGetValue(key, out var value);
+                return Mathf.Min(value,max-(arrayCountMax?1:0)); //this will return 0 if the key is empty
+            }
+            [Server] set => _questData[key] = Mathf.Min(value,max-(arrayCountMax?1:0));
+        }
+        
+        public int this[string key] {
+            get {
+                _questData.TryGetValue(key, out var value);
+                return value; //this will return 0 if the key is empty
+            }
+            [Server] set => _questData[key] = value;
+        }
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
+        
+        public void TriggerCallback<T,TV1>(TV1 val1)
+            where T : QuestTask<TV1> {
+            foreach(var quest in _activeQuests) quest.TriggerCallback<T,TV1>(this,val1);
+        }
+
+        public void TriggerCallback<T,TV1,TV2>(TV1 val1, TV2 val2)
+            where T : QuestTask<TV1,TV2> {
+            foreach(var quest in _activeQuests) quest.TriggerCallback<T,TV1,TV2>(this,val1, val2);
+        }
+        
+        public void TriggerCallback<T,TV1,TV2,TV3>(TV1 val1, TV2 val2, TV3 val3)
+            where T : QuestTask<TV1,TV2,TV3> {
+            foreach(var quest in _activeQuests) quest.TriggerCallback<T,TV1,TV2,TV3>(this,val1, val2, val3);
+        }
+        
+        public void TriggerCallback<T, TV1, TV2, TV3, TV4>(TV1 val1, TV2 val2, TV3 val3, TV4 val4)
+            where T : QuestTask<TV1,TV2,TV3,TV4> {
+            foreach(var quest in _activeQuests) quest.TriggerCallback<T,TV1,TV2,TV3,TV4>(this,val1, val2, val3, val4);
+        }
         
         /// <summary>
         /// This method is used to try add a quest.
@@ -70,6 +114,7 @@ namespace Amilious.FishyRpg.Quests {
             if(_activeQuests.Contains(quest)) return false;
             if(quest.MeetsAllRequirements(Player)) return false;
             _activeQuests.Add(quest);
+            quest.AddManager(this);
             quest.OnQuestTaken(this);
             OnQuestTaken?.Invoke(Player,this,quest);
             return true;
@@ -92,42 +137,18 @@ namespace Amilious.FishyRpg.Quests {
         }
 
         /// <summary>
-        /// This method is used to try get quest data.
+        /// This method is used to clear the quest data.
         /// </summary>
-        /// <param name="key">The key for the data.</param>
-        /// <param name="value">The value for the given key.</param>
-        /// <typeparam name="T">The type of data.</typeparam>
-        /// <returns>True if the data was found and was the give type, otherwise false.</returns>
-        public bool TryGetQuestData<T>(string key, out T value) {
-            return _questData.TryGetCastValueIL2CPP(key, out value);
-        }
-
-        /// <summary>
-        /// This method is used to set data.
-        /// </summary>
-        /// <param name="key">The key for the data.</param>
-        /// <param name="value">The value.</param>
-        public void SetQuestData(string key, object value) {
-            _questData[key] = value;
-        }
-
-        /// <summary>
-        /// This method is used to try add data.
-        /// </summary>
-        /// <param name="key">The key for the data.</param>
-        /// <param name="value">The value of the data.</param>
-        /// <returns>True if the data was added, otherwise false if the key was taken.</returns>
-        public bool TryAddQuestData<T>(string key, object value) {
-            return _questData.TryAdd(key, value);
+        /// <param name="key">The key that you want to clear.</param>
+        public void ClearData(string key) {
+            if(_questData.ContainsKey(key)) _questData.Remove(key);
         }
 
         /// <summary>
         /// This method is used to clear the quest data.
         /// </summary>
         /// <param name="key">The key that you want to clear.</param>
-        public void ClearQuestData(string key) {
-            if(_questData.ContainsKey(key)) _questData.Remove(key);
-        }
+        public void ClearData(StringBuilder key) => ClearData(key.ToString());
 
         /// <summary>
         /// This method should be called whenever data has been updated for a quest.
@@ -151,21 +172,5 @@ namespace Amilious.FishyRpg.Quests {
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
-
-        private void OnEnable() {
-            Entity.OnEntityDied += OnEntityDied;
-        }
-
-        private void OnDisable() {
-            Entity.OnEntityDied -= OnEntityDied;
-        }
-
-        private void OnEntityDied(Entity killed, Entity killer, string _) {
-            foreach(var quest in _activeQuests) quest.OnDeath(killed,killer,this);
-        }
-
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
     }
 }

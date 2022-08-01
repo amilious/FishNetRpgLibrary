@@ -32,7 +32,12 @@ namespace Amilious.Core {
         /// <summary>
         /// This serialized field is used to store the assets unique id.
         /// </summary>
-        [SerializeField, HideInInspector] private long id = 0;
+        [SerializeField, HideInInspector] private long id;
+
+        /// <summary>
+        /// This serialized field is used to store the base 64 id;
+        /// </summary>
+        [SerializeField, HideInInspector] private string base64Id;
 
         /// <summary>
         /// This serialized field is used to store the assets resource path.
@@ -49,7 +54,6 @@ namespace Amilious.Core {
         #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
         
         private static List<long> _cachedIds;
-        private static string _cachedStringId;
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -63,7 +67,7 @@ namespace Amilious.Core {
         /// <summary>
         /// This property is used to get and cache the id as a string.
         /// </summary>
-        public string CachedIdString => _cachedStringId ??= id.ToString();
+        public string Base64Id => base64Id;
 
         /// <summary>
         /// This property contains the resource path of this asset.
@@ -131,6 +135,7 @@ namespace Amilious.Core {
         private long GenerateId() {
             var oldId = id;
             id = GetNewId();
+            base64Id = id.ToBase64String();
             var path = UnityEditor.AssetDatabase.GetAssetPath(this)??name;
             if(string.IsNullOrWhiteSpace(path)) path = GetType().SplitCamelCase();
             if(oldId==0) Debug.LogFormat("{0}\n<color=#8888ff>Generated id for:</color>\t\t<color=#ff88ff><b>{1}</b></color>\n<color=#8888ff>Id:</color>\t\t\t<color=#88ff88>{2}</color>",AmiliousCore.MakeTitle("Generating Amilious Scriptable Object Id"), path,id);
@@ -157,13 +162,12 @@ namespace Amilious.Core {
         /// <returns></returns>
         private static long GetNewId() {
             Initialize();
-            var id = DateTime.UtcNow.ToFileTime();
+            var id = DateTime.Now.ToFileTimeUtc();
             while(_cachedIds.Contains(id)) id++;
             _cachedIds.Add(id);
-            _cachedStringId = null;
             return id;
         }
-        
+
         /// <summary>
         /// This method is used to fix duplicate ids.
         /// </summary>

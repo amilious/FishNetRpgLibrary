@@ -83,6 +83,18 @@ namespace Amilious.FishyRpg.Entities {
         public bool Initialized { get; private set; }
 
         /// <summary>
+        /// This method is used to check if an entity is the given player or in the player's party.
+        /// </summary>
+        /// <param name="player">The player that you want to check.</param>
+        /// <param name="includeFollowers">If true party followers will be counted as party members.</param>
+        /// <returns>True if this entity is the given player or one of its party members.</returns>
+        public bool IsPlayerOrParty(Player player, bool includeFollowers = true) {
+            if(player == null) return false;
+            if(player.ObjectId == ObjectId) return true;
+            return player.Party != null && player.Party.Contains(this, includeFollowers);
+        }
+
+        /// <summary>
         /// This property contains the entity's entity type.
         /// </summary>
         public virtual EntityType EntityType => entityType;
