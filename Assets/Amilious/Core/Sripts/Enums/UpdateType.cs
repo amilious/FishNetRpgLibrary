@@ -16,7 +16,7 @@
 
 using System;
 
-namespace Amilious.Core.Enums {
+namespace Amilious.Core {
     
     /// <summary>
     /// This enum is used to represent an update loop.

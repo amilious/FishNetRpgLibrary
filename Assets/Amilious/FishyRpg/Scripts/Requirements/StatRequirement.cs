@@ -15,7 +15,6 @@
 
 using UnityEngine;
 using Amilious.Core;
-using Amilious.Core.Enums;
 using Amilious.FishyRpg.Entities;
 using Amilious.FishyRpg.Statistics;
 

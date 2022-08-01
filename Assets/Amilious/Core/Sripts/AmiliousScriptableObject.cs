@@ -182,6 +182,9 @@ namespace Amilious.Core {
             Debug.LogFormat("{0}\n<color=#88ff88>Unique Objects:</color>\t\t<color=#ff88ff><b>{1}</b></color>\t<color=#8888ff>Fixed Ids:</color>\t<color=#ff8888>{2}</color>",AmiliousCore.MakeTitle("Fixed Amilious Scriptable Object Ids"), _cachedIds.Count,fixedIds);
         }
         
+        /// <summary>
+        /// This method is used to regenerate all of the ids.
+        /// </summary>
         internal static void RegenerateIds() {
             if(!UnityEditor.EditorUtility.DisplayDialog("Regenerate Amilious Scriptable Object Ids?",
                    "Are you sure that you want to regenerate all of the ids?  This could break a published game if " +
@@ -209,6 +212,14 @@ namespace Amilious.Core {
     /// <typeparam name="T">The type of <see cref="AmiliousScriptableObject"/> to be loaded.</typeparam>
     public abstract class AmiliousScriptableObject<T> : AmiliousScriptableObject where T : AmiliousScriptableObject {
 
+        /// <inheritdoc />
+        public sealed override bool NeedsToBeLoadableById => true;
+        
+        /// <summary>
+        /// This method is used to load the a variation of the object using its id.
+        /// </summary>
+        /// <param name="id">The id of the object that you want to load.</param>
+        /// <returns>The loaded object if able to be loaded, otherwise null.</returns>
         public static T LoadFromId(long id) => AmiliousScriptableObjectLoader.LoadFromId<T>(id);
 
     }

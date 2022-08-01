@@ -17,7 +17,6 @@
 using System;
 using Amilious.Core.Attributes;
 using UnityEngine;
-using Amilious.Core.Enums;
 
 namespace Amilious.Core {
 

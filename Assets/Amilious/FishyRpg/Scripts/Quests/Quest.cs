@@ -46,9 +46,6 @@ namespace Amilious.FishyRpg.Quests {
         /// </summary>
         public bool CanAbandon => canAbandon;
         
-        /// <inheritdoc />
-        public override bool NeedsToBeLoadableById => true;
-        
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////

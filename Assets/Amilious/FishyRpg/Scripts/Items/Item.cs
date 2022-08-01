@@ -105,9 +105,6 @@ namespace Amilious.FishyRpg.Items {
         /// </summary>
         public virtual bool CanBeTraded => canBeTraded;
 
-        /// <inheritdoc />
-        public override bool NeedsToBeLoadableById => true;
-
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Modifier Methods ///////////////////////////////////////////////////////////////////////////////////////

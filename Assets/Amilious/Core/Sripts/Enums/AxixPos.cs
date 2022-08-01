@@ -14,7 +14,7 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-namespace Amilious.Core.Enums {
+namespace Amilious.Core {
     
     /// <summary>
     /// This enum is used to represent a position on an axis.
