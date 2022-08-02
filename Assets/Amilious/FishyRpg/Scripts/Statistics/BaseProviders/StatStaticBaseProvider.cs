@@ -21,7 +21,7 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
     /// This class is used to represent a non-changing <see cref="StatBaseValueProvider"/>.
     /// </summary>
     [CreateAssetMenu(fileName = "NewStaticBaseProvider",
-        menuName = FishNetRpg.STATS_MENU_ROOT + "Static Base Value Provider", order = 44)]
+        menuName = FishyRpg.STATS_MENU_ROOT + "Static Base Value Provider", order = 44)]
     public class StatStaticBaseProvider : StatBaseValueProvider {
         
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

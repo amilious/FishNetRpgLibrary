@@ -23,7 +23,7 @@ using Object = UnityEngine.Object;
 namespace Amilious.FishyRpg.Experience {
     
     [RequireComponent(typeof(Entity),typeof(ModifierManager))]
-    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Level Manager")]
+    [AddComponentMenu(FishyRpg.COMPONENT_MANAGERS+"Level Manager")]
     public class LevelManager : NetworkBehaviour, ISystemManager {
         
         private Entity _entity;

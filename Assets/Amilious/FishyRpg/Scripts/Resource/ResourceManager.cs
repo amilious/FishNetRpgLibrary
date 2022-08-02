@@ -23,7 +23,7 @@ using Object = UnityEngine.Object;
 namespace Amilious.FishyRpg.Resource {
     
     [RequireComponent(typeof(Entity),typeof(ModifierManager))]
-    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Resource Manager")]
+    [AddComponentMenu(FishyRpg.COMPONENT_MANAGERS+"Resource Manager")]
     public class ResourceManager : NetworkBehaviour, ISystemManager {
 
         #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////

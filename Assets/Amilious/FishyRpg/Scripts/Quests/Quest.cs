@@ -27,18 +27,28 @@ namespace Amilious.FishyRpg.Quests {
     /// <summary>
     /// This class is used to represent a quest.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewQuest", menuName = FishNetRpg.QUEST_MENU_ROOT+"Quest")]
+    [CreateAssetMenu(fileName = "NewQuest", menuName = FishyRpg.QUEST_MENU_ROOT+"Quest")]
     public class Quest : AmiliousScriptableObject<Quest> {
-        
-        private static readonly StringBuilder KeyBuilder = new (64);
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
         
-        [SerializeField] private string questName;
-        [SerializeField, Multiline] private string questDescription;
-        [SerializeField] private List<QuestStage> questStages = new();
-        [SerializeField] private List<AbstractRequirement> requirements = new ();
-        [SerializeField] private bool canAbandon = true;
+        [SerializeField, Tooltip("The name of the quest!")] private string questName;
+        [SerializeField, Tooltip("If true the quest can be abandoned.")] private bool canAbandon = true;
+        [SerializeField, Multiline, Tooltip("The quest's description.")] private string description;
+        [SerializeField, Tooltip("This can be used to sort quests.")] 
+        private List<QuestType> questTypes = new List<QuestType>();
+        [SerializeField, Tooltip("The stages of the quest.")] private List<QuestStage> questStages = new();
+        [SerializeField, Tooltip("The requirements that must be met before the quest can be accepted")] 
+        private List<AbstractRequirement> requirements = new ();
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        #region Private Fields /////////////////////////////////////////////////////////////////////////////////////////
+        
+        /// <summary>
+        /// This string builder is used for generating keys used for the quest data.
+        /// </summary>
+        private static readonly StringBuilder KeyBuilder = new (64);
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -49,26 +59,47 @@ namespace Amilious.FishyRpg.Quests {
         /// </summary>
         public bool CanAbandon => canAbandon;
 
+        /// <summary>
+        /// This property is used to get the quest's name.
+        /// </summary>
+        public string QuestName => questName;
+
+        /// <summary>
+        /// This property is used to get the quest's description.
+        /// </summary>
+        public string Description => description;
+
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
 
+        /// <summary>
+        /// This method is used to check if the quest belongs to the given quest type.
+        /// </summary>
+        /// <param name="questType">The quest type that you want to check for.</param>
+        /// <returns>True if the quest is of the given quest type, otherwise false.</returns>
+        public bool IsQuestType(QuestType questType) => questTypes?.Contains(questType) ?? false;
+        
         /// <summary>
         /// This method is used to check if the quest is complete.
         /// </summary>
         /// <param name="manager">The quest manager.</param>
         /// <returns>True if the quest is complete, otherwise false.</returns>
         public bool IsComplete(QuestManager manager) {
-            //check if the current stage is complete
-            if(!GetCurrentStage(manager, out var startIndex).IsComplete(manager, Base64Id, startIndex)) return false;
-            if(startIndex + 1 == questStages.Count) return true;
-            manager[Base64Id, questStages.Count,true]++;
-            //loop to check for complete
-            while(GetCurrentStage(manager, out startIndex).IsComplete(manager, Base64Id, startIndex)) {
-                if(startIndex + 1 == questStages.Count) return true;
-                manager[Base64Id, questStages.Count,true]++;
+            //check if the current stage is a valid stage, if not the quest is complete.
+            if(!TryGetCurrentStageInfo(manager, out var stageIndex, out var startIndex)) return true;
+            while(stageIndex<questStages.Count) {
+                //check if the current stage is complete
+                var currentComplete = questStages[stageIndex].IsComplete(manager, this, BaseKey, startIndex);
+                //if the current stage is not complete than the quest is not complete
+                if(!currentComplete) return false;
+                //move to the next stage
+                manager[Base64Id, questStages.Count, true]++;
+                stageIndex++;
+                startIndex = StartIndex(stageIndex);
             }
-            return false;
+            //if we reach here all stages are complete
+            return true;
         }
 
         /// <summary>
@@ -77,9 +108,9 @@ namespace Amilious.FishyRpg.Quests {
         /// <param name="manager">The quest manager.</param>
         public void ClearAllProgress(QuestManager manager) {
             var startIndex = 0;
-            for(var i = 0; i < questStages.Count; i++) {
-                questStages[i].ClearAllProgress(manager, Base64Id, startIndex);
-                startIndex += questStages[i].TaskCount;
+            foreach(var stage in questStages) {
+                stage.ClearAllProgress(manager, this, BaseKey, startIndex);
+                startIndex += stage.TaskCount;
             }
         }
         
@@ -92,8 +123,100 @@ namespace Amilious.FishyRpg.Quests {
             return requirements.All(requirement => requirement.MeetsRequirement(player));
         }
 
+        /// <summary>
+        /// This method is used to make sure that the task have a reference to the quest manager.
+        /// </summary>
+        /// <param name="manager">The quest manager that you want to register with the tasks.</param>
         public void AddManager(QuestManager manager) {
             foreach(var stage in questStages) stage.AddManager(manager);
+        }
+        
+        /// <summary>
+        /// This method is called to send information back to the task that sent it.
+        /// </summary>
+        /// <param name="manager">The quest manager.</param>
+        /// <param name="val1">The first value.</param>
+        /// <typeparam name="T">The type of the task that sent the data.</typeparam>
+        /// <typeparam name="TV1">The type of the first value.</typeparam>
+        public void TriggerCallback<T,TV1>(QuestManager manager, TV1 val1) where T : QuestTask<TV1> {
+            if(!TryGetCurrentStageInfo(manager,out var stageIndex, out var startIndex)) return;
+            var stage = questStages[stageIndex];
+            for(var i = 0; i < stage.TaskCount; i++) {
+                if(stage[i] is not T task) continue;
+                task.TriggerCallback(manager,this,Key(startIndex,i),val1);
+            }
+        }
+
+        /// <summary>
+        /// This method is called to send information back to the task that sent it.
+        /// </summary>
+        /// <param name="manager">The quest manager.</param>
+        /// <param name="val1">The first value.</param>
+        /// <param name="val2">The second value.</param>
+        /// <typeparam name="T">The type of the task that sent the data.</typeparam>
+        /// <typeparam name="TV1">The type of the first value.</typeparam>
+        /// <typeparam name="TV2">The type of the second value.</typeparam>
+        public void TriggerCallback<T, TV1, TV2>(QuestManager manager, TV1 val1, TV2 val2) 
+            where T : QuestTask<TV1, TV2> {
+            if(!TryGetCurrentStageInfo(manager,out var stageIndex, out var startIndex)) return;
+            var stage = questStages[stageIndex];
+            for(var i = 0; i < stage.TaskCount; i++) {
+                if(stage[i] is not T task) continue;
+                task.TriggerCallback(manager,this,Key(startIndex,i),val1,val2);
+            }
+        }
+
+        /// <summary>
+        /// This method is called to send information back to the task that sent it.
+        /// </summary>
+        /// <param name="manager">The quest manager.</param>
+        /// <param name="val1">The first value.</param>
+        /// <param name="val2">The second value.</param>
+        /// <param name="val3">The third value.</param>
+        /// <typeparam name="T">The type of the task that sent the data.</typeparam>
+        /// <typeparam name="TV1">The type of the first value.</typeparam>
+        /// <typeparam name="TV2">The type of the second value.</typeparam>
+        /// <typeparam name="TV3">The type of the third value.</typeparam>
+        public void TriggerCallback<T,TV1,TV2,TV3>(QuestManager manager, TV1 val1, TV2 val2, TV3 val3) 
+            where T : QuestTask<TV1,TV2,TV3> {
+            if(!TryGetCurrentStageInfo(manager,out var stageIndex, out var startIndex)) return;
+            var stage = questStages[stageIndex];
+            for(var i = 0; i < stage.TaskCount; i++) {
+                if(stage[i] is not T task) continue;
+                task.TriggerCallback(manager,this,Key(startIndex,i),val1,val2,val3);
+            }
+        }
+
+        /// <summary>
+        /// This method is called to send information back to the task that sent it.
+        /// </summary>
+        /// <param name="manager">The quest manager.</param>
+        /// <param name="val1">The first value.</param>
+        /// <param name="val2">The second value.</param>
+        /// <param name="val3">The third value.</param>
+        /// <param name="val4">The fourth value.</param>
+        /// <typeparam name="T">The type of the task that sent the data.</typeparam>
+        /// <typeparam name="TV1">The type of the first value.</typeparam>
+        /// <typeparam name="TV2">The type of the second value.</typeparam>
+        /// <typeparam name="TV3">The type of the third value.</typeparam>
+        /// <typeparam name="TV4">The type of the fourth value.</typeparam>
+        public void TriggerCallback<T,TV1,TV2,TV3,TV4>(QuestManager manager, TV1 val1, TV2 val2, TV3 val3, 
+            TV4 val4) where T : QuestTask<TV1,TV2,TV3,TV4> {
+            if(!TryGetCurrentStageInfo(manager,out var stageIndex, out var startIndex)) return;
+            var stage = questStages[stageIndex];
+            for(var i = 0; i < stage.TaskCount; i++) {
+                if(stage[i] is not T task) continue;
+                task.TriggerCallback(manager,this,Key(startIndex,i),val1,val2,val3,val4);
+            }
+        }
+
+        /// <summary>
+        /// This method is called when a task is active at the rate set for the quest manager.
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        public void Update(QuestManager manager) {
+            if(!TryGetCurrentStageInfo(manager, out var stageIndex, out var startIndex)) return;
+            questStages[stageIndex].Update(manager, this, BaseKey, startIndex);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,53 +248,50 @@ namespace Amilious.FishyRpg.Quests {
         public virtual void OnQuestAbandoned(QuestManager manager) { }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
+                   
+        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// The method is used to get Key.
+        /// This method is used to get the base key with the task index.
         /// </summary>
-        private StringBuilder Key(int index) =>KeyBuilder.Clear().Append(Base64Id).Append(index);
+        /// <param name="startIndex">The start index for the quest stage.</param>
+        /// <param name="index">The task index within the stage.</param>
+        /// <returns>The base index with the task index.</returns>
+        private StringBuilder Key(int startIndex,int index) =>KeyBuilder.Clear()
+            .Append(Base64Id).Append(startIndex+index);
 
-        public void TriggerCallback<T, TV1>(QuestManager manager, TV1 val1) where T : QuestTask<TV1> {
-            var tasks = GetCurrentStage(manager, out var startIndex);
-            for(var i = 0; i < tasks.TaskCount; i++) {
-                if(tasks[i] is not T task) continue;
-                task.TriggerCallback(manager,this,Key(startIndex+i),val1);
-            }
-        }
-        
-        public void TriggerCallback<T, TV1, TV2>(QuestManager manager, TV1 val1, TV2 val2) 
-            where T : QuestTask<TV1, TV2> {
-            var tasks = GetCurrentStage(manager, out var startIndex);
-            for(var i = 0; i < tasks.TaskCount; i++) {
-                if(tasks[i] is not T task) continue;
-                task.TriggerCallback(manager,this,Key(startIndex+i),val1,val2);
-            }
-        }
-        
-        public void TriggerCallback<T, TV1, TV2, TV3>(QuestManager manager, TV1 val1, TV2 val2, TV3 val3) 
-            where T : QuestTask<TV1, TV2, TV3> {
-            var tasks = GetCurrentStage(manager, out var startIndex);
-            for(var i = 0; i < tasks.TaskCount; i++) {
-                if(tasks[i] is not T task) continue;
-                task.TriggerCallback(manager,this,Key(startIndex+i),val1,val2,val3);
-            }
-        }
-        
-        public void TriggerCallback<T, TV1, TV2, TV3, TV4>(QuestManager manager, TV1 val1, TV2 val2, TV3 val3, 
-            TV4 val4) where T : QuestTask<TV1, TV2, TV3,TV4> {
-            var tasks = GetCurrentStage(manager, out var startIndex);
-            for(var i = 0; i < tasks.TaskCount; i++) {
-                if(tasks[i] is not T task) continue;
-                task.TriggerCallback(manager,this,Key(startIndex+i),val1,val2,val3,val4);
-            }
+        /// <summary>
+        /// This method is used to get the base key.
+        /// </summary>
+        private StringBuilder BaseKey => KeyBuilder.Clear().Append(Base64Id);
+
+        /// <summary>
+        /// This method is used to get information related to the current stage.
+        /// </summary>
+        /// <param name="manager">The quest manager.</param>
+        /// <param name="stageIndex">The current stage index.</param>
+        /// <param name="startIndex">The startIndex for the current stage.</param>
+        /// <returns>True if the current stage is valid, otherwise false.</returns>
+        private bool TryGetCurrentStageInfo(QuestManager manager, out int stageIndex, out int startIndex) {
+            stageIndex = manager[Base64Id];
+            startIndex = StartIndex(stageIndex);
+            return stageIndex >= 0 && stageIndex < questStages.Count;
         }
 
-        private QuestStage GetCurrentStage(QuestManager manager, out int startIndex) {
-            var stage = manager[Base64Id, questStages.Count,true];
-            startIndex = 0;
-            for(var i = 0; i <= stage; i++) startIndex += questStages[i].TaskCount;
-            return questStages[stage];
+        /// <summary>
+        /// This method is used to get the start index for the given stage index.
+        /// </summary>
+        /// <param name="stageIndex">The stage index.</param>
+        /// <returns>The start index for the give stage index.</returns>
+        private int StartIndex(int stageIndex) {
+            if(questStages.Count == 0) return 0;
+            stageIndex = Mathf.Clamp(stageIndex, 0, questStages.Count - 1);
+            var startIndex = 0;
+            for(var i = 0; i <= stageIndex; i++) startIndex += questStages[i].TaskCount;
+            return startIndex;
         }
+        
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
     }
 }

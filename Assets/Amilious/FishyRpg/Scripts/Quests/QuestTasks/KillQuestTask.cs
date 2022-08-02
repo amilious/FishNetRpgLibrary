@@ -30,6 +30,9 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
 
         #region Constants //////////////////////////////////////////////////////////////////////////////////////////////
         
+        /// <summary>
+        /// This constant is used as the key for storing the kill count.
+        /// </summary>
         private const string KILLS = "kills";
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,17 +67,18 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         #region Protected Methods //////////////////////////////////////////////////////////////////////////////////////
         
         /// <inheritdoc />
-        protected override void ClearProgress(QuestManager manager, StringBuilder baseKey) {
+        protected override void ClearProgress(QuestManager manager, Quest quest, StringBuilder baseKey) {
             manager.ClearData(baseKey.Append(KILLS));
         }
 
         /// <inheritdoc />
-        protected override int GetCompletedActions(QuestManager manager, StringBuilder baseKey) {
+        protected override int GetCompletedActions(QuestManager manager, Quest quest, StringBuilder baseKey) {
             return manager[baseKey.Append(KILLS)];
         }
         
         /// <inheritdoc />
-        protected override void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, Entity died, Entity killer) {
+        protected override void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, 
+            Entity died, Entity killer) {
             if(!countPartyKills&&killer.ObjectId!=manager.Player.ObjectId) return;
             if(countFollowerKills && !killer.IsPlayerOrParty(manager.Player, countFollowerKills)) return;
             if(!killedRequirements.All(x => x.MeetsRequirement(died))) return;
@@ -86,18 +90,26 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         
         #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
         
-        private void OnEnable() {
-            Entity.OnEntityDied += OnEntityDied;
-        }
+        /// <summary>
+        /// Use on enable to subscribe to the death listener.
+        /// </summary>
+        private void OnEnable() => Entity.OnEntityDied += OnEntityDied;
 
-        private void OnDisable() {
-            Entity.OnEntityDied -= OnEntityDied;
-        }
-        
-        private void OnEntityDied(Entity killed, Entity killer, string _) {
+        /// <summary>
+        /// Use on disable to unsubscribe to the death listener.
+        /// </summary>
+        private void OnDisable() => Entity.OnEntityDied -= OnEntityDied;
+
+        /// <summary>
+        /// This method is triggered when an entity dies.
+        /// </summary>
+        /// <param name="died">The entity that died.</param>
+        /// <param name="killer">The entity that killed the dead entity.</param>
+        /// <param name="_">The death message.</param>
+        private void OnEntityDied(Entity died, Entity killer, string _) {
             if(ActiveManagers.Count == 0) return; 
             //make sure that killed is not null
-            if(killed == null||killer==null) return;
+            if(died == null||killer==null) return;
             //check to make sure that it is for a player that matters
             var send = false;
             foreach(var player in Players) {
@@ -112,7 +124,7 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
                 break;
             }
             //update the quests.
-            if(send)SendData(this,killed,killer);
+            if(send)SendData(this,died,killer);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

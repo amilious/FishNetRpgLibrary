@@ -22,7 +22,7 @@ namespace Amilious.FishyRpg.Modifiers {
     /// <summary>
     /// This manager is used to handle special duration modifiers in an efficient way.
     /// </summary>
-    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Modifier Manager")]
+    [AddComponentMenu(FishyRpg.COMPONENT_MANAGERS+"Modifier Manager")]
     public class ModifierManager : MonoBehaviour {
 
         #region Private Instance Fields ////////////////////////////////////////////////////////////////////////////////

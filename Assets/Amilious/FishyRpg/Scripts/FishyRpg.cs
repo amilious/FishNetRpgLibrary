@@ -18,7 +18,7 @@ namespace Amilious.FishyRpg {
     /// <summary>
     /// This class is used to hold global information for the FishNetRpg library.
     /// </summary>
-    public static class FishNetRpg {
+    public static class FishyRpg {
         
         #region Menus //////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -102,6 +102,15 @@ namespace Amilious.FishyRpg {
         public const string MISSING_SYSTEM_MANAGER = "The entity \"{0}\" does not contains the \"{1}\" system manager.";
 
         #endregion
+
+        #region Default Values /////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// This is the default description.
+        /// </summary>
+        public const string DEFAULT_DESCRIPTION = "Do description!";
+
+        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 }

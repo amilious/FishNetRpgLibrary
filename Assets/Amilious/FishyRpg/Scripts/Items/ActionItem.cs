@@ -26,7 +26,7 @@ namespace Amilious.FishyRpg.Items {
     
     [ItemEditorBadge("Icons/ItemBadges/ActionBadge")]
     [CreateAssetMenu(fileName = "NewActionItem", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"New Action Item", order = 21)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Action Item", order = 21)]
     public class ActionItem : Item {
 
         [SerializeField, AmiliousTab("Action"), Tooltip("If true the item will be consumed when it is used.")] 

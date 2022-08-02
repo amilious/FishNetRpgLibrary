@@ -31,7 +31,7 @@ namespace Amilious.FishyRpg.Items {
     [EditorLink("Jira", "Icons/jira", "https://fishnet-rpg-library.atlassian.net/jira/software/c/projects/FRL/boards/1", " jira")]
     [ItemEditorBadge("Icons/ItemBadges/ItemBadge")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
     public class Item : AmiliousScriptableObject<Item> {
 
         private const string DEFAULT_DESCRIPTION = "No description!";
@@ -189,7 +189,7 @@ namespace Amilious.FishyRpg.Items {
                                   
         protected override void BeforeSerialize() {
             if(string.IsNullOrWhiteSpace(displayName)) displayName = name.SplitCamelCase();
-            if(string.IsNullOrWhiteSpace(description)) description = DEFAULT_DESCRIPTION;
+            if(string.IsNullOrWhiteSpace(description)) description = FishyRpg.DEFAULT_DESCRIPTION;
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

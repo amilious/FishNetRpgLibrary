@@ -21,7 +21,7 @@ using UnityEngine;
 namespace Amilious.FishyRpg.Items {
     
     [CreateAssetMenu(fileName = "NewItemRarity", 
-        menuName = FishNetRpg.ITEM_MENU_ROOT+"New Rarity", order = 0)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Rarity", order = 0)]
     public class ItemRarity : AmiliousScriptableObject {
 
         [SerializeField] private string rarityName;

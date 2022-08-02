@@ -28,7 +28,7 @@ namespace Amilious.FishyRpg.Statistics {
     /// This class is used to manage an entities stats.
     /// </summary>
     [RequireComponent(typeof(Entity),typeof(ModifierManager))]
-    [AddComponentMenu(FishNetRpg.COMPONENT_MANAGERS+"Stat Manager")]
+    [AddComponentMenu(FishyRpg.COMPONENT_MANAGERS+"Stat Manager")]
     public class StatManager : NetworkBehaviour, ISystemManager {
 
         #region Delagates //////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ namespace Amilious.FishyRpg.Statistics {
             Initialize();
             if(modifier is not IStatModifier statModifier) return false;
             if(!_statInfo.TryGetValue(statModifier.StatName, out var stat)) {
-                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,statModifier.StatName);
+                Debug.LogWarningFormat(FishyRpg.MISSING_STAT,Entity.name,statModifier.StatName);
                 return false;
             }
             stat.AddModifier(new ModifierSource<IStatModifier>(statModifier,source));
@@ -212,7 +212,7 @@ namespace Amilious.FishyRpg.Statistics {
             Initialize();
             if(modifier is not IStatModifier statModifier) return false;
             if(!_statInfo.TryGetValue(statModifier.StatName, out var stat)) {
-                Debug.LogWarningFormat(FishNetRpg.MISSING_STAT,Entity.name,statModifier.StatName);
+                Debug.LogWarningFormat(FishyRpg.MISSING_STAT,Entity.name,statModifier.StatName);
                 return false;
             }
             stat.AddModifier(new ModifierSource<IStatModifier>(statModifier,sourceId));
@@ -274,7 +274,7 @@ namespace Amilious.FishyRpg.Statistics {
         /// <param name="stat">The stat that needs to be initialized.</param>
         protected virtual void InitializeStat(Stat stat) {
             if(_statInfo.ContainsKey(stat.StatName)) {
-                Debug.LogWarningFormat(FishNetRpg.EXISTING_STAT,Entity.name,stat.StatName);
+                Debug.LogWarningFormat(FishyRpg.EXISTING_STAT,Entity.name,stat.StatName);
                 return;
             }
             if(IsServer) {

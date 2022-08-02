@@ -23,7 +23,7 @@ namespace Amilious.FishyRpg.Requirements {
     /// <summary>
     /// This method is used to add a stat requirement.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewStatRequirement", menuName = FishNetRpg.REQUIREMENT_MENU_ROOT+"Stat")]
+    [CreateAssetMenu(fileName = "NewStatRequirement", menuName = FishyRpg.REQUIREMENT_MENU_ROOT+"Stat")]
     public class StatRequirement : AbstractRequirement {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////

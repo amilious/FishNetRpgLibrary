@@ -22,7 +22,7 @@ namespace Amilious.FishyRpg.Requirements {
     /// <summary>
     /// This requirement is used to make sure the player has a correct party size.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewPartySizeRequirement", menuName = FishNetRpg.REQUIREMENT_MENU_ROOT+"Party Size")]
+    [CreateAssetMenu(fileName = "NewPartySizeRequirement", menuName = FishyRpg.REQUIREMENT_MENU_ROOT+"Party Size")]
     public class PartySizeRequirement : AbstractRequirement {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

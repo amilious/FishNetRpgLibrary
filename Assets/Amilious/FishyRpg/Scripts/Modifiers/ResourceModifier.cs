@@ -20,7 +20,7 @@ namespace Amilious.FishyRpg.Modifiers {
     /// <summary>
     /// This class is used to modify values in the resource's system.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewResourceModifier", menuName = FishNetRpg.MODIFIERS_MENU_ROOT + "Resource")]
+    [CreateAssetMenu(fileName = "NewResourceModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Resource")]
     public class ResourceModifier : Modifier, IResourceModifier {
         
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////

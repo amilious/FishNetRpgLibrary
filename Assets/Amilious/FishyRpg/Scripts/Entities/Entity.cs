@@ -149,7 +149,7 @@ namespace Amilious.FishyRpg.Entities {
             Initialize();
             var type = typeof(T);
             if(_managers.TryGetValue(type,out var manager)) return (T) manager;
-            throw new MissingMemberException(string.Format(FishNetRpg.MISSING_SYSTEM_MANAGER, name, type.Name));
+            throw new MissingMemberException(string.Format(FishyRpg.MISSING_SYSTEM_MANAGER, name, type.Name));
         }
 
         /// <summary>
