@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefc1d289396424bbbe465b3d231f6ec, type: 3}
+  m_Name: NewKillTask
+  m_EditorClassIdentifier: 
+  id: 133039275278689014
+  base64Id: 9mIpGISm2AE=
+  resourcePath: 
+  isInResourceFolder: 0
+  taskName: New Kill Task
+  description: Do description!
+  useEntityGroup: 0
+  countPartyKills: 1
+  countFollowerKills: 1
+  entityGroup: {fileID: 0}
+  entityType: {fileID: 0}
+  entitiesToKill: 0
+  killedRequirements: []

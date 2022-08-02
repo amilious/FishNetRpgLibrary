@@ -46,8 +46,6 @@ namespace Amilious.FishyRpg {
         public const int STAT_START = RESOURCES_START+1;
         public const int INVENTORY_START = STAT_START + 11;
 
-        
-
         /// <summary>
         /// This value is the root path of the requirements asset menu.
         /// </summary>

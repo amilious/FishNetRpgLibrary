@@ -53,7 +53,7 @@ namespace Amilious.Core.Editor.Drawers {
                 width -= 87;
             }
             position.width = 30+width;
-            var newColor = EditorGUI.ColorField(position,null,oldColor,true,att.ShowAlpha,att.UseHDR);
+            var newColor = EditorGUI.ColorField(position,GUIContent.none, oldColor,true,att.ShowAlpha,att.UseHDR);
             if(!newHex.StartsWith('#')) newHex = '#' + newHex;
             if(newColor != oldColor) property.colorValue = newColor;
             else if(newHex != oldHex && ColorUtility.TryParseHtmlString(newHex, out newColor)){

@@ -170,7 +170,7 @@ namespace Amilious.Core {
         /// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
         public void DoRaycast(Ray ray, float maxDistance = float.PositiveInfinity, int layerMask = -5, 
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.RaycastNonAlloc(ray, RaycastBuffer, maxDistance, layerMask, queryTriggerInteraction);
+            HitSize = Physics.RaycastNonAlloc(ray, RaycastBuffer, maxDistance, layerMask, queryTriggerInteraction);
         }
         
         /// <summary>
@@ -183,7 +183,7 @@ namespace Amilious.Core {
         /// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
         public void DoRaycast(Vector3 origin, Vector3 direction, float maxDistance = float.PositiveInfinity, 
             int layerMask = -5, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.RaycastNonAlloc(origin, direction, RaycastBuffer, maxDistance, layerMask, queryTriggerInteraction);
+            HitSize = Physics.RaycastNonAlloc(origin, direction, RaycastBuffer, maxDistance, layerMask, queryTriggerInteraction);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ namespace Amilious.Core {
         public void DoSphereCast(Vector3 origin, in float radius, Vector3 direction,
             float maxDistance = float.PositiveInfinity, int layerMask = -5, 
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.SphereCastNonAlloc(origin, radius, direction, RaycastBuffer, maxDistance, layerMask, 
+            HitSize = Physics.SphereCastNonAlloc(origin, radius, direction, RaycastBuffer, maxDistance, layerMask, 
                 queryTriggerInteraction);
         }
         
@@ -314,7 +314,7 @@ namespace Amilious.Core {
         /// <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
         public void DoSphereCast(Ray ray, in float radius, float maxDistance = float.PositiveInfinity, 
             int layerMask = -5, QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.SphereCastNonAlloc(ray, radius, RaycastBuffer, maxDistance, layerMask,queryTriggerInteraction);
+            HitSize = Physics.SphereCastNonAlloc(ray, radius, RaycastBuffer, maxDistance, layerMask,queryTriggerInteraction);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -435,7 +435,7 @@ namespace Amilious.Core {
         public void DoBoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction,
             float maxDistance = float.PositiveInfinity, int layerMask = -5, 
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.BoxCastNonAlloc(center, halfExtents, direction, RaycastBuffer, Quaternion.identity, maxDistance,
+            HitSize = Physics.BoxCastNonAlloc(center, halfExtents, direction, RaycastBuffer, Quaternion.identity, maxDistance,
                 layerMask, queryTriggerInteraction);
         }
         
@@ -452,7 +452,7 @@ namespace Amilious.Core {
         public void DoBoxCast(Vector3 center, Vector3 halfExtents, Vector3 direction,Quaternion orientation, 
             float maxDistance = float.PositiveInfinity,int layerMask = -5, 
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.BoxCastNonAlloc(center, halfExtents, direction, RaycastBuffer, orientation, 
+            HitSize = Physics.BoxCastNonAlloc(center, halfExtents, direction, RaycastBuffer, orientation, 
                 maxDistance,layerMask,queryTriggerInteraction);
         }
         
@@ -525,7 +525,7 @@ namespace Amilious.Core {
         public void DoCapsuleCast(Vector3 point1, Vector3 point2, float radius, Vector3 direction, 
             float maxDistance = float.PositiveInfinity, int layerMask = -5, 
             QueryTriggerInteraction queryTriggerInteraction = QueryTriggerInteraction.UseGlobal) {
-            Physics.CapsuleCastNonAlloc(point1, point2, radius, direction, RaycastBuffer, maxDistance, layerMask,
+            HitSize = Physics.CapsuleCastNonAlloc(point1, point2, radius, direction, RaycastBuffer, maxDistance, layerMask,
                 queryTriggerInteraction);
         }
         
