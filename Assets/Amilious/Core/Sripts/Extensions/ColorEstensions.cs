@@ -37,8 +37,10 @@ namespace Amilious.Core.Extensions {
         /// This method is used to get the RGB hex value of the color.
         /// </summary>
         /// <param name="color">The color that you want to get the hex value for.</param>
+        /// <param name="includeAlpha">If true will get rgba.</param>
         /// <returns>The RGB hex value of the color.</returns>
-        public static string HtmlRGB(this Color color) => ColorUtility.ToHtmlStringRGB(color);
+        public static string HtmlRGB(this Color color, bool includeAlpha=false) => 
+            includeAlpha? ColorUtility.ToHtmlStringRGBA(color) :ColorUtility.ToHtmlStringRGB(color);
 
         /// <summary>
         /// This method is used to create a texture filled with the color.

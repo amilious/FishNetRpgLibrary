@@ -13,10 +13,10 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+using UnityEngine;
 using Amilious.Core;
 using Amilious.Core.Attributes;
 using Amilious.Core.Extensions;
-using UnityEngine;
 
 namespace Amilious.FishyRpg.Items {
     
@@ -26,7 +26,7 @@ namespace Amilious.FishyRpg.Items {
 
         [SerializeField] private string rarityName;
         [SerializeField] private int rarityValue = 0;
-        [SerializeField, AmiliousColor] private Color rarityColor = UnityEngine.Color.white;
+        [SerializeField, AmiliousColor(showAlpha:false)] private Color rarityColor = Color.white;
 
         public string RarityName => rarityName;
 

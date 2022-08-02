@@ -38,18 +38,18 @@ namespace Amilious.Core.Editor.Drawers {
             var att = property.GetAttributes<AmiliousColorAttribute>().FirstOrDefault()??new AmiliousColorAttribute();
             
             var oldColor = property.colorValue;
-            var oldHex = '#'+oldColor.HtmlRGBA();
+            var oldHex = '#'+oldColor.HtmlRGB(att.ShowAlpha);
             var newHex = oldHex;
             EditorGUI.BeginProperty(position, label, property);
             EditorGUI.LabelField(position, label);
-            position.x += EditorGUIUtility.labelWidth;
-            var width = position.width -= EditorGUIUtility.labelWidth;
+            position.x += EditorGUIUtility.labelWidth+2;
+            var width = position.width -= EditorGUIUtility.labelWidth+2;
             if(position.width < 30){ return;}
             width -= 30;
             if(width >= 87) {
-                position.width = 87;
+                position.width = 89;
                 newHex = EditorGUI.TextField(position, oldHex);
-                position.x += 85;
+                position.x += 87;
                 width -= 87;
             }
             position.width = 30+width;
