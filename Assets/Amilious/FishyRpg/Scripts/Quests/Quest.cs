@@ -127,8 +127,8 @@ namespace Amilious.FishyRpg.Quests {
         /// This method is used to make sure that the task have a reference to the quest manager.
         /// </summary>
         /// <param name="manager">The quest manager that you want to register with the tasks.</param>
-        public void AddManager(QuestManager manager) {
-            foreach(var stage in questStages) stage.AddManager(manager);
+        public void RegisterManager(QuestManager manager) {
+            foreach(var stage in questStages) stage.RegisterManager(manager);
         }
         
         /// <summary>

@@ -80,8 +80,8 @@ namespace Amilious.FishyRpg.Quests {
         /// This method is used to notify the tasks of a manager that is using the task.
         /// </summary>
         /// <param name="manager">The quest manager that is using the task.</param>
-        public void AddManager(QuestManager manager) {
-            foreach(var task in questTasks) task.AddManager(manager);
+        public void RegisterManager(QuestManager manager) {
+            foreach(var task in questTasks) task.RegisterManager(manager);
         }
 
         /// <summary>

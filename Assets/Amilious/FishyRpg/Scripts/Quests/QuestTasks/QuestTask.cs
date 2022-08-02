@@ -13,14 +13,13 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using Amilious.Core;
 using Amilious.Core.Extensions;
 using Amilious.FishyRpg.Entities;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.PlayerLoop;
 
 namespace Amilious.FishyRpg.Quests.QuestTasks {
 
@@ -74,10 +73,10 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// This method is used to add the manager.
+        /// This method is used to register a quest manager.
         /// </summary>
-        /// <param name="questManager">The manager that you want to add.</param>
-        public void AddManager(QuestManager questManager) {
+        /// <param name="questManager">The manager that you want to register.</param>
+        public void RegisterManager(QuestManager questManager) {
             if(ActiveManagers.Contains(questManager)) return;
             ActiveManagers.Add(questManager);
         }
@@ -149,69 +148,197 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
-    
-    public abstract class QuestTask<T, T2, T3, T4> : QuestTask {
 
-        public void SendData<TS>(TS sender, T val1, T2 val2, T3 val3, T4 val4) where TS : QuestTask<T, T2, T3, T4> {
+    /// <summary>
+    /// This vision of <see cref="QuestTask"/> is used for tasks that need to send three values.
+    /// </summary>
+    /// <typeparam name="T">The type of the first send value.</typeparam>
+    /// <typeparam name="T2">The type of the second send value.</typeparam>
+    /// <typeparam name="T3">The type of the third send value.</typeparam>
+    /// <typeparam name="T4">The type of the fourth send value.</typeparam>
+    public abstract class QuestTask<T,T2,T3,T4> : QuestTask {
+
+        /// <summary>
+        /// This method is used to send data to all of the registered quest managers.
+        /// </summary>
+        /// <param name="sender">The <see cref="QuestTask"/> that is sending the data.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        /// <param name="val4">The fourth value of the send data.</param>
+        /// <typeparam name="TS">The type of the <paramref name="sender"/>.</typeparam>
+        protected void SendData<TS>(TS sender, T val1, T2 val2, T3 val3, T4 val4) where TS : QuestTask<T, T2, T3, T4> {
             foreach(var manager in ActiveManagers) {
                 if(manager == null) continue;
                 manager.TriggerCallback<TS,T,T2,T3,T4>(val1,val2,val3,val4);
             }
         }
 
-        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val,
-            T2 val2, T3 val3, T4 val4) => Callback(manager, quest, baseKey.Append(Base64Id), val, val2, val3, val4);
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        /// <param name="val4">The fourth value of the send data.</param>
+        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1,
+            T2 val2, T3 val3, T4 val4) => Callback(manager, quest, baseKey.Append(Base64Id), val1, val2, val3, val4);
         
-        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val, 
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        /// <param name="val4">The fourth value of the send data.</param>
+        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1, 
             T2 val2, T3 val3, T4 val4);
     }
-    
-    public abstract class QuestTask<T, T2, T3> : QuestTask {
 
-        public void SendData<TS>(TS sender, T val1, T2 val2, T3 val3) where TS : QuestTask<T, T2, T3> {
+    /// <summary>
+    /// This vision of <see cref="QuestTask"/> is used for tasks that need to send three values.
+    /// </summary>
+    /// <typeparam name="T">The type of the first send value.</typeparam>
+    /// <typeparam name="T2">The type of the second send value.</typeparam>
+    /// <typeparam name="T3">The type of the third send value.</typeparam>
+    public abstract class QuestTask<T,T2,T3> : QuestTask {
+
+        /// <summary>
+        /// This method is used to send data to all of the registered quest managers.
+        /// </summary>
+        /// <param name="sender">The <see cref="QuestTask"/> that is sending the data.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        /// <typeparam name="TS">The type of the <paramref name="sender"/>.</typeparam>
+        protected void SendData<TS>(TS sender, T val1, T2 val2, T3 val3) where TS : QuestTask<T, T2, T3> {
             foreach(var manager in ActiveManagers) {
                 if(manager == null) continue;
                 manager.TriggerCallback<TS,T,T2,T3>(val1,val2,val3);
             }
         }
         
-        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val,
-            T2 val2, T3 val3) => Callback(manager, quest, baseKey.Append(Base64Id), val, val2, val3);
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1,
+            T2 val2, T3 val3) => Callback(manager, quest, baseKey.Append(Base64Id), val1, val2, val3);
         
-        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val, 
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <param name="val3">The third value of the send data.</param>
+        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1, 
             T2 val2, T3 val3);
     }
-    
-    public abstract class QuestTask<T, T2> : QuestTask {
 
-        public void SendData<TS>(TS sender, T val1, T2 val2) where TS : QuestTask<T, T2> {
+    /// <summary>
+    /// This vision of <see cref="QuestTask"/> is used for tasks that need to send two values.
+    /// </summary>
+    /// <typeparam name="T">The type of the first send value.</typeparam>
+    /// <typeparam name="T2">The type of the second send value.</typeparam>
+    public abstract class QuestTask<T,T2> : QuestTask {
+
+        /// <summary>
+        /// This method is used to send data to all of the registered quest managers.
+        /// </summary>
+        /// <param name="sender">The <see cref="QuestTask"/> that is sending the data.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        /// <typeparam name="TS">The type of the <paramref name="sender"/>.</typeparam>
+        protected void SendData<TS>(TS sender, T val1, T2 val2) where TS : QuestTask<T, T2> {
             foreach(var manager in ActiveManagers) {
                 if(manager == null) continue;
                 manager.TriggerCallback<TS,T,T2>(val1,val2);
             }
         }
         
-        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val,
-            T2 val2) => Callback(manager, quest, baseKey.Append(Base64Id), val, val2);
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1,
+            T2 val2) => Callback(manager, quest, baseKey.Append(Base64Id), val1, val2);
         
-        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val, 
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <param name="val2">The second value of the send data.</param>
+        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1, 
             T2 val2);
         
     }
     
+    /// <summary>
+    /// This vision of <see cref="QuestTask"/> is used for tasks that need to send one value.
+    /// </summary>
+    /// <typeparam name="T">The type of the first send value.</typeparam>
     public abstract class QuestTask<T> : QuestTask {
 
-        public void SendData<TS>(TS sender, T val1) where TS : QuestTask<T> {
+        /// <summary>
+        /// This method is used to send data to all of the registered quest managers.
+        /// </summary>
+        /// <param name="sender">The <see cref="QuestTask"/> that is sending the data.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        /// <typeparam name="TS">The type of the <paramref name="sender"/>.</typeparam>
+        protected void SendData<TS>(TS sender, T val1) where TS : QuestTask<T> {
             foreach(var manager in ActiveManagers) {
                 if(manager == null) continue;
                 manager.TriggerCallback<TS,T>(val1);
             }
         }
         
-        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val) =>
-            Callback(manager, quest, baseKey.Append(Base64Id), val);
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        public void TriggerCallback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1) =>
+            Callback(manager, quest, baseKey.Append(Base64Id), val1);
         
-        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val);
+        /// <summary>
+        /// This method is called from the <see cref="SendData{TS}"/> method adding additional parameters as it makes
+        /// its way back to the task. 
+        /// </summary>
+        /// <param name="manager">The calling manager.</param>
+        /// <param name="quest">The quest that has the task.</param>
+        /// <param name="baseKey">The base key for the task.</param>
+        /// <param name="val1">The first value of the send data.</param>
+        protected abstract void Callback(QuestManager manager, Quest quest, StringBuilder baseKey, T val1);
 
     }
     

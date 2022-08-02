@@ -119,7 +119,7 @@ namespace Amilious.FishyRpg.Quests {
             if(_activeQuests.Contains(quest)) return false;
             if(quest.MeetsAllRequirements(Player)) return false;
             _activeQuests.Add(quest);
-            quest.AddManager(this);
+            quest.RegisterManager(this);
             quest.OnQuestTaken(this);
             OnQuestTaken?.Invoke(Player,this,quest);
             return true;
