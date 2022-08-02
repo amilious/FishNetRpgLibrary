@@ -21,7 +21,7 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
     /// This class is used to provide a table of stat base values based on level.
     /// </summary>
     [CreateAssetMenu(fileName = "NewTableBaseProvider",
-        menuName = FishyRpg.STATS_MENU_ROOT + "Table Base Value Provider", order = 45)]
+        menuName = FishyRpg.STATS_MENU_ROOT + "Table Base Value Provider", order = FishyRpg.STAT_START+101)]
     public class StatTableBaseProvider : StatBaseValueProvider {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

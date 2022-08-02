@@ -11,7 +11,9 @@
 //  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious, Textos since 2022                      //                    
 //  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/          
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+using UnityEditor;
 
 namespace Amilious.FishyRpg {
     
@@ -25,51 +27,68 @@ namespace Amilious.FishyRpg {
         /// <summary>
         /// This value is the root path for this assembly in the asset menu.
         /// </summary>
-        public const string ASSET_MENU_ROOT = "Amilious/";
+        public const string ASSET_MENU_ROOT = "Amilious FishyRpg/";
 
-        public const string PROJECT_NAME = "FishNetRpg";
+        public const string PROJECT_NAME = "FishyRpg";
 
         /// <summary>
         /// This value is the root path for the component menu.
         /// </summary>
         public const string COMPONENT_MENU_ROOT = "Amilious/"+PROJECT_NAME+"/";
 
+        public const int ITEM_START = 140;
+        public const int ENTITY_START = ITEM_START+1;
+        public const int QUEST_START = ENTITY_START+1;
+        public const int MODIFIERS_START = QUEST_START+11;
+        public const int REQUIREMENT_START = MODIFIERS_START+1;
+        public const int LEVEL_START = REQUIREMENT_START+11;
+        public const int RESOURCES_START = LEVEL_START+1;
+        public const int STAT_START = RESOURCES_START+1;
+        public const int INVENTORY_START = STAT_START + 11;
+
+        
+
         /// <summary>
         /// This value is the root path of the requirements asset menu.
         /// </summary>
-        public const string REQUIREMENT_MENU_ROOT = ASSET_MENU_ROOT + "Requirements ("+PROJECT_NAME+")/";
+        public const string REQUIREMENT_MENU_ROOT = ASSET_MENU_ROOT + "Requirements/";
 
         /// <summary>
         /// This value is the root path of the stats asset menu.
         /// </summary>
-        public const string STATS_MENU_ROOT = ASSET_MENU_ROOT + "Stats ("+PROJECT_NAME+")/";
-
-        /// <summary>
-        /// This value is the root path of the resource asset menu.
-        /// </summary>
-        public const string MODIFIERS_MENU_ROOT = ASSET_MENU_ROOT + "Modifiers ("+PROJECT_NAME+")/";
+        public const string STATS_MENU_ROOT = ASSET_MENU_ROOT + "Stats/";
         
         /// <summary>
-        /// This value is the root path of the resource asset menu.
+        /// This value is the root path of the entity asset menu.
         /// </summary>
-        public const string QUEST_MENU_ROOT = ASSET_MENU_ROOT + "Quests ("+PROJECT_NAME+")/";
-
-        /// <summary>
-        /// This value is the root path of the resource asset menu.
-        /// </summary>
-        public const string RESOURCES_MENU_ROOT = ASSET_MENU_ROOT + "Resources ("+PROJECT_NAME+")/";
-
-        /// <summary>
-        /// This value is the root path of the level and xp asset menu.
-        /// </summary>
-        public const string XP_MENU_ROOT = ASSET_MENU_ROOT + "Experience ("+PROJECT_NAME+")/";
+        public const string ENTITY_MENU_ROOT = ASSET_MENU_ROOT + "Entities/";
         
         /// <summary>
         /// This value is the root path of the inventory asset menu.
         /// </summary>
-        public const string INVENTORY_MENU_ROOT = ASSET_MENU_ROOT + "Inventory ("+PROJECT_NAME+")/";
+        public const string INVENTORY_MENU_ROOT = ASSET_MENU_ROOT + "Inventory/";
 
-        public const string ITEM_MENU_ROOT = ASSET_MENU_ROOT + "Items ("+PROJECT_NAME+")/";
+        /// <summary>
+        /// This value is the root path of the resource asset menu.
+        /// </summary>
+        public const string MODIFIERS_MENU_ROOT = ASSET_MENU_ROOT + "Modifiers/";
+        
+        /// <summary>
+        /// This value is the root path of the resource asset menu.
+        /// </summary>
+        public const string QUEST_MENU_ROOT = ASSET_MENU_ROOT + "Quests/";
+
+        /// <summary>
+        /// This value is the root path of the resource asset menu.
+        /// </summary>
+        public const string RESOURCES_MENU_ROOT = ASSET_MENU_ROOT + "Resources/";
+
+        /// <summary>
+        /// This value is the root path of the level and xp asset menu.
+        /// </summary>
+        public const string XP_MENU_ROOT = ASSET_MENU_ROOT + "Experience/";
+
+        public const string ITEM_MENU_ROOT = ASSET_MENU_ROOT + "Items/";
 
         /// <summary>
         /// This value is the root component menu for managers.
@@ -111,6 +130,7 @@ namespace Amilious.FishyRpg {
         public const string DEFAULT_DESCRIPTION = "Do description!";
 
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
+        
+        
     }
 }

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a240e1c9ddd49f5a0da21fbfcbfa1f9, type: 3}
   m_Name: NewStandardItem
   m_EditorClassIdentifier: 
-  id: 133033902605119506
+  id: 133038436951575700
+  base64Id: 
   resourcePath: Items/NewStandardItem
   isInResourceFolder: 1
   displayName: New Item

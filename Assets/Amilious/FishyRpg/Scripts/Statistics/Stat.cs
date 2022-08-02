@@ -23,7 +23,7 @@ namespace Amilious.FishyRpg.Statistics {
     /// <summary>
     /// This class is used to represent a stat.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewStat", menuName = FishyRpg.STATS_MENU_ROOT+"Stat",order = 20)]
+    [CreateAssetMenu(fileName = "NewStat", menuName = FishyRpg.STATS_MENU_ROOT+"Stat", order = FishyRpg.STAT_START)]
     public class Stat : AmiliousScriptableObject {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

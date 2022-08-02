@@ -1,0 +1,9 @@
+
+
+namespace Amilious.FishyRpg.Statistics {
+    
+    
+    
+    
+
+}

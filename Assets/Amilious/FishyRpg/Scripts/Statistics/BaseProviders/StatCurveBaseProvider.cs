@@ -21,7 +21,7 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
     /// This class uses a curve to supply the values for a <see cref="StatBaseValueProvider"/>.
     /// </summary>
     [CreateAssetMenu(fileName = "NewCurveBaseProvider",
-        menuName = FishyRpg.STATS_MENU_ROOT + "Curve Base Value Provider", order = 46)]
+        menuName = FishyRpg.STATS_MENU_ROOT + "Curve Base Value Provider", order = FishyRpg.STAT_START+102)]
     public class StatCurveBaseProvider : StatBaseValueProvider {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

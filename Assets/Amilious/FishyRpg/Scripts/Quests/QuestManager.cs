@@ -25,7 +25,6 @@ namespace Amilious.FishyRpg.Quests {
     [RequireComponent(typeof(Player))]
     public class QuestManager : AmiliousNetworkBehavior {
 
-        [SerializeField, Min(.01f)] private float timeBetweenUpdates = 1;
         
         public delegate void QuestUpdateDelegate(Player player, QuestManager manager, Quest quest);
 
@@ -33,9 +32,6 @@ namespace Amilious.FishyRpg.Quests {
         public static event QuestUpdateDelegate OnQuestUpdated;
         public static event QuestUpdateDelegate OnQuestCompleted;
         public static event QuestUpdateDelegate OnQuestAbandoned;
-
-        private float _updateTime;
-        private float _deltaTime;
 
         [SyncObject] private readonly SyncDictionary<string, int> _questData = new SyncDictionary<string, int>();
         [SyncObject] private readonly SyncList<Quest> _activeQuests = new SyncList<Quest>();
@@ -173,20 +169,6 @@ namespace Amilious.FishyRpg.Quests {
             OnQuestCompleted?.Invoke(Player, this, quest);
             //all the quest items have been completed so we can clear the quest data.
             quest.ClearAllProgress(this);
-        }
-        
-        #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        #region Private Methods ////////////////////////////////////////////////////////////////////////////////////////
-        
-        /// <summary>
-        /// This method is used to update the quest tasks
-        /// </summary>
-        private void Update() {
-            if(_updateTime < Time.time) return;
-            _updateTime = Time.time + timeBetweenUpdates;
-            foreach(var quest in _activeQuests) quest.Update(this, Time.time-_deltaTime);
-            _deltaTime = Time.time;
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

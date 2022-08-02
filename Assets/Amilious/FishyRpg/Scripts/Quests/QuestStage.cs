@@ -63,18 +63,6 @@ namespace Amilious.FishyRpg.Quests {
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
         
         #region Public Methods /////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// This method is called when a task is active at the rate set for the quest manager.
-        /// </summary>
-        /// <param name="manager">The calling manager.</param>
-        /// <param name="quest">The quest that has the task.</param>
-        /// <param name="delta">The time since the last update.</param>
-        /// <param name="baseKey">The base key for the task.</param>
-        /// <param name="startIndex">The starting index.</param>
-        public void Update(QuestManager manager, Quest quest, float delta, StringBuilder baseKey, int startIndex) {
-            for(var i=0;i<questTasks.Count;i++) questTasks[i].Update(manager,quest,delta,baseKey.Append(startIndex+i));
-        }
         
         /// <summary>
         /// This method is used to notify the tasks of a manager that is using the task.

@@ -24,7 +24,7 @@ namespace Amilious.FishyRpg.Statistics.BaseProviders {
     /// This class uses <see cref="IFunctionProvider"/> to use a function graph as a <see cref="StatBaseValueProvider"/>.
     /// </summary>
     [CreateAssetMenu(fileName = "NewFunctionBaseProvider",
-        menuName = FishyRpg.STATS_MENU_ROOT + "Function Base Value Provider", order = 47)]
+        menuName = FishyRpg.STATS_MENU_ROOT + "Function Base Value Provider", order = FishyRpg.STAT_START+103)]
     public class StatFunctionBaseProvider : StatBaseValueProvider, IFunctionProvider {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

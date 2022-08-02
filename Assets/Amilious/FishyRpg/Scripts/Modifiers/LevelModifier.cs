@@ -17,7 +17,8 @@ using UnityEngine;
 
 namespace Amilious.FishyRpg.Modifiers {
     
-    [CreateAssetMenu(fileName = "NewLevelModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Level")]
+    [CreateAssetMenu(fileName = "NewLevelModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Level",
+        order = FishyRpg.MODIFIERS_START+1)]
     public class LevelModifier : Modifier, ILevelModifier {
         public override Systems System => Systems.LevelSystem;
     }

@@ -11,10 +11,16 @@
 //  Discord Server: https://discord.gg/SNqyDWu            Copyright© Amilious, Textos since 2022                      //                    
 //  This code is part of an asset on the unity asset store. If you did not get this from the asset store you are not  //
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/          
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+using Amilious.Core;
+using UnityEngine;
 
 namespace Amilious.FishyRpg.Experience {
-    public class ExperienceType {
+    
+    [CreateAssetMenu(fileName = "NewExperienceType", menuName = FishyRpg.XP_MENU_ROOT+"New Experience Type",
+        order = FishyRpg.LEVEL_START)]
+    public class ExperienceType : AmiliousScriptableObject {
         
     }
 }

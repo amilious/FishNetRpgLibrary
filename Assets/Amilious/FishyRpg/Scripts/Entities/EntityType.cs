@@ -13,6 +13,7 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+using UnityEngine;
 using Amilious.Core;
 
 namespace Amilious.FishyRpg.Entities {
@@ -20,6 +21,8 @@ namespace Amilious.FishyRpg.Entities {
     /// <summary>
     /// This class is used to create a standard entity type.
     /// </summary>
+    [CreateAssetMenu(fileName = "NewEntityType", 
+    menuName = FishyRpg.ENTITY_MENU_ROOT+"New Entity Type", order = FishyRpg.ENTITY_START)]
     public class EntityType : AmiliousScriptableObject { }
     
 }

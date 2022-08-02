@@ -24,7 +24,8 @@ namespace Amilious.FishyRpg.Requirements {
     /// <summary>
     /// This class is used as a quest requirement.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewQuestRequirement", menuName = FishyRpg.REQUIREMENT_MENU_ROOT+"Quest")]
+    [CreateAssetMenu(fileName = "NewQuestRequirement", menuName = FishyRpg.REQUIREMENT_MENU_ROOT+"Quest",
+        order = FishyRpg.REQUIREMENT_START+100)]
     public class QuestRequirement : AbstractRequirement{
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

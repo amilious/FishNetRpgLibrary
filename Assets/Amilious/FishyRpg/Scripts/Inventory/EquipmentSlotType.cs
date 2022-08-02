@@ -19,7 +19,7 @@ using UnityEngine;
 namespace Amilious.FishyRpg.Inventory {
     
     [CreateAssetMenu(fileName = "NewEquipmentSlotType", 
-        menuName = FishyRpg.INVENTORY_MENU_ROOT+"Equipment Slot Type", order = 20)]
+        menuName = FishyRpg.INVENTORY_MENU_ROOT+"Equipment Slot Type", order = FishyRpg.INVENTORY_START)]
     public class EquipmentSlotType : AmiliousScriptableObject { }
     
 }

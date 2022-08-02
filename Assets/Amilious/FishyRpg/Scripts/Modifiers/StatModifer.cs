@@ -21,7 +21,8 @@ namespace Amilious.FishyRpg.Modifiers {
     /// <summary>
     /// This class is used to modify values in the stat's system.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Stat")]
+    [CreateAssetMenu(fileName = "NewStatModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Stat",
+        order = FishyRpg.MODIFIERS_START+200)]
     public class StatModifer : Modifier, IStatModifier {
         
         #region Inspector Variables ////////////////////////////////////////////////////////////////////////////////////

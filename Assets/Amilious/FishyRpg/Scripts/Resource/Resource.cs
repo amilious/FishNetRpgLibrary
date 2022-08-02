@@ -14,9 +14,12 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 using Amilious.Core;
+using UnityEngine;
 
 namespace Amilious.FishyRpg.Resource {
     
+    [CreateAssetMenu(fileName = "NewResource", menuName = FishyRpg.RESOURCES_MENU_ROOT+"New Resource",
+        order = FishyRpg.RESOURCES_START)]
     public class Resource : AmiliousScriptableObject {
         
     }

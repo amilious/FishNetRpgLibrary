@@ -704,7 +704,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    Standalone: FISHNET;AMILIOUS_CORE
+    Standalone: FISHNET;AMILIOUS_CORE;AMILIOUS_FUNCTION_GRAPH
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

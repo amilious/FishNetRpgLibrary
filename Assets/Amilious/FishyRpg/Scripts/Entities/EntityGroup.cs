@@ -22,6 +22,8 @@ namespace Amilious.FishyRpg.Entities {
     /// <summary>
     /// This class is used to create a group of entity types.
     /// </summary>
+    [CreateAssetMenu(fileName = "NewEntityGroup", 
+        menuName = FishyRpg.ENTITY_MENU_ROOT+"New Entity Group", order = FishyRpg.ENTITY_START+1)]
     public class EntityGroup : AmiliousScriptableObject {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////

@@ -26,6 +26,8 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
     /// <summary>
     /// This class is used as a kill task for a quest.
     /// </summary>
+    [CreateAssetMenu(fileName = "NewKillTask", 
+    menuName = FishyRpg.QUEST_MENU_ROOT+"Tasks/New Kill Task", order = FishyRpg.QUEST_START+100)]
     public class KillQuestTask : QuestTask<Entity,Entity> {
 
         #region Constants //////////////////////////////////////////////////////////////////////////////////////////////

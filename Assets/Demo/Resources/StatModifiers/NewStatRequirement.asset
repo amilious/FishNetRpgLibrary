@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9544fba255e8477c89b5eb26cb06b8a2, type: 3}
   m_Name: NewStatRequirement
   m_EditorClassIdentifier: 
-  id: 133036899594097724
-  resourcePath: 
-  isInResourceFolder: 0
+  id: 133038436951500252
+  base64Id: 
+  resourcePath: StatModifiers/NewStatRequirement
+  isInResourceFolder: 1
   stat: {fileID: 0}
-  comparisonType: 6
+  comparisonMethod:
+    compareType: 1
+    approximateDelta: 0
   compareValue: 0

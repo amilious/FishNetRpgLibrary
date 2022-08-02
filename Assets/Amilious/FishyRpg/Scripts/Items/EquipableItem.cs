@@ -27,7 +27,7 @@ namespace Amilious.FishyRpg.Items {
     
     [ItemEditorBadge("Icons/ItemBadges/EquipmentBadge")]
     [CreateAssetMenu(fileName = "NewEquipableItem", 
-        menuName = FishyRpg.ITEM_MENU_ROOT+"New Equipable Item", order = 21)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Equipable Item", order = FishyRpg.ITEM_START+MENU_EQUIP)]
     public class EquipableItem : Item {
 
         #region Inspector Fields ///////////////////////////////////////////////////////////////////////////////////////

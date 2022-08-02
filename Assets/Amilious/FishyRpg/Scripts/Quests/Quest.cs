@@ -27,7 +27,8 @@ namespace Amilious.FishyRpg.Quests {
     /// <summary>
     /// This class is used to represent a quest.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewQuest", menuName = FishyRpg.QUEST_MENU_ROOT+"Quest")]
+    [CreateAssetMenu(fileName = "NewQuest", 
+        menuName = FishyRpg.QUEST_MENU_ROOT+"New Quest", order = FishyRpg.QUEST_START)]
     public class Quest : AmiliousScriptableObject<Quest> {
 
         #region Serialized Fields //////////////////////////////////////////////////////////////////////////////////////
@@ -208,16 +209,6 @@ namespace Amilious.FishyRpg.Quests {
                 if(stage[i] is not T task) continue;
                 task.TriggerCallback(manager,this,Key(startIndex,i),val1,val2,val3,val4);
             }
-        }
-
-        /// <summary>
-        /// This method is called when a task is active at the rate set for the quest manager.
-        /// </summary>
-        /// <param name="manager">The calling manager.</param>
-        /// <param name="delta">The time since the last update.</param>
-        public void Update(QuestManager manager, float delta) {
-            if(!TryGetCurrentStageInfo(manager, out var stageIndex, out var startIndex)) return;
-            questStages[stageIndex].Update(manager, this, delta, BaseKey, startIndex);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

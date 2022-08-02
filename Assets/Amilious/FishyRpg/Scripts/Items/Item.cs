@@ -13,17 +13,17 @@
 //  using it legally. Check the asset store or join the discord for the license that applies for this script.         //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-using System.Collections.Generic;
+using UnityEngine;
 using System.Linq;
 using Amilious.Core;
+using System.Collections.Generic;
 using Amilious.Core.Attributes;
 using Amilious.Core.Extensions;
-using Amilious.FishyRpg.Attributes;
 using Amilious.FishyRpg.Entities;
-using Amilious.FishyRpg.Modifiers;
 using Amilious.FishyRpg.Pickups;
+using Amilious.FishyRpg.Modifiers;
+using Amilious.FishyRpg.Attributes;
 using Amilious.FishyRpg.Requirements;
-using UnityEngine;
 
 namespace Amilious.FishyRpg.Items {
     
@@ -31,7 +31,7 @@ namespace Amilious.FishyRpg.Items {
     [EditorLink("Jira", "Icons/jira", "https://fishnet-rpg-library.atlassian.net/jira/software/c/projects/FRL/boards/1", " jira")]
     [ItemEditorBadge("Icons/ItemBadges/ItemBadge")]
     [CreateAssetMenu(fileName = "NewStandardItem", 
-        menuName = FishyRpg.ITEM_MENU_ROOT+"New Standard Item", order = 20)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Standard Item", order = FishyRpg.ITEM_START+MENU_ITEM)]
     public class Item : AmiliousScriptableObject<Item> {
 
         private const string DEFAULT_DESCRIPTION = "No description!";
@@ -206,6 +206,13 @@ namespace Amilious.FishyRpg.Items {
         private void OnValidate() => OnEnable();
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////
-                   
+
+        public const int MENU_ITEM = 0;
+        public const int MENU_RARE = MENU_ITEM +1;
+        public const int MENU_EQUIP = MENU_RARE + 11;
+        public const int MENU_WEP = MENU_EQUIP + 1;
+        public const int MENU_ACTION = MENU_WEP + 11;
+        public const int MENU_SKILL = MENU_ACTION + 1;
+
     }
 }

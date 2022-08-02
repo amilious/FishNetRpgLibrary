@@ -21,7 +21,7 @@ namespace Amilious.FishyRpg.Items {
     
     [ItemEditorBadge("Icons/ItemBadges/WeaponBadge")]
     [CreateAssetMenu(fileName = "NewWeapon", 
-        menuName = FishyRpg.ITEM_MENU_ROOT+"New Weapon", order = 21)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Weapon", order = FishyRpg.ITEM_START+MENU_WEP)]
     public class Weapon : EquipableItem {
         
         [SerializeField, AmiliousTab("Weapon")]

@@ -21,7 +21,7 @@ namespace Amilious.FishyRpg.Items {
     
     [ItemEditorBadge("Icons/ItemBadges/SkillBadge")]
     [CreateAssetMenu(fileName = "NewSkill", 
-        menuName = FishyRpg.ITEM_MENU_ROOT+"New Skill", order = 21)]
+        menuName = FishyRpg.ITEM_MENU_ROOT+"New Skill", order = FishyRpg.ITEM_START+MENU_SKILL)]
     public class SkillItem : ActionItem {
 
         [SerializeField, AmiliousTab("Skill")] 

@@ -17,7 +17,8 @@ using UnityEngine;
 
 namespace Amilious.FishyRpg.Modifiers {
     
-    [CreateAssetMenu(fileName = "NewExperienceModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Experience")]
+    [CreateAssetMenu(fileName = "NewExperienceModifier", menuName = FishyRpg.MODIFIERS_MENU_ROOT + "Experience",
+        order = FishyRpg.MODIFIERS_START)]
     public class ExperienceModifier : Modifier, IExperienceModifier {
         public override Systems System => Systems.LevelSystem;
     }

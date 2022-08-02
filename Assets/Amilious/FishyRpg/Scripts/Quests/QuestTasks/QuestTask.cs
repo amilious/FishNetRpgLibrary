@@ -130,15 +130,6 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         /// <returns>The number of completed actions.</returns>
         protected abstract int GetCompletedActions(QuestManager manager, Quest quest, StringBuilder baseKey);
 
-        /// <summary>
-        /// This method is called when a task is active at the rate set for the quest manager.
-        /// </summary>
-        /// <param name="manager">The calling manager.</param>
-        /// <param name="quest">The quest that has the task.</param>
-        /// <param name="delta">The time since the last update.</param>
-        /// <param name="baseKey">The base key for the task.</param>
-        public virtual void Update(QuestManager manager, Quest quest, float delta, StringBuilder baseKey) { }
-
         /// <inheritdoc />
         protected override void BeforeSerialize() {
             if(string.IsNullOrWhiteSpace(taskName)) taskName = name.SplitCamelCase();
