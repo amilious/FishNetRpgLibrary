@@ -69,10 +69,11 @@ namespace Amilious.FishyRpg.Quests {
         /// </summary>
         /// <param name="manager">The calling manager.</param>
         /// <param name="quest">The quest that has the task.</param>
+        /// <param name="delta">The time since the last update.</param>
         /// <param name="baseKey">The base key for the task.</param>
         /// <param name="startIndex">The starting index.</param>
-        public void Update(QuestManager manager, Quest quest, StringBuilder baseKey, int startIndex) {
-            for(var i=0;i<questTasks.Count;i++) questTasks[i].Update(manager,quest,baseKey.Append(startIndex+i));
+        public void Update(QuestManager manager, Quest quest, float delta, StringBuilder baseKey, int startIndex) {
+            for(var i=0;i<questTasks.Count;i++) questTasks[i].Update(manager,quest,delta,baseKey.Append(startIndex+i));
         }
         
         /// <summary>

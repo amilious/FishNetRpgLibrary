@@ -214,9 +214,10 @@ namespace Amilious.FishyRpg.Quests {
         /// This method is called when a task is active at the rate set for the quest manager.
         /// </summary>
         /// <param name="manager">The calling manager.</param>
-        public void Update(QuestManager manager) {
+        /// <param name="delta">The time since the last update.</param>
+        public void Update(QuestManager manager, float delta) {
             if(!TryGetCurrentStageInfo(manager, out var stageIndex, out var startIndex)) return;
-            questStages[stageIndex].Update(manager, this, BaseKey, startIndex);
+            questStages[stageIndex].Update(manager, this, delta, BaseKey, startIndex);
         }
         
         #endregion /////////////////////////////////////////////////////////////////////////////////////////////////////

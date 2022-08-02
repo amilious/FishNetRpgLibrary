@@ -136,8 +136,9 @@ namespace Amilious.FishyRpg.Quests.QuestTasks {
         /// </summary>
         /// <param name="manager">The calling manager.</param>
         /// <param name="quest">The quest that has the task.</param>
+        /// <param name="delta">The time since the last update.</param>
         /// <param name="baseKey">The base key for the task.</param>
-        public virtual void Update(QuestManager manager, Quest quest, StringBuilder baseKey) { }
+        public virtual void Update(QuestManager manager, Quest quest, float delta, StringBuilder baseKey) { }
 
         /// <inheritdoc />
         protected override void BeforeSerialize() {
